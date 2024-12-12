@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express'
-import { AuthRequest } from '../types/auth'
-import { validateToken } from '../config/authJwt'
-import { HttpError } from '../errors/http'
+import { AuthRequest } from '@type/auth'
+import { validateToken } from '@config/jwt'
+import { HttpError } from '@errors/http'
 
 const authorization = (req: AuthRequest, res: Response, next: NextFunction) => {
     try {

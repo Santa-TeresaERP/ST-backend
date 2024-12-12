@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize'
-import sequelize from '../config/database'
-import { UserAttributes } from '../types/auth'
+import sequelize from '@config/database'
+import { UserAttributes } from '@type/auth'
 
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 

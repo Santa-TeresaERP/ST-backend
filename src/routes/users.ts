@@ -1,6 +1,6 @@
-import express from 'express';
-import { createUser, deleteUser, getUsers, updateUser } from '../controllers/userController.js'
-import authorization from '../middlewares/authorization'
+import express from 'express'
+import { createUser, deleteUser, getUsers, updateUser } from '@controllers/userController.js'
+import authorization from '@middlewares/authorization'
 
 const router = express.Router()
 

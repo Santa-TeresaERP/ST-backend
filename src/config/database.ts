@@ -1,15 +1,13 @@
 import { Sequelize } from 'sequelize'
-import dotenv from 'dotenv'
-
-dotenv.config()
+import { PG_NAME, PG_HOST, PG_PASSWORD, PG_PORT, PG_USER } from '@environments'
 
 const sequelize = new Sequelize(
-  process.env.PG_NAME!,
-  process.env.PG_USER!,
-  process.env.PG_PASSWORD,
+  PG_NAME!,
+  PG_USER!,
+  PG_PASSWORD,
   {
-    host: process.env.PG_HOST,
-    port: parseInt(process.env.PG_PORT!),
+    host: PG_HOST!,
+    port: parseInt(PG_PORT!),
     dialect: 'postgres',
     logging: false,
     pool: {

@@ -1,6 +1,6 @@
-import { generateToken } from '../config/authJwt'
-import User from '../models/user'
-import { AuthRequest, jwtData } from "../types/auth"
+import { generateToken } from '@config/jwt'
+import User from '@models/user'
+import { AuthRequest, jwtData } from '@type/auth'
 import bcrypt from 'bcrypt'
 
 class useUser {

@@ -1,8 +1,8 @@
-import express from 'express'
-import { createEgress, getEgresses, deleteEgress, updateEgress } from '../controllers/egressController.js'
-import authorization from '../middlewares/authorization'
+import { Router } from 'express'
+import { createEgress, getEgresses, deleteEgress, updateEgress } from '@controllers/egressController.js'
+import authorization from '@middlewares/authorization'
 
-const router = express.Router();
+const router = Router()
 
 router.post('/:type', authorization, createEgress)
 

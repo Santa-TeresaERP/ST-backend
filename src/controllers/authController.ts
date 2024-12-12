@@ -1,7 +1,7 @@
 import { Response } from 'express'
-import { AuthRequest } from '../types/auth'
-import useUser from '../services/useUser'
-import { HttpError } from '../errors/http'
+import { AuthRequest } from '@type/auth'
+import useUser from '@services/useUser'
+import { HttpError } from '@errors/http'
 
 export class authController {
   static async login (req: AuthRequest, res: Response) {

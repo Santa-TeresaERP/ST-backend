@@ -1,11 +1,11 @@
-import User from '../models/user'
+import User from '@models/user'
 import bcrypt from 'bcrypt'
-import 'dotenv/config'
+import { ADMIN_EMAIL, ADMIN_PASSWORD } from '@environments'
 
 const createAdmin = async () => {
   try {
-    const email = process.env.ADMIN_EMAIL!
-    const password = process.env.ADMIN_PASSWORD!
+    const email = ADMIN_EMAIL!
+    const password = ADMIN_PASSWORD!
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
 

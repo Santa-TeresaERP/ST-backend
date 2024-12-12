@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import { createUser, deleteUser, getUsers, updateUser } from '../controllers/userController.js';
-import auth from '../middleware/auth.js';
+import auth from '../middleware/authorization.js';
 
 router.post('/', auth, createUser);
 

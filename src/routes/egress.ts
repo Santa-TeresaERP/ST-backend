@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import { createEgress, getEgresses, deleteEgress, updateEgress } from '../controllers/egressController.js';
-import auth from '../middleware/auth.js';
+import auth from '../middleware/authorization.js';
 
 router.post('/:type', auth, createEgress);
 

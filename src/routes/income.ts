@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import { createIncome, deleteIncome, getIncomes, updateIncome } from '../controllers/incomeController.js';
-import auth from '../middleware/auth.js';
+import auth from '../middleware/authorization.js';
 
 router.post('/:type', auth, createIncome);
 

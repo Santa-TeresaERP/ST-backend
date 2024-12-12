@@ -13,4 +13,4 @@ const routesLoader = (app) => {
   })
 }
 
-export default routesLoader;
+export default routesLoader

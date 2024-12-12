@@ -11,4 +11,4 @@ router.delete('/:type/:id', auth, deleteProduct);
 
 router.patch('/:type/:id', auth, updateProduct);
 
-export default router;
+export default router

@@ -1,6 +1,6 @@
-import bcrypt from 'bcryptjs';
-import {Op } from 'sequelize';
-import User from '../models/user_model.js';
+import bcrypt from 'bcrypt'
+import {Op } from 'sequelize'
+import User from '../models/user'
 
 export const createUser = async (req, res) => {
   const { name, phonenumber, dni, email, password, modules, isadmin } = req.body;

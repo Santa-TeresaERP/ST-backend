@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';
+import sequelize from '../config/database';
 import Producto from './product_craft_model.js';
 
 const Ingreso = sequelize.define('ingreso', {

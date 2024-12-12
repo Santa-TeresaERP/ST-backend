@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../config/database.js';
+import sequelize from '../config/database';
 import Local from './local_model.js';
 
 const Reserva = sequelize.define('reserva', {

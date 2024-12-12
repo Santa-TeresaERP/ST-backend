@@ -1,6 +1,6 @@
 import express from 'express'
 import { createEgress, getEgresses, deleteEgress, updateEgress } from '../controllers/egressController.js'
-import authorization from '@middleware/authorization'
+import authorization from '../middlewares/authorization'
 
 const router = express.Router();
 

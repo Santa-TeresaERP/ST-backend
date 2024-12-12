@@ -1,5 +1,5 @@
-import { environments } from '@environment'
-import { jwtData } from '@type/auth'
+import { environments } from './environments'
+import { jwtData } from '../types/auth'
 import jwt from 'jsonwebtoken'
 
 

@@ -1,6 +1,6 @@
 import express from 'express'
 import { createProduct, deleteProduct, getProducts, updateProduct } from '../controllers/productController.js'
-import authorization from '@middleware/authorization'
+import authorization from '../middlewares/authorization'
 
 const router = express.Router()
 

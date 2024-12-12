@@ -1,14 +1,15 @@
-import express from 'express';
+import express from 'express'
+import { createEgress, getEgresses, deleteEgress, updateEgress } from '../controllers/egressController.js'
+import authorization from '@middleware/authorization'
+
 const router = express.Router();
-import { createEgress, getEgresses, deleteEgress, updateEgress } from '../controllers/egressController.js';
-import auth from '../middleware/authorization.js';
 
-router.post('/:type', auth, createEgress);
+router.post('/:type', authorization, createEgress)
 
-router.get('/:type', auth, getEgresses);
+router.get('/:type', authorization, getEgresses)
 
-router.delete('/:type/:id', auth, deleteEgress);
+router.delete('/:type/:id', authorization, deleteEgress)
 
-router.patch('/:type/:id', auth, updateEgress);
+router.patch('/:type/:id', authorization, updateEgress)
 
-export default router;
+export default router

@@ -28,7 +28,11 @@
     "@types/jsonwebtoken": "^9.0.7",
     "dotenv": "^16.4.7",
     "nodemon": "^3.1.7",
+    "standard": "^17.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
+  },
+  "eslintConfig": {
+    "extends": "standard"
   }
 }

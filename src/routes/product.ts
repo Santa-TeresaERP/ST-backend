@@ -1,14 +1,15 @@
-import express from 'express';
-const router = express.Router();
-import { createProduct, deleteProduct, getProducts, updateProduct } from '../controllers/productController.js';
-import auth from '../middleware/authorization.js';
+import express from 'express'
+import { createProduct, deleteProduct, getProducts, updateProduct } from '../controllers/productController.js'
+import authorization from '@middleware/authorization'
 
-router.post('/:type', auth, createProduct);
+const router = express.Router()
 
-router.get('/', auth, getProducts);
+router.post('/:type', authorization, createProduct)
 
-router.delete('/:type/:id', auth, deleteProduct);
+router.get('/', authorization, getProducts)
 
-router.patch('/:type/:id', auth, updateProduct);
+router.delete('/:type/:id', authorization, deleteProduct)
+
+router.patch('/:type/:id', authorization, updateProduct)
 
 export default router

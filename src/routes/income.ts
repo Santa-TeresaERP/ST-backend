@@ -1,14 +1,15 @@
 import express from 'express';
-const router = express.Router();
 import { createIncome, deleteIncome, getIncomes, updateIncome } from '../controllers/incomeController.js';
-import auth from '../middleware/authorization.js';
+import authorization from '@middleware/authorization'
 
-router.post('/:type', auth, createIncome);
+const router = express.Router()
 
-router.get('/:type', auth, getIncomes);
+router.post('/:type', authorization, createIncome)
 
-router.delete('/:type/:id', auth, deleteIncome);
+router.get('/:type', authorization, getIncomes)
 
-router.patch('/:type/:id', auth, updateIncome);
+router.delete('/:type/:id', authorization, deleteIncome)
 
-export default router;
+router.patch('/:type/:id', authorization, updateIncome)
+
+export default router

@@ -1,22 +1,29 @@
-import Egress from '@models/egress_model.js'
+/*
+ * To be corrected
+ */
+
+import { HttpError } from '@errors/http'
+import useEgress from '@services/useEgress'
 import { Request, Response } from 'express'
 
-export class egressController {
-  static async createEgress (req: Request, res: Response) {
+class egressController {
+  static async createEgress(req: Request, res: Response) {
     try {
-     const { type } = req.params
-      const { name, amount, supplier, date, total_price } = req.body
-
-      const newEgress = await Egress.create({ name, amount, supplier, date, total_price, type })
+      const newEgress = await useEgress.createEgress(req.body)
+      if (!newEgress) throw new HttpError('Error to insert a new egress', 400)
       res.status(201).json(newEgress)
     } catch (error) {
-      res.status(400).json({ error: error.message })
+      if (error instanceof HttpError) {
+        res.status(error.statusCode).json({ error: error.message })
+      } else {
+        res.status(500).json({ error: 'Internal server error' })
+      }
     }
   }
 
-  static async getEgresses (req: Request, res: Response) {
+  /* static async getEgresses(req: Request, res: Response) {
     try {
-     const { type } = req.params
+      const { type } = req.params
 
       const egresses = await Egress.findAll({ where: { type } })
       res.status(200).json(egresses)
@@ -25,7 +32,7 @@ export class egressController {
     }
   }
 
-  static async deleteEgress (req: Request, res: Response) {
+  static async deleteEgress(req: Request, res: Response) {
     try {
       const { type, id } = req.params
 
@@ -40,25 +47,27 @@ export class egressController {
     }
   }
 
-  static async updateEgress (req: Request, res: Response) {
-    const { type, id } = req.params;
-    const { name, amount, supplier, date, total_price } = req.body;
+  static async updateEgress(req: Request, res: Response) {
+    const { type, id } = req.params
+    const { name, amount, supplier, date, total_price } = req.body
 
     try {
-      const egress = await Egress.findOne({ where: { id, type } });
+      const egress = await Egress.findOne({ where: { id, type } })
       if (!egress) {
-        return res.status(404).json({ error: 'Egreso no encontrado' });
+        return res.status(404).json({ error: 'Egreso no encontrado' })
       }
-      egress.name = name || egress.name;
-      egress.amount = amount || egress.amount;
-      egress.supplier = supplier || egress.supplier;
-      egress.date = date || egress.date;
-      egress.total_price = total_price || egress.total_price;
+      egress.name = name || egress.name
+      egress.amount = amount || egress.amount
+      egress.supplier = supplier || egress.supplier
+      egress.date = date || egress.date
+      egress.total_price = total_price || egress.total_price
 
-      await egress.save();
-      res.status(200).json(egress);
+      await egress.save()
+      res.status(200).json(egress)
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      res.status(400).json({ error: error.message })
     }
-  }
+  } */
 }
+
+export default egressController

@@ -1,6 +1,6 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/database';
-import Local from './local_model.js';
+import { DataTypes } from 'sequelize'
+import sequelize from '../config/database'
+import Local from './local_model.js'
 
 const Reserva = sequelize.define('reserva', {
   fecha: {
@@ -22,10 +22,10 @@ const Reserva = sequelize.define('reserva', {
   email_cliente: {
     type: DataTypes.STRING,
     allowNull: false,
-  }
-});
+  },
+})
 
-Reserva.belongsTo(Local);
-Local.hasMany(Reserva);
+Reserva.belongsTo(Local)
+Local.hasMany(Reserva)
 
-export default Reserva;
+export default Reserva

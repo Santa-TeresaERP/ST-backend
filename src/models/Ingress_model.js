@@ -1,6 +1,6 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/database';
-import Producto from './product_craft_model.js';
+import { DataTypes } from 'sequelize'
+import sequelize from '../config/database'
+import Producto from './product_craft_model.js'
 
 const Ingreso = sequelize.define('ingreso', {
   fecha: {
@@ -15,10 +15,10 @@ const Ingreso = sequelize.define('ingreso', {
   total: {
     type: DataTypes.DECIMAL(10, 2),
     allowNull: false,
-  }
-});
+  },
+})
 
-Ingreso.belongsTo(Producto);
-Producto.hasMany(Ingreso);
+Ingreso.belongsTo(Producto)
+Producto.hasMany(Ingreso)
 
-export default Ingreso;
+export default Ingreso

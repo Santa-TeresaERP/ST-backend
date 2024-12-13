@@ -23,11 +23,11 @@ const createAdmin = async () => {
           alquileres: { access: true },
           monasterio: { access: true },
           museo: { access: true },
-          administrativo: { access: true }
+          administrativo: { access: true },
         },
         createdAt: new Date(),
         updatedAt: new Date(),
-      }
+      },
     })
 
     if (created) {

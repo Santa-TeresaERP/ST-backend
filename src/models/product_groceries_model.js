@@ -1,5 +1,5 @@
-import { DataTypes } from 'sequelize';
-import sequelize from '../config/database';
+import { DataTypes } from 'sequelize'
+import sequelize from '../config/database'
 
 const Producto = sequelize.define('producto', {
   nombre: {
@@ -25,7 +25,7 @@ const Producto = sequelize.define('producto', {
   categoria: {
     type: DataTypes.STRING,
     allowNull: true,
-  }
-});
+  },
+})
 
-export default Producto;
+export default Producto

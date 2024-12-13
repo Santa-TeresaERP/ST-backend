@@ -8,7 +8,7 @@ const routesLoader = (app: Express) => {
   const loadRoutes = async () => {
     const files = readdirSync(dirsPath)
 
-    for (const  file of files) {
+    for (const file of files) {
       if (file.endsWith('.ts')) {
         const pathName = file.replace('.ts', '')
         const route = await import(join(dirsPath, file))
@@ -17,8 +17,7 @@ const routesLoader = (app: Express) => {
     }
   }
 
-  loadRoutes()
-    .catch(err => console.error(`Error to load routes ${err}`))
+  loadRoutes().catch((err) => console.error(`Error to load routes ${err}`))
 }
 
 export default routesLoader

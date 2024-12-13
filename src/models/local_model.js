@@ -1,5 +1,5 @@
-import sequelize from '../config/database';
-import { DataTypes } from 'sequelize';
+import sequelize from '../config/database'
+import { DataTypes } from 'sequelize'
 
 const Local = sequelize.define('local', {
   nombre: {
@@ -17,7 +17,7 @@ const Local = sequelize.define('local', {
   descripcion: {
     type: DataTypes.TEXT,
     allowNull: true,
-  }
-});
+  },
+})
 
-export default Local;
+export default Local

@@ -9,7 +9,7 @@ export const validateToken = (token: string) => {
   try {
     const decodedToken = jwt.verify(token, SECRET_KEY!) as jwtData
     return decodedToken
-  } catch (error) {
+  } catch {
     return null
   }
 }

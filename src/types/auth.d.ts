@@ -2,7 +2,7 @@ import { Request } from 'express'
 import { JwtPayload } from 'jsonwebtoken'
 
 export interface UserAttributes {
-  id?: number
+  id?: string
   name: string
   phonenumber: string
   dni: string
@@ -50,8 +50,8 @@ export interface Museum {
 
 /* On http methods */
 
-export interface jwtData extends JwtPayload{
-  userId: number
+export interface jwtData extends JwtPayload {
+  userId: string
   name: string
   isAdmin: boolean
 }

@@ -1,11 +1,16 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { UserAttributes } from '@type/auth'
+import { v4 as uuid } from 'uuid'
 
-export interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
+export interface UserCreationAttributes
+  extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
 
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: number
+class User
+  extends Model<UserAttributes, UserCreationAttributes>
+  implements UserAttributes
+{
+  public id!: string
   public name!: string
   public phonenumber!: string
   public dni!: string
@@ -19,11 +24,16 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
 
 User.init(
   {
-    id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+    id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false },
     phonenumber: { type: DataTypes.STRING, allowNull: false },
     dni: { type: DataTypes.STRING, allowNull: false, unique: true },
-    email: { type: DataTypes.STRING, allowNull: false, unique: true, validate: { isEmail: true } },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: { isEmail: true },
+    },
     password: { type: DataTypes.STRING, allowNull: false },
     isAdmin: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     modules: {
@@ -31,8 +41,18 @@ User.init(
       allowNull: false,
       defaultValue: {
         administrativo: { access: false },
-        ventas: { access: false, confectionery: false, crafts: false, mass: false },
-        alquileres: { access: false, santaCatalina: false, goyoneche: false, santaMarta: false },
+        ventas: {
+          access: false,
+          confectionery: false,
+          crafts: false,
+          mass: false,
+        },
+        alquileres: {
+          access: false,
+          santaCatalina: false,
+          goyoneche: false,
+          santaMarta: false,
+        },
       },
     },
     createdAt: { type: DataTypes.DATE, allowNull: false },
@@ -42,7 +62,7 @@ User.init(
     sequelize,
     tableName: 'users',
     timestamps: true,
-  }
+  },
 )
 
 export default User

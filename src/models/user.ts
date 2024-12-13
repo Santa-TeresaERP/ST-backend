@@ -3,11 +3,11 @@ import sequelize from '@config/database'
 import { UserAttributes } from '@type/auth'
 import { v4 as uuid } from 'uuid'
 
-export interface UserCreationAttributes
-  extends Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'> {}
-
 class User
-  extends Model<UserAttributes, UserCreationAttributes>
+  extends Model<
+    UserAttributes,
+    Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>
+  >
   implements UserAttributes
 {
   public id!: string

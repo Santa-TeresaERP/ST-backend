@@ -3,11 +3,8 @@ import sequelize from '../config/database'
 import { EgressAttributes } from '@type/egress'
 import { v4 as uuid } from 'uuid'
 
-export interface EgressCreationAttributes
-  extends Optional<EgressAttributes, 'id'> {}
-
 class Egress
-  extends Model<EgressAttributes, EgressCreationAttributes>
+  extends Model<EgressAttributes, Optional<EgressAttributes, 'id'>>
   implements EgressAttributes
 {
   public id!: string
@@ -26,7 +23,7 @@ Egress.init(
   {
     sequelize,
     tableName: 'egress',
-    timestamps: false
+    timestamps: false,
   },
 )
 

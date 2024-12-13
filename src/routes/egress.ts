@@ -1,15 +1,15 @@
 import { Router } from 'express'
-import { createEgress, getEgresses, deleteEgress, updateEgress } from '@controllers/egressController.js'
+import { egressController } from '@controllers/egressController.js'
 import authorization from '@middlewares/authorization'
 
 const router = Router()
 
-router.post('/:type', authorization, createEgress)
+router.post('/:type', authorization, egressController.createEgress)
 
-router.get('/:type', authorization, getEgresses)
+router.get('/:type', authorization, egressController.getEgresses)
 
-router.delete('/:type/:id', authorization, deleteEgress)
+router.delete('/:type/:id', authorization, egressController.deleteEgress)
 
-router.patch('/:type/:id', authorization, updateEgress)
+router.patch('/:type/:id', authorization, egressController.updateEgress)
 
 export default router

@@ -20,7 +20,7 @@ Egress.init(
   {
     id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
     description: { type: DataTypes.STRING, allowNull: false },
-    monto: { type: DataTypes.NUMBER, allowNull: false },
+    monto: { type: DataTypes.INTEGER, allowNull: false },
     fecha: { type: DataTypes.DATE, allowNull: false },
   },
   {

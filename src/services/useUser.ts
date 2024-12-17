@@ -31,7 +31,7 @@ class useUser {
   }
 
   static async createUser(body: UserAttributes) {
-    const { name, phonenumber, dni, email, password, modules, isAdmin } = body
+    const { name, phonenumber, dni, email, password, enabled, isAdmin } = body
     let user = await User.findOne({
       where: {
         [Op.or]: [{ email }, { dni }],
@@ -50,21 +50,7 @@ class useUser {
       dni,
       email,
       password: hashedPassword,
-      modules: modules || {
-        administrativo: { access: false },
-        ventas: {
-          access: false,
-          reposteria: false,
-          manualidades: false,
-          misa: false,
-        },
-        alquileres: {
-          access: false,
-          santaCatalina: false,
-          goyoneche: false,
-          santaMarta: false,
-        },
-      },
+      enabled: enabled || true,
       isAdmin: isAdmin || false,
     })
 

@@ -17,7 +17,7 @@ class User
   public email!: string
   public password!: string
   public isAdmin!: boolean
-  public modules!: UserAttributes['modules']
+  public enabled!: boolean
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }
@@ -36,25 +36,7 @@ User.init(
     },
     password: { type: DataTypes.STRING, allowNull: false },
     isAdmin: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
-    modules: {
-      type: DataTypes.JSONB,
-      allowNull: false,
-      defaultValue: {
-        administrativo: { access: false },
-        ventas: {
-          access: false,
-          confectionery: false,
-          crafts: false,
-          mass: false,
-        },
-        alquileres: {
-          access: false,
-          santaCatalina: false,
-          goyoneche: false,
-          santaMarta: false,
-        },
-      },
-    },
+    enabled: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
     createdAt: { type: DataTypes.DATE, allowNull: false },
     updatedAt: { type: DataTypes.DATE, allowNull: false },
   },

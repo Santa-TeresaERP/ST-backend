@@ -18,15 +18,7 @@ const createAdmin = async () => {
         email,
         password: hashedPassword,
         isAdmin: true,
-        modules: {
-          ventas: { access: true },
-          alquileres: { access: true },
-          monasterio: { access: true },
-          museo: { access: true },
-          administrativo: { access: true },
-        },
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        enabled: true,
       },
     })
 

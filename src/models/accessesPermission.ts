@@ -33,10 +33,10 @@ AccessesPermission.init(
 )
 
 // Define the relationship
-AccessesPermission.belongsTo(Accesses, { foreignKey: 'access_id' })
-Accesses.hasMany(AccessesPermission, { foreignKey: 'access_id' })
+AccessesPermission.belongsTo(Accesses, { foreignKey: 'accessId' })
+Accesses.hasMany(AccessesPermission, { foreignKey: 'accessId' })
 
-AccessesPermission.belongsTo(User, { foreignKey: 'user_id' })
-User.hasMany(AccessesPermission, { foreignKey: 'user_id' })
+AccessesPermission.belongsTo(User, { foreignKey: 'userId' })
+User.hasMany(AccessesPermission, { foreignKey: 'userId' })
 
 export default AccessesPermission

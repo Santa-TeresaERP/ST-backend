@@ -4,14 +4,14 @@ import { JwtPayload } from 'jsonwebtoken'
 export interface UserAttributes {
   id?: string
   name: string
-  email: string
-  phonenumber: string
   dni: string
+  phonenumber: string
+  email: string
+  roleId: string
   password: string
-  isAdmin: boolean
-  enabled: boolean
   createdAt?: Date
   updatedAt?: Date
+  status: string
 }
 
 /* On http methods */
@@ -19,7 +19,7 @@ export interface UserAttributes {
 export interface jwtData extends JwtPayload {
   userId: string
   name: string
-  isAdmin: boolean
+  rolId: string
 }
 
 export interface AuthRequest extends Request {

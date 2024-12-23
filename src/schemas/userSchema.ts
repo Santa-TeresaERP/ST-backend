@@ -4,20 +4,25 @@ import { z } from 'zod'
 const userSchema = z.object({
   name: z
     .string()
-    .max(45, 'El nombre no debe exceder los 45 caracteres')
-    .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/, 'El nombre solo debe contener letras'),
-
-  phonenumber: z
-    .string()
-    .length(9, 'El número telefónico debe tener 9 dígitos')
-    .regex(/^[0-9]+$/, 'El número telefónico solo debe contener números'),
+    .max(45, 'El nombre completo no debe exceder los 45 caracteres')
+    .regex(
+      /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/,
+      'El nombre solo debe contener letras y espacios',
+    ),
 
   dni: z
     .string()
     .length(8, 'El DNI debe tener 8 dígitos')
     .regex(/^[0-9]+$/, 'El DNI solo debe contener números'),
 
+  phonenumber: z
+    .string()
+    .length(9, 'El número telefónico debe tener 9 dígitos')
+    .regex(/^[0-9]+$/, 'El número telefónico solo debe contener números'),
+
   email: z.string().email('El email debe tener un formato válido'),
+
+  roleId: z.string().nonempty('El rol no puede estar vacío'),
 
   password: z
     .string()
@@ -27,8 +32,14 @@ const userSchema = z.object({
       'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y solo los caracteres "_" o "-" permitidos',
     ),
 
-  isAdmin: z.boolean().optional(),
-  enabled: z.boolean().optional(),
+  status: z
+    .string()
+    .regex(/^[A-Za-z]+$/, 'El estado solo debe contener letras')
+    .nonempty('El estado no puede estar vacío'),
+
+  createdA: z.date().optional(),
+  updatedAt: z.date().optional(),
 })
+
 export const userValidation = (data: UserAttributes) =>
   userSchema.safeParse(data)

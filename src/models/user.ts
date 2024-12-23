@@ -12,14 +12,14 @@ class User
 {
   public id!: string
   public name!: string
-  public phonenumber!: string
   public dni!: string
+  public phonenumber!: string
   public email!: string
+  public roleId!: string
   public password!: string
-  public isAdmin!: boolean
-  public enabled!: boolean
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
+  public status!: string
 }
 
 User.init(
@@ -35,10 +35,10 @@ User.init(
       validate: { isEmail: true },
     },
     password: { type: DataTypes.STRING, allowNull: false },
-    isAdmin: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
-    enabled: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
+    roleId: { type: DataTypes.STRING, allowNull: false },
     createdAt: { type: DataTypes.DATE, allowNull: false },
     updatedAt: { type: DataTypes.DATE, allowNull: false },
+    status: { type: DataTypes.STRING, allowNull: false },
   },
   {
     sequelize,

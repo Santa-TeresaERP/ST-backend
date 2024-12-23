@@ -19,10 +19,10 @@ class useUser {
       return null
     }
 
-    const { id, isAdmin, name } = user
+    const { id, roleId, name } = user
     const tokenData: jwtData = {
       userId: id,
-      isAdmin: isAdmin,
+      rolId: roleId,
       name: name,
     }
 
@@ -31,7 +31,7 @@ class useUser {
   }
 
   static async createUser(body: UserAttributes) {
-    const { name, phonenumber, dni, email, password, enabled, isAdmin } = body
+    const { name, phonenumber, dni, email, password, roleId, status } = body
     let user = await User.findOne({
       where: {
         [Op.or]: [{ email }, { dni }],
@@ -50,8 +50,8 @@ class useUser {
       dni,
       email,
       password: hashedPassword,
-      enabled: enabled || true,
-      isAdmin: isAdmin || false,
+      roleId,
+      status,
     })
 
     return user

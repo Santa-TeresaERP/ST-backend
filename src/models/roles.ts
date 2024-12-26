@@ -9,14 +9,14 @@ class Roles
 {
   public id!: string
   public name!: string
-  public descripcion!: string
+  public description!: string
 }
 
 Roles.init(
   {
     id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false },
-    descripcion: { type: DataTypes.STRING, allowNull: true },
+    description: { type: DataTypes.STRING, allowNull: true },
   },
   {
     sequelize,

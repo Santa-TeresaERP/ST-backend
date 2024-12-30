@@ -1,7 +1,7 @@
 import { Op } from 'sequelize'
 import bcrypt from 'bcryptjs'
 import { generateToken } from '@config/jwt'
-import User from '@models/user'
+import User from '@models/users_models/user'
 import { jwtData, UserAttributes } from '@type/auth'
 import { userValidation, userValidationPartial } from 'src/schemas/userSchema'
 

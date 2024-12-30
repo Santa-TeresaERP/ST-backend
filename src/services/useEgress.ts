@@ -1,4 +1,4 @@
-import Egress from '@models/egress'
+import Egress from '@models/rent_models/egress'
 import { EgressAttributes } from '@type/egress'
 
 class useEgress {

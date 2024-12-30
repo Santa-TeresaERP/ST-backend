@@ -1,5 +1,5 @@
 import useUser from '@services/useUser'
-import User from '@models/user'
+import User from '@models/users_models/user'
 import { Request, Response } from 'express'
 import { HttpError } from '@errors/http'
 

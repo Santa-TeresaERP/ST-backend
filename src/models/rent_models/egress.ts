@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize'
-import sequelize from '../config/database'
+import sequelize from '@config/database'
 import { EgressAttributes } from '@type/egress'
 import { v4 as uuid } from 'uuid'
 

@@ -1,4 +1,4 @@
-import Roles from '@models/roles'
+import Roles from '@models/users_models/roles'
 import { RolesAttributes } from '@type/modules'
 import { rolesValidation } from 'src/schemas/rolesSchema'
 

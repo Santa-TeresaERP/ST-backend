@@ -1,5 +1,5 @@
-import User from '@models/user'
-import bcrypt from 'bcrypt'
+import User from '@models/users_models/user'
+import bcrypt from 'bcryptjs'
 import { ADMIN_EMAIL, ADMIN_PASSWORD } from '@environments'
 
 const createAdmin = async () => {
@@ -19,7 +19,6 @@ const createAdmin = async () => {
         password: hashedPassword,
       },
     })
-
     if (created) {
       console.log('Admin user created')
     } else {

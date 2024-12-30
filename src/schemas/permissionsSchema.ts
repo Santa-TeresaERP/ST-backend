@@ -3,7 +3,7 @@ import { z } from 'zod'
 
 const PermissionsSchema = z.object({
   id: z.string().uuid(),
-  module_id: z.string().uuid(),
+  moduleId: z.string().uuid(),
   canRead: z.boolean(),
   canWrite: z.boolean(),
   canEdit: z.boolean(),

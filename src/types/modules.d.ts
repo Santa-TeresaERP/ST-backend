@@ -19,7 +19,7 @@ export interface AccessesPermissionAttributes {
 export interface RolesAttributes {
   id: string
   name: string
-  descripcion: string
+  description: string
 }
 
 export interface PermissionsAttributes {

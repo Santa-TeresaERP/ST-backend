@@ -1,6 +1,8 @@
 services:
   backend:
-    build: Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       PG_USER: ${PG_USER}
       PG_PASSWORD: ${PG_PASSWORD}
@@ -9,12 +11,12 @@ services:
       SECRET_KEY: ${SECRET_KEY}
       ADMIN_EMAIL: ${ADMIN_EMAIL}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
-      API_PORT: ${NEXT_PUBLIC_API_PORT}
+      PORT: ${PORT}
     depends_on:
       postgres:
         condition: service_healthy
     ports:
-      - '${NEXT_PUBLIC_API_PORT}:${NEXT_PUBLIC_API_PORT}'
+      - '${PORT}:${PORT}'
     restart: always
     networks:
       - app-network

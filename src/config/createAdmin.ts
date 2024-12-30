@@ -17,8 +17,6 @@ const createAdmin = async () => {
         dni: '12345678',
         email,
         password: hashedPassword,
-        isAdmin: true,
-        enabled: true,
       },
     })
 

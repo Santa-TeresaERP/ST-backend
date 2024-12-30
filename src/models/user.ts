@@ -6,7 +6,10 @@ import { v4 as uuid } from 'uuid'
 class User
   extends Model<
     UserAttributes,
-    Optional<UserAttributes, 'id' | 'createdAt' | 'updatedAt'>
+    Optional<
+      UserAttributes,
+      'id' | 'createdAt' | 'updatedAt' | 'roleId' | 'status'
+    >
   >
   implements UserAttributes
 {
@@ -35,10 +38,10 @@ User.init(
       validate: { isEmail: true },
     },
     password: { type: DataTypes.STRING, allowNull: false },
-    roleId: { type: DataTypes.STRING, allowNull: false },
+    roleId: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
     createdAt: { type: DataTypes.DATE, allowNull: false },
     updatedAt: { type: DataTypes.DATE, allowNull: false },
-    status: { type: DataTypes.STRING, allowNull: false },
+    status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
   },
   {
     sequelize,

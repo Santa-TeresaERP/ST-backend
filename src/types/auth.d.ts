@@ -7,11 +7,11 @@ export interface UserAttributes {
   dni: string
   phonenumber: string
   email: string
-  roleId: string
+  roleId?: string
   password: string
   createdAt?: Date
   updatedAt?: Date
-  status: string
+  status?: string
 }
 
 /* On http methods */

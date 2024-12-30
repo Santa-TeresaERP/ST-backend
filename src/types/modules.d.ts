@@ -13,7 +13,7 @@ export interface AccessesPermissionAttributes {
   id?: string
   userId: string
   accessId: string
-  value: booleanS
+  value: boolean
 }
 
 export interface RolesAttributes {

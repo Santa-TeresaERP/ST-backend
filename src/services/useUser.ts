@@ -3,18 +3,24 @@ import bcrypt from 'bcrypt'
 import { generateToken } from '@config/jwt'
 import User from '@models/user'
 import { jwtData, UserAttributes } from '@type/auth'
-import { userValidation } from 'src/schemas/userSchema'
+import { userValidation, userValidationPartial } from 'src/schemas/userSchema'
 
 class useUser {
   static async checkUser(body: UserAttributes) {
-    const { email, password } = body
+    const validation = userValidationPartial(body)
+    if (validation.error) {
+      return null
+    }
+
+    const { email, password } = validation.data
+
     const user = await User.findOne({ where: { email } })
 
     if (!user) {
       return null
     }
 
-    const isMatch = await bcrypt.compare(password, user.password)
+    const isMatch = await bcrypt.compare(password!, user.password)
 
     if (!isMatch) {
       return null

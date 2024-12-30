@@ -8,7 +8,7 @@ class usePermissions {
     const validation = permissionsValidation(body)
 
     if (!validation.success) {
-      return { error: validation.error.errors }
+      return { error: validation.error.flatten().fieldErrors }
     }
 
     const { id, moduleId, canRead, canWrite, canEdit, canDelete } =

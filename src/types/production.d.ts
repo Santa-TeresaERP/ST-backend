@@ -3,7 +3,7 @@ export interface productionAttributes {
   productId: string
   quantityProduced: number
   resourceId: string
-  resourceUsed: string
+  quantityUsed: string
   productionDate: string
   observation: string
 }

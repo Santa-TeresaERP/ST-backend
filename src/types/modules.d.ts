@@ -71,3 +71,19 @@ export interface PaymentAttributes {
   payment_date: Date
   status: string
 }
+
+export interface ProductAttributes {
+  id: string
+  name: string
+  category_id: string
+  price: number
+  stock: number
+  description: string
+  imagen_url: string
+}
+
+export interface CategoryAttributes {
+  id: string
+  name: string
+  description: string
+}

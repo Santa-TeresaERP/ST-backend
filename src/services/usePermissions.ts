@@ -1,4 +1,4 @@
-import Permissions from '@models/users_models/permissions'
+import Permissions from '@models/permissions'
 import { PermissionsAttributes } from '@type/modules'
 import { permissionsValidation } from 'src/schemas/permissionsSchema'
 

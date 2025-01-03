@@ -1,8 +1,8 @@
 import { DataTypes, Model } from 'sequelize'
 import sequelize from '@config/database'
 import { RolesPermissionsAttributes } from '@type/modules'
-import Roles from '@models/users_models/roles'
-import Permissions from '@models/users_models/permissions'
+import Roles from '@models/roles'
+import Permissions from '@models/permissions'
 
 class RolesPermissions
   extends Model<RolesPermissionsAttributes>

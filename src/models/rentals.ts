@@ -2,9 +2,9 @@ import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { RentalAttributes } from '@type/modules'
 import { v4 as uuid } from 'uuid'
-import Customer from '@models/rent_models/customers'
-import Location from '@models/rent_models/locations'
-import User from '@models/users_models/user'
+import Customer from '@models/customers'
+import Location from '@models/locations'
+import User from '@models/user'
 
 class Rental
   extends Model<RentalAttributes, Optional<RentalAttributes, 'id'>>

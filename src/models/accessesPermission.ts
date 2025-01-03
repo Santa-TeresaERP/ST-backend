@@ -3,7 +3,7 @@ import sequelize from '@config/database'
 import { AccessesPermissionAttributes } from '@type/modules'
 import { v4 as uuid } from 'uuid'
 import Accesses from '@models/accesses'
-import User from '@models/users_models/user'
+import User from '@models/user'
 
 class AccessesPermission
   extends Model<

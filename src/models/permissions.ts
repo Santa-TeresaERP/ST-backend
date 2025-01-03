@@ -2,7 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { PermissionsAttributes } from '@type/modules'
 import { v4 as uuid } from 'uuid'
-import Module from '@models/users_models/module'
+import Module from '@models/module'
 
 class Permissions
   extends Model<PermissionsAttributes, Optional<PermissionsAttributes, 'id'>>

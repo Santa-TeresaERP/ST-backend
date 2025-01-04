@@ -1,8 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { productionAttributes } from '@type/production'
-import resource from '@models/resource'
-//import products from '@models/products'
+import products from '@models/products'
 import { v4 as uuid } from 'uuid'
 
 class production
@@ -12,7 +11,6 @@ class production
   public id!: string
   public productId!: string
   public quantityProduced!: number
-  public resourceId!: string
   public quantityUsed!: string
   public productionDate!: string
   public observation!: string
@@ -23,7 +21,6 @@ production.init(
     id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
     productId: { type: DataTypes.STRING, allowNull: false },
     quantityProduced: { type: DataTypes.INTEGER, allowNull: false },
-    resourceId: { type: DataTypes.STRING, allowNull: false },
     quantityUsed: { type: DataTypes.STRING, allowNull: false },
     productionDate: { type: DataTypes.DATE, allowNull: false },
     observation: { type: DataTypes.STRING, allowNull: true },
@@ -35,7 +32,6 @@ production.init(
   },
 )
 
-/** 
 production.belongsTo(products, {
   foreignKey: 'productId',
   as: 'product',
@@ -43,17 +39,6 @@ production.belongsTo(products, {
 
 products.hasMany(production, {
   foreignKey: 'productId',
-  as: 'productions',
-})
-*/
-
-production.belongsTo(resource, {
-  foreignKey: 'resourceId',
-  as: 'resource',
-})
-
-resource.hasMany(production, {
-  foreignKey: 'resourceId',
   as: 'productions',
 })
 

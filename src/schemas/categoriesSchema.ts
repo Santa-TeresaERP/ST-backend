@@ -8,12 +8,14 @@ const categoriesSchema = z.object({
     .regex(
       /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/,
       'El nombre de la categoría solo debe contener letras y espacios',
-    ),
+    )
+    .min(1, 'El nombre de la categoría es obligatorio'), // Agregado para que no sea vacío
 
   description: z
     .string()
     .max(150, 'La descripción no debe exceder los 150 caracteres')
-    .optional(),
+    .optional()
+    .default(''),
 })
 
 export const categoriesValidation = (data: CategoryAttributes) =>

@@ -37,7 +37,7 @@ class useResource {
     return resources
   }
 
-  static async deleteResource(id: number) {
+  static async deleteResource(id: string) {
     const Resource = await resource.findByPk(id)
     if (!Resource) {
       return null
@@ -47,7 +47,7 @@ class useResource {
     return { message: 'Recurso eliminado correctamente' }
   }
 
-  static async updateResource(id: number, body: resourceAttributes) {
+  static async updateResource(id: string, body: resourceAttributes) {
     const validation = resourceValidation(body)
     if (!validation.success) {
       return { error: validation.error.errors }

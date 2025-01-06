@@ -69,7 +69,7 @@ class useUser {
     return user
   }
 
-  static async getUser(id: number) {
+  static async getUser(id: string) {
     const user = await User.findByPk(id)
     if (!user) {
       return null
@@ -77,7 +77,7 @@ class useUser {
     return user
   }
 
-  static async deleteUser(id: number) {
+  static async deleteUser(id: string) {
     const user = await User.findByPk(id)
     if (!user) {
       return null
@@ -87,7 +87,7 @@ class useUser {
     return { message: 'Usuario eliminado correctamente' }
   }
 
-  static async updateUser(id: number, body: UserAttributes) {
+  static async updateUser(id: string, body: UserAttributes) {
     const validation = userValidation(body)
     if (!validation.success) {
       return { error: validation.error.errors } // Devuelve los errores de validación

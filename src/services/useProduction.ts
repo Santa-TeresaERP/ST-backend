@@ -33,7 +33,7 @@ class useProduction {
     return productions
   }
 
-  static async deleteProduction(id: number) {
+  static async deleteProduction(id: string) {
     const Production = await production.findByPk(id)
     if (!Production) {
       return null
@@ -43,7 +43,7 @@ class useProduction {
     return { message: 'Producción eliminada correctamente' }
   }
 
-  static async updateProduction(id: number, body: productionAttributes) {
+  static async updateProduction(id: string, body: productionAttributes) {
     const validation = productionValidation(body)
     if (!validation.success) {
       return { error: validation.error.errors }

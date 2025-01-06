@@ -33,7 +33,7 @@ class useModule {
     return modules
   }
 
-  static async deleteModule(id: number) {
+  static async deleteModule(id: string) {
     const module = await Module.findByPk(id)
     if (!module) {
       return null
@@ -43,7 +43,7 @@ class useModule {
     return { message: 'Módulo eliminado correctamente' }
   }
 
-  static async updateModule(id: number, body: ModulesAttributes) {
+  static async updateModule(id: string, body: ModulesAttributes) {
     const validation = modulesValidation(body)
     if (!validation.success) {
       return { error: validation.error.errors }

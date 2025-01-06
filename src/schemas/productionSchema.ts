@@ -9,10 +9,6 @@ const ProductionSchema = z.object({
   quantityProduced: z
     .number({ invalid_type_error: 'Debe ser un número' })
     .positive('La cantidad producida debe ser mayor a cero'),
-  resourceId: z
-    .string()
-    .uuid('El ID del recurso debe ser un UUID válido')
-    .nonempty('El recurso no puede estar vacío'),
   quantityUsed: z
     .string()
     .nonempty('La cantidad utilizada no puede estar vacía'),

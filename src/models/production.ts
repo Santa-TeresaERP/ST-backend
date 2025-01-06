@@ -19,7 +19,7 @@ class production
 production.init(
   {
     id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
-    productId: { type: DataTypes.STRING, allowNull: false },
+    productId: { type: DataTypes.UUID, allowNull: false },
     quantityProduced: { type: DataTypes.INTEGER, allowNull: false },
     quantityUsed: { type: DataTypes.STRING, allowNull: false },
     productionDate: { type: DataTypes.DATE, allowNull: false },

@@ -3,27 +3,14 @@ export interface ModulesAttributes {
   name: string
 }
 
-export interface AccessesAttributes {
-  id?: string
-  moduleId: string
-  name: string
-}
-
-export interface AccessesPermissionAttributes {
-  id?: string
-  userId: string
-  accessId: string
-  value: boolean
-}
-
 export interface RolesAttributes {
-  id: string
+  id?: string
   name: string
   description: string
 }
 
 export interface PermissionsAttributes {
-  id: string
+  id?: string
   moduleId: string
   canRead: boolean
   canWrite: boolean
@@ -32,12 +19,12 @@ export interface PermissionsAttributes {
 }
 
 export interface RolesPermissionsAttributes {
-  roleId: string
+  roleId?: string
   permissionId: string
 }
 
 export interface CustomerAttributes {
-  id: string
+  id?: string
   full_name: string
   dni: string
   phone: string
@@ -45,7 +32,7 @@ export interface CustomerAttributes {
 }
 
 export interface LocationAttributes {
-  id: string
+  id?: string
   name: string
   address: string
   capacity: number
@@ -53,7 +40,7 @@ export interface LocationAttributes {
 }
 
 export interface RentalAttributes {
-  id: string
+  id?: string
   customer_id: string
   location_id: string
   user_id: string
@@ -65,7 +52,7 @@ export interface RentalAttributes {
 }
 
 export interface PaymentAttributes {
-  id: string
+  id?: string
   rental_id: string
   amount: number
   payment_date: Date
@@ -73,7 +60,7 @@ export interface PaymentAttributes {
 }
 
 export interface ProductAttributes {
-  id: string
+  id?: string
   name: string
   category_id: string
   price: number
@@ -83,7 +70,7 @@ export interface ProductAttributes {
 }
 
 export interface CategoryAttributes {
-  id: string
+  id?: string
   name: string
   description: string
 }

@@ -29,8 +29,13 @@ class useProduction {
   }
 
   static async getProductions() {
-    const productions = await production.findAll()
-    return productions
+    try {
+      const productions = await production.findAll()
+      return productions
+    } catch (error) {
+      console.log('Error al obtener producciones:', error)
+      return null
+    }
   }
 
   static async deleteProduction(id: string) {

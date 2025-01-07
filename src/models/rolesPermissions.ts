@@ -20,11 +20,10 @@ RolesPermissions.init(
   {
     sequelize,
     tableName: 'roles_permissions',
-    timestamps: false, // No necesitamos createdAt ni updatedAt en tablas de relaciones
+    timestamps: false, 
   },
 )
 
-// Relación Roles <-> Permissions
 Roles.belongsToMany(Permissions, {
   through: RolesPermissions,
   foreignKey: 'roleId',

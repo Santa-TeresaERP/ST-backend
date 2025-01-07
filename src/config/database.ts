@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize'
-import { PG_NAME, PG_HOST, PG_PASSWORD, PG_PORT, PG_USER } from '@environments'
+import { PG_NAMEDB,PG_HOST, PG_PASSWORD, PG_PORT, PG_USER } from '@environments'
 
-const sequelize = new Sequelize(PG_NAME!, PG_USER!, PG_PASSWORD, {
+const sequelize = new Sequelize(PG_NAMEDB!, PG_USER!, PG_PASSWORD, {
   host: PG_HOST!,
   port: parseInt(PG_PORT!),
   dialect: 'postgres',

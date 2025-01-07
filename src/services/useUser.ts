@@ -40,7 +40,7 @@ class useUser {
   static async createUser(body: UserAttributes) {
     const validation = userValidation(body)
     if (!validation.success) {
-      return { error: validation.error.errors } // Devuelve los errores de validación
+      return { error: validation.error.errors }
     }
 
     const { name, phonenumber, dni, email, password, roleId, status } = body

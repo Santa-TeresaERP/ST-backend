@@ -3,7 +3,7 @@ import 'dotenv/config'
 export const {
   SECRET_KEY,
   PORT,
-  PG_NAME,
+  PG_NAMEDB,
   PG_USER,
   PG_PASSWORD,
   PG_HOST,

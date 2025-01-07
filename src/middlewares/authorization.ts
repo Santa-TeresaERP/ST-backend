@@ -14,9 +14,6 @@ const authorization = (req: AuthRequest, res: Response, next: NextFunction) => {
     if (!validation) throw new HttpError('The token is not valid', 401)
 
     req.authUser = validation
-    if (!req.authUser.isAdmin) {
-      throw new HttpError('The resource you are accessing does not exist', 404)
-    }
     next()
   } catch (err) {
     if (err instanceof HttpError) {

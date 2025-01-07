@@ -1,4 +1,4 @@
-import { PermissionsAttributes } from '@type/modules'
+import { PermissionsAttributes } from '@type/permissions'
 import { z } from 'zod'
 
 const PermissionsSchema = z.object({

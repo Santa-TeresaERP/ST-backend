@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize'
 import sequelize from '@config/database'
-import { RolesPermissionsAttributes } from '@type/modules'
+import { RolesPermissionsAttributes } from '@type/permissions'
 import Roles from '@models/roles'
 import Permissions from '@models/permissions'
 

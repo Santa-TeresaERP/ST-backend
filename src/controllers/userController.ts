@@ -42,7 +42,7 @@ class userController {
 
   static async updateUser(req: Request, res: Response) {
     try {
-      const user = useUser.updateUser(req.params.id, req.body)
+      const user = useUser.updateUser(parseInt(req.params.id), req.body)
       if (!user) throw new HttpError('Error to updating user', 400)
 
       res.json({ message: 'User updated', user })

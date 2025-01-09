@@ -1,6 +1,6 @@
 import Product from '@models/products'
 import Category from '@models/categories'
-import { ProductAttributes } from '@type/modules'
+import { ProductAttributes } from '@type/products'
 import { productsValidation } from 'src/schemas/productsSchema'
 
 class useProducts {

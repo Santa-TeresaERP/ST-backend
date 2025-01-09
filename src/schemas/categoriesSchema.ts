@@ -1,4 +1,4 @@
-import { CategoryAttributes } from '@type/modules'
+import { CategoryAttributes } from '@type/categories'
 import { z } from 'zod'
 
 const categoriesSchema = z.object({

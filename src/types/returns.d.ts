@@ -5,4 +5,5 @@ export interface returnsAttributes {
   reason: string
   observations?: string
   createdAt?: Date
+  updatedAt?: Date
 }

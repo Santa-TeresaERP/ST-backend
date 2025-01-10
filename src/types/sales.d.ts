@@ -4,4 +4,5 @@ export interface salesAtributes {
   total: number
   observations?: string | null
   createdAt?: Date
+  updatedAt?: Date
 }

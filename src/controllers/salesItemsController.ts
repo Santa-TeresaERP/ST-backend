@@ -11,12 +11,11 @@ class SalesItemsController {
         throw new HttpError('Invalid sale item data', 400)
       }
 
-      const { salesId, productId, quantity, price } = req.body
+      const { salesId, productId, quantity } = req.body
       const newSaleItem = await SaleItem.create({
         salesId,
         productId,
-        quantity,
-        price
+        quantity
       })
       
       res.status(201).json({ message: 'Sale item created successfully', saleItem: newSaleItem })

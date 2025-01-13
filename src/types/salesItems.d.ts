@@ -3,7 +3,6 @@ export interface salesItemAttributes {
   salesId: string  
   productId: string
   quantity: number
-  price: number
   createdAt?: Date
   updatedAt?: Date
 }

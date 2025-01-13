@@ -10,7 +10,6 @@ class SaleItem
   public salesId!: string
   public productId!: string
   public quantity!: number
-  public price!: number
   public createdAt!: Date
 }
 
@@ -20,7 +19,6 @@ SaleItem.init(
     salesId: { type: DataTypes.UUID, allowNull: false },
     productId: { type: DataTypes.UUID, allowNull: false },
     quantity: { type: DataTypes.INTEGER, allowNull: false },
-    price: { type: DataTypes.DECIMAL, allowNull: false },
     createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
   },
   {

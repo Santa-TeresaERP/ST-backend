@@ -9,7 +9,7 @@ class useSalesItems {
       return { error: validation.error.errors }
     }
 
-    const { salesId, productId, quantity, price } = body
+    const { salesId, productId, quantity } = body
 
     const existingItem = await SaleItem.findOne({
       where: {
@@ -25,8 +25,7 @@ class useSalesItems {
     const saleItem = await SaleItem.create({
       salesId,
       productId,
-      quantity,
-      price
+      quantity
     })
 
     return saleItem

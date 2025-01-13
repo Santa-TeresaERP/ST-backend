@@ -15,7 +15,9 @@ class useReturns {
       productId,
       salesId,
       reason,
-      observations
+      observations,
+      createdAt: body.createdAt,
+      updatedAt: body.updatedAt
     })
 
     return newReturn

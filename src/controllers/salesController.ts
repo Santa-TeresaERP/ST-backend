@@ -11,7 +11,8 @@ class SalesController {
         userId: req.body.userId,
         total: req.body.total,
         observations: req.body.observations || null,
-        createdAt: new Date()
+        createdAt: new Date(),
+        updatedAt: new Date()
       }
 
       const sale = await Sale.create(saleData)
@@ -54,7 +55,8 @@ class SalesController {
     try {
       const saleData: Partial<salesAtributes> = {
         total: req.body.total,
-        observations: req.body.observations
+        observations: req.body.observations,
+        updatedAt: new Date()
       }
 
       const [updated] = await Sale.update(saleData, {

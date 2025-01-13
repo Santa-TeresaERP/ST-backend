@@ -7,6 +7,7 @@ export const salesSchema = z.object({
   total: z.number().positive(),
   observations: z.string().nullable(),
   createdAt: z.date(),
+  updatedAt: z.date().optional()
 });
 
 export const saleValidation = (data: salesAtributes) =>

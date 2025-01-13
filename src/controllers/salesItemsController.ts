@@ -1,5 +1,5 @@
-import SaleItem from '../models/salesItems'
 import { Request, Response } from 'express'
+import SaleItem from '@models/salesItems'
 import { HttpError } from '../errors/http'
 import { salesItemsValidation } from '../schemas/salesItemsSchema'
 
@@ -11,7 +11,14 @@ class SalesItemsController {
         throw new HttpError('Invalid sale item data', 400)
       }
 
-      const newSaleItem = await SaleItem.create(req.body)
+      const { salesId, productId, quantity, price } = req.body
+      const newSaleItem = await SaleItem.create({
+        salesId,
+        productId,
+        quantity,
+        price
+      })
+      
       res.status(201).json({ message: 'Sale item created successfully', saleItem: newSaleItem })
     } catch (error) {
       if (error instanceof HttpError) {
@@ -29,6 +36,17 @@ class SalesItemsController {
     } catch (error) {
       console.error('Error getting sales items:', error)
       res.status(500).json({ message: 'Error getting sales items' })
+    }
+  }
+
+  static async getSaleItemsBySale(req: Request, res: Response) {
+    try {
+      const saleItems = await SaleItem.findAll({
+        where: { salesId: req.params.saleId }
+      })
+      res.json(saleItems)
+    } catch (error) {
+      res.status(500).json({ error: 'Error getting sale items' })
     }
   }
 

@@ -1,17 +1,16 @@
 import SaleItem from '@models/salesItems'
-import { salesItemsAttributes } from '@type/salesItems'
+import { salesItemAttributes } from '@type/salesItems'
 import { salesItemsValidation } from 'src/schemas/salesItemsSchema'
 
 class useSalesItems {
-  static async createSaleItem(body: salesItemsAttributes) {
+  static async createSaleItem(body: salesItemAttributes) {
     const validation = salesItemsValidation(body)
     if (!validation.success) {
       return { error: validation.error.errors }
     }
 
-    const { salesId, productId, quantity } = body
+    const { salesId, productId, quantity, price } = body
 
-    // Check if item already exists
     const existingItem = await SaleItem.findOne({
       where: {
         salesId,
@@ -26,7 +25,8 @@ class useSalesItems {
     const saleItem = await SaleItem.create({
       salesId,
       productId,
-      quantity
+      quantity,
+      price
     })
 
     return saleItem
@@ -62,7 +62,7 @@ class useSalesItems {
     return { message: 'Item de venta eliminado correctamente' }
   }
 
-  static async updateSaleItem(salesId: string, productId: string, body: salesItemsAttributes) {
+  static async updateSaleItem(salesId: string, productId: string, body: salesItemAttributes) {
     const validation = salesItemsValidation(body)
     if (!validation.success) {
       return { error: validation.error.errors }

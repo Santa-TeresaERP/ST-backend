@@ -12,6 +12,7 @@ class Return
   public reason!: string
   public observations!: string 
   public createdAt!: Date
+  public updatedAt!: Date
 }
 
 Return.init(
@@ -35,6 +36,11 @@ Return.init(
       type: DataTypes.DATE, 
       defaultValue: DataTypes.NOW,
       field: 'created_at'
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+      field: 'updated_at'
     }
   },
   {

@@ -21,7 +21,8 @@ class useSales {
       userId,
       total,
       observations,
-      createdAt: new Date()
+      createdAt: new Date(),
+      updatedAt: new Date()
     })
 
     return sale
@@ -70,7 +71,10 @@ class useSales {
       return { error: validation.error.errors }
     }
 
-    await sale.update(body)
+    await sale.update({
+      ...body,
+      updatedAt: new Date()
+    })
     return sale
   }
 }

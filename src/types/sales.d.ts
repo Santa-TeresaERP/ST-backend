@@ -1,8 +1,8 @@
-export interface salesAtributes {
+export interface salesAttributes {
   id?: string
   userId: string
   total: number
-  observations?: string | null
+  observations?: string
   createdAt?: Date
   updatedAt?: Date
 }

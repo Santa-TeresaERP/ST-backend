@@ -1,5 +1,5 @@
 import SaleItem from '@models/salesItems'
-import { salesItemsAttributes } from '@type/salesItems'
+import { salesItemsAttributes } from '@type/salesItem'
 import { salesItemsValidation } from 'src/schemas/salesItemsSchema'
 
 class useSalesItems {

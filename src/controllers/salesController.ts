@@ -1,8 +1,8 @@
-import Sale from '@models/sales'
+import Sale from '@models/sale'
 import User from '@models/user'
 import { Request, Response } from 'express'
 import { HttpError } from '@errors/http'
-import { salesAtributes } from '@type/sales'
+import { salesAtributes } from '@type/sale'
 
 class SalesController {
   static async createSale(req: Request, res: Response) {

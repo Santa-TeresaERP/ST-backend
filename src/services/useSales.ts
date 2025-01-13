@@ -1,5 +1,5 @@
-import { salesAtributes } from '@type/sales'
-import Sale from '@models/sales'
+import { salesAtributes } from '@type/sale'
+import Sale from '@models/sale'
 import User from '@models/user'
 import { saleValidation } from 'src/schemas/salesSchema'
 

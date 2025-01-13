@@ -11,7 +11,7 @@ class SalesController {
         userId: req.body.userId,
         total: req.body.total,
         observations: req.body.observations || null,
-        createdAt: new Date()
+        createdAt: new Date(),
       }
 
       const sale = await Sale.create(saleData)
@@ -30,7 +30,7 @@ class SalesController {
   static async getSales(_req: Request, res: Response) {
     try {
       const sales = await Sale.findAll({
-        include: [{ model: User }]
+        include: [{ model: User }],
       })
       res.json(sales)
     } catch (error) {
@@ -54,11 +54,11 @@ class SalesController {
     try {
       const saleData: Partial<salesAtributes> = {
         total: req.body.total,
-        observations: req.body.observations
+        observations: req.body.observations,
       }
 
       const [updated] = await Sale.update(saleData, {
-        where: { id: req.params.id }
+        where: { id: req.params.id },
       })
 
       if (!updated) throw new HttpError('Sale not found', 404)

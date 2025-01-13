@@ -5,9 +5,10 @@ import { v4 as uuid } from 'uuid'
 import User from '@models/user'
 import SaleItem from './salesItems'
 
-class Sale 
+class Sale
   extends Model<salesAtributes, Optional<salesAtributes, 'id'>>
-  implements salesAtributes {
+  implements salesAtributes
+{
   public id!: string
   public userId!: string
   public total!: number
@@ -21,13 +22,13 @@ Sale.init(
     userId: { type: DataTypes.UUID, allowNull: false },
     total: { type: DataTypes.DECIMAL, allowNull: false },
     observations: { type: DataTypes.STRING, allowNull: true },
-    createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
+    createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
   },
   {
     sequelize,
     tableName: 'sales',
     timestamps: true,
-  }
+  },
 )
 Sale.belongsTo(User, { foreignKey: 'user_id' })
 Sale.hasMany(SaleItem, { foreignKey: 'salesId' })

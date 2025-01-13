@@ -15,8 +15,8 @@ class useSalesItems {
     const existingItem = await SaleItem.findOne({
       where: {
         salesId,
-        productId
-      }
+        productId,
+      },
     })
 
     if (existingItem) {
@@ -26,7 +26,7 @@ class useSalesItems {
     const saleItem = await SaleItem.create({
       salesId,
       productId,
-      quantity
+      quantity,
     })
 
     return saleItem
@@ -36,8 +36,8 @@ class useSalesItems {
     const saleItem = await SaleItem.findOne({
       where: {
         salesId,
-        productId
-      }
+        productId,
+      },
     })
 
     if (!saleItem) {
@@ -50,8 +50,8 @@ class useSalesItems {
     const saleItem = await SaleItem.findOne({
       where: {
         salesId,
-        productId
-      }
+        productId,
+      },
     })
 
     if (!saleItem) {
@@ -62,7 +62,11 @@ class useSalesItems {
     return { message: 'Item de venta eliminado correctamente' }
   }
 
-  static async updateSaleItem(salesId: string, productId: string, body: salesItemsAttributes) {
+  static async updateSaleItem(
+    salesId: string,
+    productId: string,
+    body: salesItemsAttributes,
+  ) {
     const validation = salesItemsValidation(body)
     if (!validation.success) {
       return { error: validation.error.errors }
@@ -71,8 +75,8 @@ class useSalesItems {
     const saleItem = await SaleItem.findOne({
       where: {
         salesId,
-        productId
-      }
+        productId,
+      },
     })
 
     if (!saleItem) {

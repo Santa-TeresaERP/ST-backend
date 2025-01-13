@@ -12,7 +12,10 @@ class SalesItemsController {
       }
 
       const newSaleItem = await SaleItem.create(req.body)
-      res.status(201).json({ message: 'Sale item created successfully', saleItem: newSaleItem })
+      res.status(201).json({
+        message: 'Sale item created successfully',
+        saleItem: newSaleItem,
+      })
     } catch (error) {
       if (error instanceof HttpError) {
         res.status(error.statusCode).json({ error: error.message })
@@ -35,11 +38,11 @@ class SalesItemsController {
   static async deleteSaleItem(req: Request, res: Response) {
     try {
       const { salesId, productId } = req.params
-      await SaleItem.destroy({ 
-        where: { 
+      await SaleItem.destroy({
+        where: {
           salesId: salesId,
-          productId: productId
-        } 
+          productId: productId,
+        },
       })
       res.json({ message: 'Sale item deleted successfully' })
     } catch (error) {
@@ -57,10 +60,10 @@ class SalesItemsController {
 
       const { salesId, productId } = req.params
       const [updated] = await SaleItem.update(req.body, {
-        where: { 
+        where: {
           salesId: salesId,
-          productId: productId
-        }
+          productId: productId,
+        },
       })
 
       if (!updated) {
@@ -70,10 +73,13 @@ class SalesItemsController {
       const updatedSaleItem = await SaleItem.findOne({
         where: {
           salesId: salesId,
-          productId: productId
-        }
+          productId: productId,
+        },
       })
-      res.json({ message: 'Sale item updated successfully', saleItem: updatedSaleItem })
+      res.json({
+        message: 'Sale item updated successfully',
+        saleItem: updatedSaleItem,
+      })
     } catch (error) {
       if (error instanceof HttpError) {
         res.status(error.statusCode).json({ error: error.message })

@@ -15,7 +15,7 @@ class useReturns {
       productId,
       salesId,
       reason,
-      observations
+      observations,
     })
 
     return newReturn

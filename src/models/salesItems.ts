@@ -4,10 +4,10 @@ import sequelize from '@config/database'
 import Sale from './sales'
 import Product from './products'
 
-class SaleItem 
+class SaleItem
   extends Model<salesItemsAttributes>
-  implements salesItemsAttributes {
-
+  implements salesItemsAttributes
+{
   public salesId!: string
   public productId!: string
   public quantity!: number
@@ -15,17 +15,17 @@ class SaleItem
 
 SaleItem.init(
   {
-    salesId: { 
-      type: DataTypes.UUID, 
+    salesId: {
+      type: DataTypes.UUID,
       primaryKey: true,
-      references: { model: 'sales', key: 'id' }
+      references: { model: 'sales', key: 'id' },
     },
-    productId: { 
-      type: DataTypes.UUID, 
+    productId: {
+      type: DataTypes.UUID,
       primaryKey: true,
-      references: { model: 'products', key: 'id' }
+      references: { model: 'products', key: 'id' },
     },
-    quantity: { type: DataTypes.INTEGER, allowNull: false }
+    quantity: { type: DataTypes.INTEGER, allowNull: false },
   },
   {
     sequelize,
@@ -34,9 +34,9 @@ SaleItem.init(
     indexes: [
       {
         unique: true,
-        fields: ['salesId', 'productId']
-      }
-    ]
+        fields: ['salesId', 'productId'],
+      },
+    ],
   },
 )
 

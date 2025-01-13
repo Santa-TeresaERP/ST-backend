@@ -12,7 +12,9 @@ class ReturnsController {
       }
 
       const newReturn = await Return.create(req.body)
-      res.status(201).json({ message: 'Return created successfully', return: newReturn })
+      res
+        .status(201)
+        .json({ message: 'Return created successfully', return: newReturn })
     } catch (error) {
       if (error instanceof HttpError) {
         res.status(error.statusCode).json({ error: error.message })
@@ -52,7 +54,7 @@ class ReturnsController {
 
       const returnId = req.params.id
       const [updated] = await Return.update(req.body, {
-        where: { id: returnId }
+        where: { id: returnId },
       })
 
       if (!updated) {
@@ -60,7 +62,10 @@ class ReturnsController {
       }
 
       const updatedReturn = await Return.findByPk(returnId)
-      res.json({ message: 'Return updated successfully', return: updatedReturn })
+      res.json({
+        message: 'Return updated successfully',
+        return: updatedReturn,
+      })
     } catch (error) {
       if (error instanceof HttpError) {
         res.status(error.statusCode).json({ error: error.message })

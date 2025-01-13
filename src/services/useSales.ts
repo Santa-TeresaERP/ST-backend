@@ -11,7 +11,7 @@ class useSales {
     }
 
     const { userId, total, observations } = body
-    
+
     const user = await User.findByPk(userId)
     if (!user) {
       return null
@@ -21,7 +21,7 @@ class useSales {
       userId,
       total,
       observations,
-      createdAt: new Date()
+      createdAt: new Date(),
     })
 
     return sale
@@ -29,7 +29,7 @@ class useSales {
 
   static async getSale(id: string) {
     const sale = await Sale.findByPk(id, {
-      include: [{ model: User }]
+      include: [{ model: User }],
     })
     if (!sale) {
       return null
@@ -39,7 +39,7 @@ class useSales {
 
   static async getAllSales() {
     const sales = await Sale.findAll({
-      include: [{ model: User }]
+      include: [{ model: User }],
     })
     return sales
   }
@@ -62,7 +62,7 @@ class useSales {
 
     const updatedData = {
       ...sale.toJSON(),
-      ...body
+      ...body,
     }
 
     const validation = saleValidation(updatedData)

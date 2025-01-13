@@ -1,5 +1,5 @@
-import { salesAtributes } from "@type/sales";
-import { z } from "zod";
+import { salesAtributes } from '@type/sales'
+import { z } from 'zod'
 
 export const salesSchema = z.object({
   id: z.string().uuid(),
@@ -7,7 +7,7 @@ export const salesSchema = z.object({
   total: z.number().positive(),
   observations: z.string().nullable(),
   createdAt: z.date(),
-});
+})
 
 export const saleValidation = (data: salesAtributes) =>
-  salesSchema.safeParse(data);
+  salesSchema.safeParse(data)

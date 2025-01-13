@@ -9,11 +9,7 @@ export const returnSchema = z.object({
   reason: z.string().nullable(),
   observations: z.string().nullable(),
   createdAt: z.date(),
-});
+})
 
 export const productionValidation = (data: returnsAttributes) =>
   returnSchema.safeParse(data)
-
-
-
-

@@ -1,4 +1,4 @@
-import { returnsAttributes } from '@type/returns'
+import { returnsAttributes } from '@type/return'
 
 import { z } from 'zod'
 

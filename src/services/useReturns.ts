@@ -1,5 +1,5 @@
-import Return from '@models/returns'
-import { returnsAttributes } from '@type/returns'
+import Return from '@models/return'
+import { returnsAttributes } from '@type/return'
 import { productionValidation } from 'src/schemas/returnsSchema'
 
 class useReturns {

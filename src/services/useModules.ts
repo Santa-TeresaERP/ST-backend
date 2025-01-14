@@ -1,4 +1,4 @@
-import Module from '@models/module'
+import Module from '@models/modules'
 import { ModulesAttributes } from '@type/modules'
 import { modulesValidation } from 'src/schemas/modulesSchema'
 

@@ -32,12 +32,9 @@ const userSchema = z.object({
       'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y solo los caracteres "_" o "-" permitidos',
     ),
 
-  status: z
-    .string()
-    .regex(/^[A-Za-z]+$/, 'El estado solo debe contener letras')
-    .nonempty('El estado no puede estar vacío'),
+  status: z.boolean().default(true),
 
-  createdA: z.date().optional(),
+  createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 })
 

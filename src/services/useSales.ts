@@ -1,10 +1,10 @@
-import { salesAtributes } from '@type/sale'
+import { salesAttributes } from '@type/sale'
 import Sale from '@models/sale'
 import User from '@models/user'
 import { saleValidation } from 'src/schemas/salesSchema'
 
 class useSales {
-  static async createSale(body: salesAtributes) {
+  static async createSale(body: salesAttributes) {
     const validation = saleValidation(body)
     if (!validation.success) {
       return { error: validation.error.errors }
@@ -54,7 +54,7 @@ class useSales {
     return { message: 'Venta eliminada correctamente' }
   }
 
-  static async updateSale(id: string, body: Partial<salesAtributes>) {
+  static async updateSale(id: string, body: Partial<salesAttributes>) {
     const sale = await Sale.findByPk(id)
     if (!sale) {
       return null

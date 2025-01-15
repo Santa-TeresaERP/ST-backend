@@ -1,4 +1,4 @@
-import SaleItem from '../models/salesItems'
+import SalesItem from '../models/salesItem'
 import { Request, Response } from 'express'
 import { HttpError } from '../errors/http'
 import { salesItemsValidation } from '../schemas/salesItemsSchema'
@@ -11,7 +11,7 @@ class SalesItemsController {
         throw new HttpError('Invalid sale item data', 400)
       }
 
-      const newSaleItem = await SaleItem.create(req.body)
+      const newSaleItem = await SalesItem.create(req.body)
       res.status(201).json({
         message: 'Sale item created successfully',
         saleItem: newSaleItem,
@@ -27,7 +27,7 @@ class SalesItemsController {
 
   static async getSalesItems(_req: Request, res: Response) {
     try {
-      const salesItems = await SaleItem.findAll()
+      const salesItems = await SalesItem.findAll()
       res.json(salesItems)
     } catch (error) {
       console.error('Error getting sales items:', error)
@@ -38,7 +38,7 @@ class SalesItemsController {
   static async deleteSaleItem(req: Request, res: Response) {
     try {
       const { salesId, productId } = req.params
-      await SaleItem.destroy({
+      await SalesItem.destroy({
         where: {
           salesId: salesId,
           productId: productId,
@@ -59,7 +59,7 @@ class SalesItemsController {
       }
 
       const { salesId, productId } = req.params
-      const [updated] = await SaleItem.update(req.body, {
+      const [updated] = await SalesItem.update(req.body, {
         where: {
           salesId: salesId,
           productId: productId,
@@ -70,7 +70,7 @@ class SalesItemsController {
         throw new HttpError('Sale item not found', 404)
       }
 
-      const updatedSaleItem = await SaleItem.findOne({
+      const updatedSaleItem = await SalesItem.findOne({
         where: {
           salesId: salesId,
           productId: productId,

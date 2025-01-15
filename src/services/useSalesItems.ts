@@ -1,4 +1,4 @@
-import SaleItem from '@models/salesItems'
+import SalesItem from '@models/salesItem'
 import { salesItemsAttributes } from '@type/salesItem'
 import { salesItemsValidation } from 'src/schemas/salesItemsSchema'
 
@@ -12,7 +12,7 @@ class useSalesItems {
     const { salesId, productId, quantity } = body
 
     // Check if item already exists
-    const existingItem = await SaleItem.findOne({
+    const existingItem = await SalesItem.findOne({
       where: {
         salesId,
         productId,
@@ -23,7 +23,7 @@ class useSalesItems {
       return null
     }
 
-    const saleItem = await SaleItem.create({
+    const saleItem = await SalesItem.create({
       salesId,
       productId,
       quantity,
@@ -33,7 +33,7 @@ class useSalesItems {
   }
 
   static async getSaleItem(salesId: string, productId: string) {
-    const saleItem = await SaleItem.findOne({
+    const saleItem = await SalesItem.findOne({
       where: {
         salesId,
         productId,
@@ -47,7 +47,7 @@ class useSalesItems {
   }
 
   static async deleteSaleItem(salesId: string, productId: string) {
-    const saleItem = await SaleItem.findOne({
+    const saleItem = await SalesItem.findOne({
       where: {
         salesId,
         productId,
@@ -72,7 +72,7 @@ class useSalesItems {
       return { error: validation.error.errors }
     }
 
-    const saleItem = await SaleItem.findOne({
+    const saleItem = await SalesItem.findOne({
       where: {
         salesId,
         productId,
@@ -88,7 +88,7 @@ class useSalesItems {
   }
 
   static async getAllSaleItems() {
-    const saleItems = await SaleItem.findAll()
+    const saleItems = await SalesItem.findAll()
     return saleItems
   }
 }

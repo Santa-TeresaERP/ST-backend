@@ -11,7 +11,7 @@ export interface UserAttributes {
   password: string
   createdAt?: Date
   updatedAt?: Date
-  status?: string
+  status?: boolean
 }
 
 /* On http methods */

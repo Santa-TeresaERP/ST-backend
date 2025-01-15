@@ -22,7 +22,7 @@ class User
   public password!: string
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
-  public status!: string
+  public status!: boolean
 }
 
 User.init(

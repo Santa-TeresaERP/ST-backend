@@ -1,4 +1,4 @@
-import { returnsAttributes } from '@type/return'
+import { returnAttributes } from '@type/return'
 
 import { z } from 'zod'
 
@@ -8,8 +8,8 @@ export const returnSchema = z.object({
   salesId: z.string().uuid(),
   reason: z.string().nullable(),
   observations: z.string().nullable(),
-  createdAt: z.date(),
+  createdAt: z.date().optional(),
 })
 
-export const productionValidation = (data: returnsAttributes) =>
+export const productionValidation = (data: returnAttributes) =>
   returnSchema.safeParse(data)

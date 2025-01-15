@@ -51,7 +51,7 @@ User.init(
   },
 )
 
-Roles.hasMany(User, { foreignKey: 'roleId' as 'URoleid' })
 User.belongsTo(Roles, { foreignKey: 'roleId' as 'URoleid' })
+Roles.hasOne(User, { foreignKey: 'roleId' as 'URoleid' })
 
 export default User

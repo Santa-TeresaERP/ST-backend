@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { UserAttributes } from '@type/auth'
+import Roles from '@models/roles'
 import { v4 as uuid } from 'uuid'
 
 class User
@@ -38,7 +39,7 @@ User.init(
       validate: { isEmail: true },
     },
     password: { type: DataTypes.STRING, allowNull: false },
-    roleId: { type: DataTypes.STRING, allowNull: true, defaultValue: null },
+    roleId: { type: DataTypes.UUID, allowNull: true, defaultValue: null },
     createdAt: { type: DataTypes.DATE, allowNull: false },
     updatedAt: { type: DataTypes.DATE, allowNull: false },
     status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
@@ -49,5 +50,8 @@ User.init(
     timestamps: true,
   },
 )
+
+Roles.hasMany(User, { foreignKey: 'roleId' as 'URoleid' })
+User.belongsTo(Roles, { foreignKey: 'roleId' as 'URoleid' })
 
 export default User

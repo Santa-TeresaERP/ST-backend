@@ -1,4 +1,4 @@
-import SaleItem from '@models/salesItems'
+import SaleItem from '@models/salesItem'
 import { salesItemsAttributes } from '@type/salesItem'
 import { salesItemsValidation } from 'src/schemas/salesItemsSchema'
 

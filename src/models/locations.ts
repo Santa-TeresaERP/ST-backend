@@ -21,6 +21,16 @@ Location.init(
     address: { type: DataTypes.STRING, allowNull: false },
     capacity: { type: DataTypes.INTEGER, allowNull: false },
     status: { type: DataTypes.STRING, allowNull: false },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
   { sequelize, tableName: 'locations', timestamps: true },
 )

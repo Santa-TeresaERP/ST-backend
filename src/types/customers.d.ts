@@ -4,4 +4,6 @@ export interface CustomerAttributes {
   dni: string
   phone: string
   email: string
+  createdAt?: Date
+  updatedAt?: Date
 }

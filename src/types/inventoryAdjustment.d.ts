@@ -4,5 +4,6 @@ export interface InventoryAdjustmentAttributes {
   adjustment_type: string
   quantity: number
   observations?: string
-  created_at?: string
+  createdAt?: Date
+  updatedAt?: Date
 }

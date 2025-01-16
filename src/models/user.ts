@@ -39,9 +39,21 @@ User.init(
       validate: { isEmail: true },
     },
     password: { type: DataTypes.STRING, allowNull: false },
-    roleId: { type: DataTypes.UUID, allowNull: true, defaultValue: null },
-    createdAt: { type: DataTypes.DATE, allowNull: false },
-    updatedAt: { type: DataTypes.DATE, allowNull: false },
+    roleId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      defaultValue: null,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
     status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
   },
   {
@@ -51,7 +63,7 @@ User.init(
   },
 )
 
-User.belongsTo(Roles, { foreignKey: 'roleId' as 'URoleid' })
-Roles.hasMany(User, { foreignKey: 'roleId' as 'URoleid' })
+User.belongsTo(Roles, { foreignKey: 'roleId' })
+Roles.hasMany(User, { foreignKey: 'roleId' })
 
 export default User

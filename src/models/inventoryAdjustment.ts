@@ -16,7 +16,7 @@ class InventoryAdjustment
   public adjustment_type!: string
   public quantity!: number
   public observations!: string
-  public created_at!: string
+  public created_at!: Date
 }
 
 InventoryAdjustment.init(
@@ -26,7 +26,16 @@ InventoryAdjustment.init(
     adjustment_type: { type: DataTypes.STRING, allowNull: false },
     quantity: { type: DataTypes.INTEGER, allowNull: false },
     observations: { type: DataTypes.STRING, allowNull: true },
-    created_at: { type: DataTypes.DATE, allowNull: false },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     sequelize,

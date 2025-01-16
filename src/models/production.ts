@@ -24,6 +24,16 @@ production.init(
     quantityUsed: { type: DataTypes.STRING, allowNull: false },
     productionDate: { type: DataTypes.DATE, allowNull: false },
     observation: { type: DataTypes.STRING, allowNull: true },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     sequelize,

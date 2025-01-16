@@ -4,5 +4,6 @@ export interface WarehouseAttributes {
   quantity: number
   inventory_adjustment_id?: string
   observations?: string
-  created_at?: string
+  createdAt?: Date
+  updatedAt?: Date
 }

@@ -6,4 +6,6 @@ export interface ProductAttributes {
   stock: number
   description: string
   imagen_url: string
+  createdAt?: Date
+  updatedAt?: Date
 }

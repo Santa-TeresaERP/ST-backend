@@ -3,4 +3,6 @@ export interface EgressAttributes {
   description: string
   monto: number
   fecha: Date
+  createdAt?: Date
+  updatedAt?: Date
 }

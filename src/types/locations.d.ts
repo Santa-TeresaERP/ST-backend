@@ -4,4 +4,6 @@ export interface LocationAttributes {
   address: string
   capacity: number
   status: string
+  createdAt?: Date
+  updatedAt?: Date
 }

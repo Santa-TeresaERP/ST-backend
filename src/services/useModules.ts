@@ -1,9 +1,9 @@
 import Module from '@models/modules'
-import { ModulesAttributes } from '@type/modules'
+import { ModuleAttributes } from '@type/modules'
 import { modulesValidation } from 'src/schemas/modulesSchema'
 
 class useModule {
-  static async createModule(body: ModulesAttributes) {
+  static async createModule(body: ModuleAttributes) {
     const validation = modulesValidation(body)
     if (!validation.success) {
       return { error: validation.error.errors }
@@ -43,7 +43,7 @@ class useModule {
     return { message: 'Módulo eliminado correctamente' }
   }
 
-  static async updateModule(id: string, body: ModulesAttributes) {
+  static async updateModule(id: string, body: ModuleAttributes) {
     const validation = modulesValidation(body)
     if (!validation.success) {
       return { error: validation.error.errors }

@@ -16,7 +16,8 @@ class useUser {
 
     const user = await User.findOne({ where: { email } })
 
-    if (!user) {
+    //Verifica que el ususario exista y este activo
+    if (!user || !user.status) {
       return null
     }
 
@@ -40,7 +41,7 @@ class useUser {
   static async createUser(body: UserAttributes) {
     const validation = userValidation(body)
     if (!validation.success) {
-      return { error: validation.error.errors } // Devuelve los errores de validación
+      return { error: validation.error.errors }
     }
 
     const { name, phonenumber, dni, email, password, roleId, status } = body
@@ -77,6 +78,16 @@ class useUser {
     return user
   }
 
+  static async getUsers() {
+    const users = await User.findAll({ where: { status: true } })
+    return users
+  }
+
+  static async getUsersAll() {
+    const users = await User.findAll()
+    return users
+  }
+
   static async deleteUser(id: string) {
     const user = await User.findByPk(id)
     if (!user) {
@@ -90,7 +101,7 @@ class useUser {
   static async updateUser(id: string, body: UserAttributes) {
     const validation = userValidation(body)
     if (!validation.success) {
-      return { error: validation.error.errors } // Devuelve los errores de validación
+      return { error: validation.error.errors }
     }
 
     const user = await User.findByPk(id)

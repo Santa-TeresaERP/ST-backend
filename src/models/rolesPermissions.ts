@@ -16,11 +16,21 @@ RolesPermissions.init(
   {
     roleId: { type: DataTypes.UUID, allowNull: false, primaryKey: true },
     permissionId: { type: DataTypes.UUID, allowNull: false, primaryKey: true },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     sequelize,
     tableName: 'roles_permissions',
-    timestamps: false, // No necesitamos createdAt ni updatedAt en tablas de relaciones
+    timestamps: false,
   },
 )
 

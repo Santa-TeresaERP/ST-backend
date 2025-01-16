@@ -24,7 +24,16 @@ Warehouse.init(
     quantity: { type: DataTypes.INTEGER, allowNull: false },
     inventory_adjustment_id: { type: DataTypes.UUID, allowNull: true },
     observations: { type: DataTypes.STRING, allowNull: true },
-    created_at: { type: DataTypes.DATE, allowNull: false },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     sequelize,

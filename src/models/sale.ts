@@ -22,8 +22,16 @@ sale.init(
     userId: { type: DataTypes.UUID, allowNull: false },
     total: { type: DataTypes.DECIMAL, allowNull: false },
     observations: { type: DataTypes.STRING, allowNull: true },
-    createdAt: { type: DataTypes.DATE, allowNull: false },
-    updatedAt: { type: DataTypes.DATE, allowNull: false },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     sequelize,

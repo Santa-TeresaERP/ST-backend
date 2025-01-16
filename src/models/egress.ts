@@ -19,6 +19,16 @@ Egress.init(
     description: { type: DataTypes.STRING, allowNull: false },
     monto: { type: DataTypes.INTEGER, allowNull: false },
     fecha: { type: DataTypes.DATE, allowNull: false },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     sequelize,

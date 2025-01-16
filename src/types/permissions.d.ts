@@ -5,9 +5,13 @@ export interface PermissionsAttributes {
   canWrite: boolean
   canEdit: boolean
   canDelete: boolean
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 export interface RolesPermissionsAttributes {
   roleId?: string
   permissionId: string
+  createdAt?: Date
+  updatedAt?: Date
 }

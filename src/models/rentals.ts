@@ -32,6 +32,16 @@ Rental.init(
     end_date: { type: DataTypes.DATE, allowNull: false },
     price: { type: DataTypes.STRING, allowNull: false },
     status: { type: DataTypes.STRING, allowNull: false },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
   { sequelize, tableName: 'rentals', timestamps: true },
 )

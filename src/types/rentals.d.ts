@@ -8,4 +8,6 @@ export interface RentalAttributes {
   end_date: Date
   price: string
   status: string
+  createdAt?: Date
+  updatedAt?: Date
 }

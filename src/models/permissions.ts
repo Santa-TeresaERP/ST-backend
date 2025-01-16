@@ -24,6 +24,16 @@ Permissions.init(
     canWrite: { type: DataTypes.BOOLEAN, defaultValue: false },
     canEdit: { type: DataTypes.BOOLEAN, defaultValue: false },
     canDelete: { type: DataTypes.BOOLEAN, defaultValue: false },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     sequelize,

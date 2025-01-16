@@ -4,4 +4,6 @@ export interface PaymentAttributes {
   amount: number
   payment_date: Date
   status: string
+  createdAt?: Date
+  updatedAt?: Date
 }

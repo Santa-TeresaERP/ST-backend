@@ -7,4 +7,6 @@ export interface resourceAttributes {
   supplier: string
   purchaseDate: string
   observation: string
+  createdAt?: Date
+  updatedAt?: Date
 }

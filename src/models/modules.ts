@@ -9,14 +9,24 @@ class Module
 {
   public id!: string
   public name!: string
-  public descripcion?: string // Agrega la propiedad descripcion
+  public description?: string
 }
 
 Module.init(
   {
     id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false },
-    descripcion: { type: DataTypes.STRING, allowNull: true }, // Agrega la columna descripcion
+    description: { type: DataTypes.STRING, allowNull: true },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     sequelize,

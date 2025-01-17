@@ -2,12 +2,12 @@ import Sale from '@models/sale'
 import User from '@models/user'
 import { Request, Response } from 'express'
 import { HttpError } from '@errors/http'
-import { salesAtributes } from '@type/sale'
+import { salesAttributes } from '@type/sale'
 
 class SalesController {
   static async createSale(req: Request, res: Response) {
     try {
-      const saleData: salesAtributes = {
+      const saleData: salesAttributes = {
         userId: req.body.userId,
         total: req.body.total,
         observations: req.body.observations || null,
@@ -52,7 +52,7 @@ class SalesController {
 
   static async updateSale(req: Request, res: Response) {
     try {
-      const saleData: Partial<salesAtributes> = {
+      const saleData: Partial<salesAttributes> = {
         total: req.body.total,
         observations: req.body.observations,
       }

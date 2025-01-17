@@ -14,6 +14,20 @@ class modulesController {
     }
   }
 
+  static async getModuleById(req: Request, res: Response) {
+    try {
+      const module = await useModules.getModuleById(req.params.id)
+      if ('error' in module) throw new HttpError(module.error, 404)
+
+      res.json(module)
+    } catch (error) {
+      if (error instanceof HttpError) {
+        res.status(error.statusCode).json({ error: error.message })
+      } else {
+        res.status(500).json({ error: 'Internal server error' })
+      }
+    }
+  }
   static async updateModule(req: Request, res: Response) {
     try {
       const module = await useModules.updateModule(req.params.id, req.body)

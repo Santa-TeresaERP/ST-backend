@@ -9,6 +9,15 @@ class useModules {
     return modules
   }
 
+  // Obtener un módulo por su ID
+  static async getModuleById(id: string) {
+    const module = await Module.findByPk(id)
+    if (!module) {
+      return { error: 'El módulo no existe' }
+    }
+
+    return module
+  }
   // Actualizar un módulo
   static async updateModule(id: string, body: ModuleAttributes) {
     const validation = modulesValidation(body)

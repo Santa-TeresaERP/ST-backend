@@ -28,6 +28,16 @@ class useRoles {
     return roles
   }
 
+  static async getRole(id: string) {
+    const role = await Roles.findByPk(id)
+
+    if (!role) {
+      return { error: 'El rol no existe' }
+    }
+
+    return role
+  }
+
   // Actualizar un rol
   static async updateRole(id: string, body: RolesAttributes) {
     const validation = rolesValidation(body)

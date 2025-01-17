@@ -41,5 +41,5 @@ const userSchema = z.object({
 export const userValidation = (data: UserAttributes) =>
   userSchema.safeParse(data)
 
-export const userValidationPartial = (data: UserAttributes) =>
+export const userValidationPartial = (data: Partial<UserAttributes>) =>
   userSchema.partial().safeParse(data)

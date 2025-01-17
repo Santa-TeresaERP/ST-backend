@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Op } from 'sequelize'
 import bcrypt from 'bcryptjs'
 import { generateToken } from '@config/jwt'
 import User from '@models/user'
 import { jwtData, UserAttributes } from '@type/auth'
-import { userValidation, userValidationPartial } from 'src/schemas/userSchema'
+import { userValidationPartial } from 'src/schemas/userSchema'
 
 class useUser {
   static async checkUser(body: UserAttributes) {
@@ -39,7 +40,7 @@ class useUser {
   }
 
   static async createUser(body: UserAttributes) {
-    const validation = userValidation(body)
+    const validation = userValidationPartial(body)
     if (!validation.success) {
       return { error: validation.error.errors }
     }
@@ -75,7 +76,10 @@ class useUser {
     if (!user) {
       return null
     }
-    return user
+
+    const { password, id: userId, ...userData } = user.toJSON()
+
+    return userData
   }
 
   static async getUsers() {
@@ -98,8 +102,8 @@ class useUser {
     return { message: 'Usuario eliminado correctamente' }
   }
 
-  static async updateUser(id: string, body: UserAttributes) {
-    const validation = userValidation(body)
+  static async updateUser(id: string, body: Partial<UserAttributes>) {
+    const validation = userValidationPartial(body)
     if (!validation.success) {
       return { error: validation.error.errors }
     }
@@ -109,8 +113,13 @@ class useUser {
       return null
     }
 
-    await user.update(body)
-    return user
+    // Elimina el campo password del objeto body si existe
+    const { password, ...updateData } = body
+
+    await user.update(updateData)
+    // Recarga el usuario para obtener los datos actualizados
+    const updatedUser = await User.findByPk(id)
+    return updatedUser
   }
 }
 

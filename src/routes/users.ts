@@ -10,8 +10,10 @@ router.get('/', authorization, userController.getUsers) // Ruta para obtener usu
 
 router.get('/all', authorization, userController.getUsersAll) // Ruta para obtener todos los usuarios (activos e inactivos)
 
+router.get('/:id', authorization, userController.getUser)
+
 router.delete('/:id', authorization, userController.deleteUser)
 
-// router.patch('/:id', authorization, userController.updateUser)
+router.patch('/:id', authorization, userController.updateUser)
 
 export default router

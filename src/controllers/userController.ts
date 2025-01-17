@@ -41,6 +41,18 @@ class userController {
     }
   }
 
+  static async getUser(req: Request, res: Response) {
+    try {
+      const userId = req.params.id
+      const user = await useUser.getUser(userId)
+      if (!user) throw new HttpError('User not found', 404)
+      res.json(user)
+    } catch (error) {
+      console.error('Error al obtener usuario:', error)
+      res.status(500).json({ message: 'Error al obtener usuario' })
+    }
+  }
+
   static async deleteUser(req: Request, res: Response) {
     try {
       const userId = req.params.id
@@ -54,13 +66,13 @@ class userController {
 
   static async updateUser(req: Request, res: Response) {
     try {
-      const user = useUser.updateUser(req.params.id, req.body)
+      const user = await useUser.updateUser(req.params.id, req.body) // Usa await aquí
       if (!user) throw new HttpError('Error to updating user', 400)
 
       res.json({ message: 'User updated', user })
     } catch (error) {
       if (error instanceof HttpError) {
-        res.status(error.statusCode).json(error.message)
+        res.status(error.statusCode).json({ error: error.message }) // Devuelve un objeto JSON con una clave para el mensaje de error
       } else {
         res.status(500).json({ error: 'Internal server error' })
       }

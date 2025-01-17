@@ -1,5 +1,4 @@
 import useUser from '@services/useUser'
-import User from '@models/user'
 import { Response } from 'express'
 import { AuthRequest as Request } from '@type/auth'
 import { HttpError } from '@errors/http'
@@ -20,13 +19,25 @@ class userController {
     }
   }
 
+  // Método para obtener todos los usuarios activos
   static async getUsers(_req: Request, res: Response) {
     try {
-      const users = await User.findAll()
+      const users = await useUser.getUsers()
       res.json(users)
     } catch (error) {
-      console.error('Error al obtener usuarios:', error)
-      res.status(500).json({ message: 'Error al obtener usuarios' })
+      console.error('Error al obtener usuarios activos:', error)
+      res.status(500).json({ message: 'Error al obtener usuarios activos' })
+    }
+  }
+
+  // Método para obtener todos los usuarios (activos e inactivos)
+  static async getUsersAll(_req: Request, res: Response) {
+    try {
+      const users = await useUser.getUsersAll()
+      res.json(users)
+    } catch (error) {
+      console.error('Error al obtener todos los usuarios:', error)
+      res.status(500).json({ message: 'Error al obtener todos los usuarios' })
     }
   }
 

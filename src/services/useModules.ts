@@ -2,61 +2,31 @@ import Module from '@models/modules'
 import { ModuleAttributes } from '@type/modules'
 import { modulesValidation } from 'src/schemas/modulesSchema'
 
-class useModule {
-  static async createModule(body: ModuleAttributes) {
-    const validation = modulesValidation(body)
-    if (!validation.success) {
-      return { error: validation.error.errors }
-    }
-
-    const { name } = body
-
-    const existingModule = await Module.findOne({
-      where: {
-        name,
-      },
-    })
-
-    if (existingModule) {
-      return { error: 'El módulo ya existe' }
-    }
-
-    const newModule = await Module.create({
-      name,
-    })
-
-    return newModule
-  }
-
+class useModules {
+  // Obtener todos los módulos
   static async getModules() {
     const modules = await Module.findAll()
     return modules
   }
 
-  static async deleteModule(id: string) {
-    const module = await Module.findByPk(id)
-    if (!module) {
-      return null
-    }
-
-    await module.destroy()
-    return { message: 'Módulo eliminado correctamente' }
-  }
-
+  // Actualizar un módulo
   static async updateModule(id: string, body: ModuleAttributes) {
     const validation = modulesValidation(body)
+
     if (!validation.success) {
       return { error: validation.error.errors }
     }
 
+    const { name, description } = validation.data
+
     const module = await Module.findByPk(id)
     if (!module) {
-      return null
+      return { error: 'El módulo no existe' }
     }
 
-    await module.update(body)
+    await module.update({ name, description })
     return module
   }
 }
 
-export default useModule
+export default useModules

@@ -1,13 +1,39 @@
 import { salesAtributes } from '@type/sale'
 import { z } from 'zod'
 
-export const salesSchema = z.object({
-  id: z.string().uuid(),
-  userId: z.string().uuid(),
-  total: z.number().positive(),
-  observations: z.string().nullable(),
-  createdAt: z.date(),
-})
+// Definir el esquema de ventas, si salesAtributes es un tipo, necesitas crear el esquema de validación correspondiente.
+const salesSchema = z.object({
+  id: z
+    .string()
+    .uuid('El ID debe ser un UUID válido'),
+
+  userId: z
+    .string()
+    .uuid('El ID de usuario debe ser un UUID válido'),
+
+  total: z
+    .number()
+    .positive('El total debe ser un número positivo')
+    .refine(
+      (val) => val.toString().length === 9,
+      'El número debe tener exactamente 9 dígitos'
+    ),
+
+  observations: z
+    .string()
+    .nullable()
+    .refine((val) => {
+      if (val && /<script|<\/script|SELECT|DROP|INSERT|--/i.test(val)) {
+        return false;
+      }
+      return true;
+    }, 'Observaciones contienen caracteres no permitidos o posibles inyecciones'),
+
+  createdAt: z
+    .date()
+    .refine(date => date <= new Date(), 'La fecha no puede ser futura'),
+});
+
 
 export const saleValidation = (data: salesAtributes) =>
-  salesSchema.safeParse(data)
+  salesSchema.safeParse(data);

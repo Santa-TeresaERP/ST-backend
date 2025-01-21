@@ -98,7 +98,7 @@ class useUser {
       return null
     }
 
-    await user.destroy()
+    await user.update({ status: false })
     return { message: 'Usuario eliminado correctamente' }
   }
 

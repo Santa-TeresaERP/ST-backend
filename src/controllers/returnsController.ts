@@ -1,7 +1,7 @@
 import Return from '../models/return'
 import { Request, Response } from 'express'
 import { HttpError } from '../errors/http'
-import { productionValidation } from '../schemas/returnsSchema'
+import { productionValidation } from '../schemas/returnSchema'
 
 class ReturnsController {
   static async createReturn(req: Request, res: Response) {

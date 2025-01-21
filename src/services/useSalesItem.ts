@@ -1,6 +1,6 @@
 import SalesItem from '@models/salesItem'
 import { salesItemsAttributes } from '@type/salesItem'
-import { salesItemsValidation } from 'src/schemas/salesItemsSchema'
+import { salesItemsValidation } from 'src/schemas/saleItemSchema'
 
 class useSalesItems {
   static async createSaleItem(body: salesItemsAttributes) {

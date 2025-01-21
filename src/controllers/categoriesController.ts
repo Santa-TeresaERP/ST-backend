@@ -1,5 +1,5 @@
 import { Request, Response, RequestHandler } from 'express'
-import useCategories from '@services/useCategories'
+import useCategories from '@services/useCategory'
 
 class categoriesController {
   static createCategory: RequestHandler = async (

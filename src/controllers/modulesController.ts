@@ -1,4 +1,4 @@
-import useModules from '@services/useModules'
+import useModules from '@services/useModule'
 import { Response } from 'express'
 import { AuthRequest as Request } from '@type/auth'
 import { HttpError } from '@errors/http'

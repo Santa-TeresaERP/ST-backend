@@ -1,4 +1,4 @@
-import { ProductAttributes } from '@type/products'
+import { ProductAttributes } from '@type/product'
 import { z } from 'zod'
 
 const productsSchema = z.object({

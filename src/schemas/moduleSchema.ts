@@ -1,4 +1,4 @@
-import { ModuleAttributes } from '@type/modules'
+import { ModuleAttributes } from '@type/module'
 import { z } from 'zod'
 
 const modulesSchema = z.object({

@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
-import { ProductAttributes } from '@type/products'
+import { ProductAttributes } from '@type/product'
 import { v4 as uuid } from 'uuid'
 import Category from '@models/categories'
 

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import useRoles from '@services/useRoles'
+import useRoles from '@services/useRole'
 
 class rolesController {
   static async createRoleController(req: Request, res: Response) {

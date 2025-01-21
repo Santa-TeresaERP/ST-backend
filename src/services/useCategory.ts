@@ -1,5 +1,5 @@
 import Category from '@models/categories'
-import { CategoryAttributes } from '@type/categories'
+import { CategoryAttributes } from '@type/category'
 import { categoriesValidation } from 'src/schemas/categoriesSchema'
 
 class useCategories {

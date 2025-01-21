@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
-import { ModuleAttributes } from '@type/modules'
+import { ModuleAttributes } from '@type/module'
 import { v4 as uuid } from 'uuid'
 
 class Module

@@ -34,6 +34,9 @@ RolesPermissions.init(
   },
 )
 
+RolesPermissions.belongsTo(Roles, { foreignKey: 'roleId' })
+RolesPermissions.belongsTo(Permissions, { foreignKey: 'permissionId' })
+
 // Relación Roles <-> Permissions
 Roles.belongsToMany(Permissions, {
   through: RolesPermissions,

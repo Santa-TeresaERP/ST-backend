@@ -1,9 +1,9 @@
 import Return from '@models/return'
-import { returnsAttributes } from '@type/return'
+import { returnAttributes } from '@type/return'
 import { productionValidation } from 'src/schemas/returnsSchema'
 
 class useReturns {
-  static async createReturn(body: returnsAttributes) {
+  static async createReturn(body: returnAttributes) {
     const validation = productionValidation(body)
     if (!validation.success) {
       return { error: validation.error.errors }
@@ -44,7 +44,7 @@ class useReturns {
     return { message: 'Return deleted successfully' }
   }
 
-  static async updateReturn(id: string, body: returnsAttributes) {
+  static async updateReturn(id: string, body: returnAttributes) {
     const validation = productionValidation(body)
     if (!validation.success) {
       return { error: validation.error.errors }

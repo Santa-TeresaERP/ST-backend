@@ -1,6 +1,7 @@
 import Roles from '@models/roles'
 import { RolesAttributes } from '@type/roles'
 import { rolesValidation } from 'src/schemas/rolesSchema'
+import Permissions from '@models/permissions'
 
 class useRoles {
   // Crear un rol
@@ -24,12 +25,28 @@ class useRoles {
 
   // Obtener todos los roles
   static async getRoles() {
-    const roles = await Roles.findAll()
+    const roles = await Roles.findAll({
+      include: [
+        {
+          model: Permissions,
+          through: { attributes: [] }, // Excluir atributos de la tabla intermedia
+          include: ['Module'], // Incluir el módulo relacionado
+        },
+      ],
+    })
     return roles
   }
 
   static async getRole(id: string) {
-    const role = await Roles.findByPk(id)
+    const role = await Roles.findByPk(id, {
+      include: [
+        {
+          model: Permissions,
+          through: { attributes: [] },
+          include: ['Module'],
+        },
+      ],
+    })
 
     if (!role) {
       return { error: 'El rol no existe' }

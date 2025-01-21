@@ -1,7 +1,7 @@
-import Roles from '@models/roles'
+import Roles from '@models/role'
 import { RolesAttributes } from '@type/roles'
 import { rolesValidation } from 'src/schemas/rolesSchema'
-import Permissions from '@models/permissions'
+import Permissions from '@models/permission'
 
 class useRoles {
   // Crear un rol

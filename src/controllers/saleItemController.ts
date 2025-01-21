@@ -1,4 +1,4 @@
-import SalesItem from '../models/salesItem'
+import SalesItem from '../models/saleItem'
 import { Request, Response } from 'express'
 import { HttpError } from '../errors/http'
 import { salesItemsValidation } from '../schemas/salesItemsSchema'

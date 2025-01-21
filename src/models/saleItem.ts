@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize'
 import sequelize from '@config/database'
 import { salesItemsAttributes } from '@type/salesItem'
-import Product from '@models/products'
+import Product from '@models/product'
 
 class salesItem
   extends Model<salesItemsAttributes>

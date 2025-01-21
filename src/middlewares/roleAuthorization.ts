@@ -2,7 +2,7 @@ import { Response, NextFunction } from 'express'
 import { AuthRequest } from '@type/auth'
 import { HttpError } from '@errors/http'
 import User from '@models/user'
-import Roles from '@models/roles'
+import Roles from '@models/role'
 
 const roleAuthorization = (requiredRole: string) => {
   return async (req: AuthRequest, res: Response, next: NextFunction) => {

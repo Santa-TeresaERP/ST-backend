@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { UserAttributes } from '@type/auth'
-import Roles from '@models/roles'
+import Roles from '@models/role'
 import { v4 as uuid } from 'uuid'
 
 class User

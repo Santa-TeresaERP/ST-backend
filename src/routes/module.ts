@@ -1,6 +1,6 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
-import modulesController from '@controllers/modulesController'
+import modulesController from '@controllers/moduleController'
 
 const router = express.Router()
 

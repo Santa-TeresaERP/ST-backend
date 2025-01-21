@@ -1,5 +1,5 @@
-import Product from '@models/products'
-import Category from '@models/categories'
+import Product from '@models/product'
+import Category from '@models/category'
 import { ProductAttributes } from '@type/products'
 import { productsValidation } from 'src/schemas/productsSchema'
 

@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { productionAttributes } from '@type/production'
-import products from '@models/products'
+import products from '@models/product'
 import { v4 as uuid } from 'uuid'
 
 class production

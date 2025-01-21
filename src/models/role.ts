@@ -2,8 +2,8 @@ import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { RolesAttributes } from '@type/roles'
 import { v4 as uuid } from 'uuid'
-import Permissions from './permissions'
-import RolesPermissions from './rolesPermissions'
+import Permissions from './permission'
+import RolesPermissions from './rolePermission'
 
 class Roles
   extends Model<RolesAttributes, Optional<RolesAttributes, 'id'>>

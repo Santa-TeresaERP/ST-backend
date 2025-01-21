@@ -5,7 +5,7 @@ import {
   getPermissionsController,
   updatePermissionController,
   deletePermissionController,
-} from '@controllers/permissionsController'
+} from '@controllers/permissionController'
 
 const router = express.Router()
 

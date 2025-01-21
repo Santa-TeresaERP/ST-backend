@@ -1,5 +1,5 @@
 import Warehouse from '@models/warehouse'
-import Product from '@models/products'
+import Product from '@models/product'
 import { WarehouseAttributes } from '@type/warehouse'
 import { warehouseValidation } from 'src/schemas/warehouseSchema'
 

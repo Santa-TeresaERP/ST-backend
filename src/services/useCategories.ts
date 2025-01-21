@@ -1,4 +1,4 @@
-import Category from '@models/categories'
+import Category from '@models/category'
 import { CategoryAttributes } from '@type/categories'
 import { categoriesValidation } from 'src/schemas/categoriesSchema'
 

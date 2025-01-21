@@ -1,4 +1,4 @@
-import { RolesAttributes } from '@type/roles'
+import { RolesAttributes } from '@type/role'
 import { z } from 'zod'
 
 const rolesSchema = z.object({

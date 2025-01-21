@@ -1,5 +1,5 @@
 import { Request, Response, RequestHandler } from 'express'
-import useProducts from '@services/useProducts'
+import useProducts from '@services/useProduct'
 
 class productsController {
   static createProduct: RequestHandler = async (

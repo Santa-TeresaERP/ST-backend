@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import usePermissions from '@services/usePermissions'
+import usePermissions from '@services/usePermission'
 
 // Crear un permiso
 export const createPermissionController = async (

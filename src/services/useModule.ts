@@ -1,6 +1,6 @@
 import Module from '@models/modules'
-import { ModuleAttributes } from '@type/modules'
-import { modulesValidation } from 'src/schemas/modulesSchema'
+import { ModuleAttributes } from '@type/module'
+import { modulesValidation } from 'src/schemas/moduleSchema'
 
 class useModules {
   // Obtener todos los módulos

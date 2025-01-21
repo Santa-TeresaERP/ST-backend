@@ -1,7 +1,7 @@
 import SalesItem from '../models/salesItem'
 import { Request, Response } from 'express'
 import { HttpError } from '../errors/http'
-import { salesItemsValidation } from '../schemas/salesItemsSchema'
+import { salesItemsValidation } from '../schemas/saleItemSchema'
 
 class SalesItemsController {
   static async createSaleItem(req: Request, res: Response) {

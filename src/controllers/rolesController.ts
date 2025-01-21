@@ -1,85 +1,69 @@
 import { Request, Response } from 'express'
 import useRoles from '@services/useRoles'
 
-export const createRoleController = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  try {
-    const result = await useRoles.createRole(req.body)
-
-    if ('error' in result) {
-      res.status(400).json({ error: result.error })
+class rolesController {
+  static async createRoleController(req: Request, res: Response) {
+    try {
+      const role = await useRoles.createRole(req.body)
+      res.status(201).json(role)
+    } catch {
+      res.status(500).json({ error: 'Internal Server Error' })
     }
-
-    res.status(201).json(result)
-  } catch {
-    res.status(500).json({ error: 'Internal Server Error' })
   }
-}
 
-export const getRolesController = async (
-  _req: Request,
-  res: Response,
-): Promise<void> => {
-  try {
-    const roles = await useRoles.getRoles()
-    res.status(200).json(roles)
-  } catch {
-    res.status(500).json({ error: 'Internal Server Error' })
-  }
-}
-
-export const getRoleController = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  try {
-    const { id } = req.params
-    const result = await useRoles.getRole(id)
-
-    if ('error' in result) {
-      res.status(404).json({ error: result.error })
+  static async getRolesController(_req: Request, res: Response) {
+    try {
+      const roles = await useRoles.getRoles()
+      res.status(200).json(roles)
+    } catch {
+      res.status(500).json({ error: 'Internal Server Error' })
     }
-
-    res.status(200).json(result)
-  } catch {
-    res.status(500).json({ error: 'Internal Server Error' })
   }
-}
 
-export const updateRoleController = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  try {
-    const { id } = req.params
-    const result = await useRoles.updateRole(id, req.body)
+  static async getRoleController(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+      const role = await useRoles.getRole(id)
 
-    if ('error' in result) {
-      res.status(400).json({ error: result.error })
+      if (!role) {
+        res.status(404).json({ error: 'Role not found' })
+      }
+
+      res.status(200).json(role)
+    } catch {
+      res.status(500).json({ error: 'Internal Server Error' })
     }
-
-    res.status(200).json(result)
-  } catch {
-    res.status(500).json({ error: 'Internal Server Error' })
   }
-}
 
-export const deleteRoleController = async (
-  req: Request,
-  res: Response,
-): Promise<void> => {
-  try {
-    const { id } = req.params
-    const result = await useRoles.deleteRole(id)
+  static async updateRoleController(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+      const role = await useRoles.updateRole(id, req.body)
 
-    if (result.error) {
-      res.status(404).json({ error: result.error })
+      if (!role) {
+        res.status(404).json({ error: 'Role not found' })
+      }
+
+      res.status(200).json(role)
+    } catch {
+      res.status(500).json({ error: 'Internal Server Error' })
     }
+  }
 
-    res.status(200).json(result)
-  } catch {
-    res.status(500).json({ error: 'Internal Server Error' })
+  static async deleteRoleController(req: Request, res: Response) {
+    try {
+      const { id } = req.params
+      const result = await useRoles.deleteRole(id)
+
+      if (result.error) {
+        res.status(404).json({ error: result.error })
+      }
+
+      res.status(200).json(result)
+    } catch {
+      res.status(500).json({ error: 'Internal Server Error' })
+    }
   }
 }
+
+export default rolesController

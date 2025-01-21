@@ -12,7 +12,7 @@ router.get('/all', authorization, userController.getUsersAll) // Ruta para obten
 
 router.get('/:id', authorization, userController.getUser)
 
-router.delete('/:id', authorization, userController.deleteUser)
+router.put('/:id', authorization, userController.deleteUser)
 
 router.patch('/:id', authorization, userController.updateUser)
 

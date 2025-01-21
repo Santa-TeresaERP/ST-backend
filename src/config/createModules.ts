@@ -20,6 +20,3 @@ const createModules = async () => {
 };
 
 export default createModules;
-
-
-// modulos, roles, permisos

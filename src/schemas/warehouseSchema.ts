@@ -10,6 +10,7 @@ const warehouseSchema = z.object({
   quantity: z
     .number({ invalid_type_error: 'La cantidad debe ser un número' })
     .int('La cantidad debe ser un número entero')
+    .positive('La cantidad debe ser mayor a cero') // Añadido para asegurar que la cantidad sea positiva
     .nonnegative('La cantidad no puede ser negativa'),
 
   inventory_adjustment_id: z

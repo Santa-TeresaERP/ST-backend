@@ -1,5 +1,5 @@
-import { z } from 'zod'
-import { InventoryAdjustmentAttributes } from '@type/inventoryAdjustment.d'
+import { z } from 'zod';
+import { InventoryAdjustmentAttributes } from '@type/inventoryAdjustment.d';
 
 const inventoryAdjustmentSchema = z.object({
   product_id: z
@@ -10,7 +10,11 @@ const inventoryAdjustmentSchema = z.object({
   adjustment_type: z
     .string()
     .nonempty('El tipo de ajuste no puede estar vacío')
-    .max(50, 'El tipo de ajuste no debe exceder los 50 caracteres'),
+    .max(50, 'El tipo de ajuste no debe exceder los 50 caracteres')
+    .regex(
+      /^[a-zA-Z0-9\s]+$/,
+      'El tipo de ajuste solo debe contener caracteres alfanuméricos y espacios',
+    ),
 
   quantity: z
     .number({ invalid_type_error: 'La cantidad debe ser un número' })
@@ -20,17 +24,23 @@ const inventoryAdjustmentSchema = z.object({
   observations: z
     .string()
     .max(150, 'Las observaciones no deben exceder los 150 caracteres')
-    .optional(),
+    .optional()
+    .refine(
+      (val) =>
+        !val ||
+        !/<script|<\/script|SELECT|DROP|INSERT|--/i.test(val),
+      'Las observaciones contienen caracteres no permitidos o posibles inyecciones',
+    ),
 
   created_at: z
-    .string()
+    .date()
     .refine(
-      (date) => !isNaN(Date.parse(date)),
-      'La fecha de creación debe ser válida',
+      (date) => date <= new Date(),
+      'La fecha de creación no puede ser futura',
     )
     .optional(),
-})
+});
 
 export const inventoryAdjustmentValidation = (
   data: InventoryAdjustmentAttributes,
-) => inventoryAdjustmentSchema.safeParse(data)
+) => inventoryAdjustmentSchema.safeParse(data);

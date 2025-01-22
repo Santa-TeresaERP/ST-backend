@@ -1,43 +1,58 @@
 import { Response, NextFunction } from 'express'
 import { AuthRequest } from '@type/auth'
-import { HttpError } from '@errors/http'
-import User from '@models/user'
-import Roles from '@models/roles'
+import Permissions from '@models/permissions'
+import RolesPermissions from '@models/rolesPermissions'
+import Module from '@models/modules'
 
-const roleAuthorization = (requiredRole: string) => {
-  return async (req: AuthRequest, res: Response, next: NextFunction) => {
+const authorizePermissions = (permission: string, moduleName: string) => {
+  return async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
     try {
-      const { authUser } = req
-      if (!authUser || !authUser.id) {
-        throw new HttpError('Usuario no autenticado', 401)
+      const user = req.authUser
+
+      if (!user?.rolId) {
+        res.status(403).json({ message: 'Unauthorized. Role ID is missing.' })
+        return
       }
 
-      // Obtener el usuario con su rol
-      const user = await User.findByPk(authUser.id, {
-        include: { model: Roles, as: 'role' },
+      const module = await Module.findOne({ where: { name: moduleName } })
+      const moduleId = module?.id
+
+      if (!moduleId) {
+        throw new Error(`Module '${moduleName}' not found.`)
+      }
+
+      const rolePermissions = await RolesPermissions.findOne({
+        where: {
+          roleId: user.rolId,
+        },
+        include: [
+          {
+            model: Permissions,
+            where: {
+              moduleId: moduleId,
+              [`${permission}`]: true,
+            },
+          },
+        ],
       })
 
-      if (!user || !user.roleId) {
-        throw new HttpError('Rol no asignado o usuario no encontrado', 403)
-      }
-
-      // Validar el rol del usuario
-      if (user.roleId !== requiredRole) {
-        throw new HttpError(
-          `Permiso denegado. Se requiere el rol: ${requiredRole}`,
-          403,
-        )
+      if (!rolePermissions) {
+        res
+          .status(403)
+          .json({ message: 'You do not have permission for this action.' })
+        return
       }
 
       next()
-    } catch (err) {
-      if (err instanceof HttpError) {
-        res.status(err.statusCode).json({ error: err.message })
-      } else {
-        res.status(500).json({ error: 'Algo salió mal' })
-      }
+    } catch (error) {
+      console.error('Error in permission authorization middleware:', error)
+      res.status(500).json({ message: 'Internal server error.' })
     }
   }
 }
 
-export default roleAuthorization
+export default authorizePermissions

@@ -22,13 +22,6 @@ const userSchema = z.object({
 
   email: z.string().email('El email debe tener un formato válido'),
 
-  roleId: z
-    .string()
-    .nonempty('El rol no puede estar vacío')
-    .refine(role => ['admin', 'user', 'guest'].includes(role), {
-      message: 'El rol debe ser uno de los valores permitidos: admin, user, guest',
-    }),
-
   password: z
     .string()
     .min(5, 'La contraseña debe tener al menos 5 caracteres')
@@ -39,13 +32,19 @@ const userSchema = z.object({
 
   status: z.boolean().default(true),
 
-  createdAt: z.date().optional().refine((date) => date !== undefined && !isNaN(date.getTime()), {
-    message: 'La fecha de creación debe ser válida',
-  }),
+  createdAt: z
+    .date()
+    .optional()
+    .refine((date) => date !== undefined && !isNaN(date.getTime()), {
+      message: 'La fecha de creación debe ser válida',
+    }),
 
-  updatedAt: z.date().optional().refine((date) => date !== undefined && !isNaN(date.getTime()), {
-    message: 'La fecha de actualización debe ser válida',
-  }),
+  updatedAt: z
+    .date()
+    .optional()
+    .refine((date) => date !== undefined && !isNaN(date.getTime()), {
+      message: 'La fecha de actualización debe ser válida',
+    }),
 })
 
 export const userValidation = (data: UserAttributes) =>

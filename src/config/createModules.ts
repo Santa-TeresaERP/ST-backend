@@ -1,48 +1,43 @@
 import Module from '@models/modules'
-import Role from '@models/roles'
 
-// Crear roles y módulos predeterminados
-const createModulesAndRoles = async (options = { clean: false }) => {
+// Crear módulos predeterminados
+const createModules = async (options = { clean: false }) => {
   try {
-    const modules = ['Dashboard', 'Users', 'Settings', 'Reports']
-    const roles = ['Admin', 'User']
+    const modules = [
+      {
+        name: 'modulos',
+        description: 'Módulo para gestionar los módulos del sistema',
+      },
+      {
+        name: 'roles',
+        description: 'Módulo para administrar los roles de los usuarios',
+      },
+      {
+        name: 'user',
+        description: 'Módulo para gestionar la información de los usuarios',
+      },
+    ]
 
     if (options.clean) {
-      await Promise.all([
-        Module.destroy({ where: {} }),
-        Role.destroy({ where: {} }),
-      ])
+      await Module.destroy({ where: {} })
     }
-
-    // Crear roles predeterminados
-    const createdRoles = await Promise.all(
-      roles.map((roleName) =>
-        Role.findOrCreate({
-          where: { name: roleName },
-          defaults: { name: roleName, description: `${roleName} role` },
-        }),
-      ),
-    )
 
     // Crear módulos predeterminados
     const createdModules = await Promise.all(
-      modules.map((name) =>
+      modules.map(({ name, description }) =>
         Module.findOrCreate({
           where: { name },
-          defaults: { name, description: `${name} module` },
+          defaults: { name, description },
         }),
       ),
     )
 
-    console.log('Roles y módulos creados correctamente')
-    return {
-      modules: createdModules.map(([module]) => module),
-      roles: createdRoles.map(([role]) => role),
-    }
+    console.log('Módulos creados correctamente')
+    return createdModules.map(([module]) => module)
   } catch (err) {
-    console.error('Error al crear roles y módulos:', err)
+    console.error('Error al crear módulos:', err)
     throw err
   }
 }
 
-export default createModulesAndRoles
+export default createModules

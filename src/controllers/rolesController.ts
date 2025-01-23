@@ -6,8 +6,20 @@ class rolesController {
     try {
       const role = await useRoles.createRole(req.body)
       res.status(201).json(role)
-    } catch {
-      res.status(500).json({ error: 'Internal Server Error' })
+    } catch (error) {
+      console.error('Error creating role:', error) // Mostrar error detallado en los logs
+
+      if (error instanceof Error) {
+        res.status(500).json({
+          error: 'Internal Server Error',
+          message: error.message, // Acceder de manera segura a la propiedad `message`
+        })
+      } else {
+        res.status(500).json({
+          error: 'Internal Server Error',
+          message: 'Unknown error occurred', // En caso de que `error` no sea un `Error` estándar
+        })
+      }
     }
   }
 

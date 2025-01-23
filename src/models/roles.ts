@@ -2,6 +2,8 @@ import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { RolesAttributes } from '@type/roles'
 import { v4 as uuid } from 'uuid'
+import Permission from './permissions'
+import RolesPermissions from './rolesPermissions'
 
 class Roles
   extends Model<RolesAttributes, Optional<RolesAttributes, 'id'>>
@@ -34,5 +36,20 @@ Roles.init(
     timestamps: true,
   },
 )
+
+RolesPermissions.belongsTo(Roles, { foreignKey: 'roleId' })
+RolesPermissions.belongsTo(Permission, { foreignKey: 'permissionId' })
+
+Roles.belongsToMany(Permission, {
+  through: RolesPermissions,
+  foreignKey: 'roleId',
+  otherKey: 'permissionId',
+})
+
+Permission.belongsToMany(Roles, {
+  through: RolesPermissions,
+  foreignKey: 'permissionId',
+  otherKey: 'roleId',
+})
 
 export default Roles

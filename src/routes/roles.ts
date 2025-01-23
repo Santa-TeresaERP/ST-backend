@@ -1,17 +1,11 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
 import rolesController from '@controllers/rolesController'
-import authorizePermissions from '@middlewares/roleAuthorization'
 
 const router = express.Router()
 
 // Crear un rol||
-router.post(
-  '/',
-  authorization,
-  authorizePermissions('canWrite', 'usuariosyroles'),
-  rolesController.createRoleController,
-)
+router.post('/', authorization, rolesController.createRoleController)
 
 // Obtener todos los roles
 router.get('/', authorization, rolesController.getRolesController)

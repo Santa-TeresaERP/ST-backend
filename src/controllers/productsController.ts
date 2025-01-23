@@ -35,7 +35,6 @@ class productsController {
     }
   }
 
-  // Obtener un producto por su ID
   static getProduct: RequestHandler = async (
     req: Request,
     res: Response,
@@ -54,7 +53,6 @@ class productsController {
     }
   }
 
-  // Obtener productos de repostería
   static getConfectionery: RequestHandler = async (
     _req: Request,
     res: Response,

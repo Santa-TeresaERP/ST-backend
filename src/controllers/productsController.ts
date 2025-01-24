@@ -35,41 +35,30 @@ class productsController {
     }
   }
 
-  static updateProduct: RequestHandler = async (
-    req: Request,
-    res: Response,
-  ): Promise<void> => {
+  static async updateProduct(req: Request, res: Response): Promise<void> {
     try {
       const product = await useProducts.updateProduct(req.params.id, req.body)
       if ('error' in product) {
         res.status(400).json({ error: product.error })
-        return
+        return // Asegúrate de retornar después de enviar la respuesta
       }
 
       res.json({ message: 'Producto actualizado', product })
-      return
     } catch {
       res.status(500).json({ error: 'Error interno del servidor' })
-      return
     }
   }
 
-  static deleteProduct: RequestHandler = async (
-    req: Request,
-    res: Response,
-  ): Promise<void> => {
+  static async deleteProduct(req: Request, res: Response) {
     try {
-      const result = await useProducts.deleteProduct(req.params.id)
-      if ('error' in result) {
-        res.status(400).json({ error: result.error })
-        return
+      const product = await useProducts.deleteProduct(req.params.id)
+      if ('error' in product) {
+        res.status(400).json({ error: product.error })
       }
 
-      res.json({ message: result.message })
-      return
+      res.json({ message: 'Producto eliminado' })
     } catch {
       res.status(500).json({ error: 'Error interno del servidor' })
-      return
     }
   }
 }

@@ -22,7 +22,7 @@ Product.init(
     id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false },
     category_id: { type: DataTypes.UUID, allowNull: false },
-    price: { type: DataTypes.DECIMAL, allowNull: false },
+    price: { type: DataTypes.FLOAT, allowNull: false },
     stock: { type: DataTypes.INTEGER, allowNull: false },
     description: { type: DataTypes.STRING, allowNull: true },
     imagen_url: { type: DataTypes.STRING, allowNull: true },

@@ -2,7 +2,7 @@ import { PermissionsAttributes } from '@type/permissions'
 import { z } from 'zod'
 
 const PermissionsSchema = z.object({
-  id: z.string().uuid('El ID debe ser un UUID válido'),
+  id: z.string().uuid('El ID debe ser un UUID válido').optional(),
 
   moduleId: z.string().uuid('El ID del módulo debe ser un UUID válido'),
 

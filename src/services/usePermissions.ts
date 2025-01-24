@@ -11,16 +11,9 @@ class usePermissions {
       return { error: validation.error.flatten().fieldErrors }
     }
 
-    const { id, moduleId, canRead, canWrite, canEdit, canDelete } =
-      validation.data
-
-    const existingPermission = await Permissions.findOne({ where: { id } })
-    if (existingPermission) {
-      return { error: 'El permiso ya existe' }
-    }
+    const { moduleId, canRead, canWrite, canEdit, canDelete } = validation.data
 
     const newPermission = await Permissions.create({
-      id,
       moduleId,
       canRead,
       canWrite,

@@ -55,7 +55,7 @@ class useProducts {
     const confectioneryProducts = await Product.findAll({
       include: Category,
       where: {
-        '$Category.name$': 'Repostería', // Asegúrate de que 'name' sea el campo que almacena el nombre de la categoría
+        '$Category.name$': 'Food', // Asegúrate de que 'name' sea el campo que almacena el nombre de la categoría
       },
     })
     return confectioneryProducts

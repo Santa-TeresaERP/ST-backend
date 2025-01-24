@@ -2,6 +2,7 @@ import Product from '@models/products'
 import Category from '@models/categories'
 import { ProductAttributes } from '@type/products'
 import { productsValidation } from 'src/schemas/productsSchema'
+import { Identifier } from 'sequelize'
 
 class useProducts {
   // Crear un producto
@@ -35,6 +36,29 @@ class useProducts {
   static async getProducts() {
     const products = await Product.findAll()
     return products
+  }
+
+  // Obtener un producto por su ID
+  static async getProduct(id: Identifier | undefined) {
+    if (!id) {
+      throw new Error('El ID del producto es requerido') // Lanza un error si el ID no es válido
+    }
+    const product = await Product.findByPk(id, { include: Category })
+    if (!product) {
+      throw new Error('Producto no encontrado') // Maneja el caso en que no se encuentre el producto
+    }
+    return product
+  }
+
+  // Obtener productos de repostería
+  static async getConfectionery() {
+    const confectioneryProducts = await Product.findAll({
+      include: Category,
+      where: {
+        '$Category.name$': 'Food', // Asegúrate de que 'name' sea el campo que almacena el nombre de la categoría
+      },
+    })
+    return confectioneryProducts
   }
 
   // Actualizar un producto

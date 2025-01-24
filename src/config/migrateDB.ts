@@ -2,6 +2,7 @@ import { connectDb } from '@config/database'
 import createAdmin from '@createAdmin'
 import { join } from 'node:path'
 import { readdirSync } from 'node:fs'
+import createModules from './createModules'
 
 class migrate {
   static modelLoader() {
@@ -17,6 +18,7 @@ class migrate {
     try {
       await connectDb()
       await createAdmin()
+      await createModules()
       console.log('Migration succesfully')
     } catch (err) {
       if (err instanceof Error) {

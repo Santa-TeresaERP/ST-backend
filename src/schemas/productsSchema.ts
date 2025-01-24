@@ -4,6 +4,7 @@ import { z } from 'zod'
 const productsSchema = z.object({
   name: z
     .string()
+    .min(1, 'El nombre del producto no puede estar vacío') // Agregado para que el nombre no esté vacío
     .max(50, 'El nombre del producto no debe exceder los 50 caracteres'),
 
   category_id: z.string().uuid('El ID de la categoría debe ser un UUID válido'),

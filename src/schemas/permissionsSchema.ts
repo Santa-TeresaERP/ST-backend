@@ -2,12 +2,17 @@ import { PermissionsAttributes } from '@type/permissions'
 import { z } from 'zod'
 
 const PermissionsSchema = z.object({
-  id: z.string().uuid(),
-  moduleId: z.string().uuid(),
-  canRead: z.boolean(),
-  canWrite: z.boolean(),
-  canEdit: z.boolean(),
-  canDelete: z.boolean(),
+  id: z.string().uuid('El ID debe ser un UUID válido'),
+
+  moduleId: z.string().uuid('El ID del módulo debe ser un UUID válido'),
+
+  canRead: z.boolean().optional().default(false),
+
+  canWrite: z.boolean().optional().default(false),
+
+  canEdit: z.boolean().optional().default(false),
+
+  canDelete: z.boolean().optional().default(false),
 })
 
 export const permissionsValidation = (data: PermissionsAttributes) =>

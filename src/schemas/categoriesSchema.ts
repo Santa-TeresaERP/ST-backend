@@ -9,13 +9,21 @@ const categoriesSchema = z.object({
       /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/,
       'El nombre de la categoría solo debe contener letras y espacios',
     )
-    .min(1, 'El nombre de la categoría es obligatorio'), // Agregado para que no sea vacío
+    .min(1, 'El nombre de la categoría es obligatorio')
+    .refine(
+      (val) => !/^\s|\s$/.test(val),
+      'El nombre no debe comenzar ni terminar con espacios en blanco',
+    ),
 
   description: z
     .string()
     .max(150, 'La descripción no debe exceder los 150 caracteres')
     .optional()
-    .default(''),
+    .default('')
+    .refine(
+      (val) => !/<script|<\/script|SELECT|DROP|INSERT|--/i.test(val),
+      'La descripción contiene caracteres no permitidos o posibles inyecciones',
+    ),
 })
 
 export const categoriesValidation = (data: CategoryAttributes) =>

@@ -35,6 +35,38 @@ class productsController {
     }
   }
 
+  static getProduct: RequestHandler = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    try {
+      const product = await useProducts.getProduct(req.params.id)
+      res.json(product)
+      return
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message })
+      } else {
+        res.status(400).json({ error: 'Unknown error' })
+      }
+      return
+    }
+  }
+
+  static getConfectionery: RequestHandler = async (
+    _req: Request,
+    res: Response,
+  ): Promise<void> => {
+    try {
+      const confectioneryProducts = await useProducts.getConfectionery()
+      res.json(confectioneryProducts)
+      return
+    } catch {
+      res.status(500).json({ error: 'Error interno del servidor' })
+      return
+    }
+  }
+
   static async updateProduct(req: Request, res: Response): Promise<void> {
     try {
       const product = await useProducts.updateProduct(req.params.id, req.body)

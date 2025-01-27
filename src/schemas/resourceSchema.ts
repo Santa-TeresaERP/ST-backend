@@ -6,8 +6,8 @@ const resourceSchema = z.object({
     .string()
     .max(45, 'El nombre del recurso no debe exceder los 45 caracteres')
     .regex(
-      /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/,
-      'El nombre solo debe contener letras y espacios',
+      /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s./_-]+$/,
+      'El nombre solo debe contener letras, espacios, puntos, barras, guiones y guiones bajos',
     ),
   quantity: z
     .number({ invalid_type_error: 'La cantidad debe ser un número' })
@@ -23,8 +23,8 @@ const resourceSchema = z.object({
     .string()
     .max(45, 'El nombre del proveedor no debe exceder los 45 caracteres')
     .regex(
-      /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/,
-      'El nombre del proveedor solo debe contener letras y espacios',
+      /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s./_-]+$/,
+      'El nombre del proveedor solo debe contener letras, espacios, puntos, barras, guiones y guiones bajos',
     ),
   purchaseDate: z
     .string()
@@ -36,8 +36,8 @@ const resourceSchema = z.object({
     .string()
     .max(150, 'La observación no debe exceder los 150 caracteres')
     .regex(
-      /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/,
-      'La observación solo debe contener letras y espacios',
+      /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s./_-]+$/,
+      'La observación solo debe contener letras, espacios, puntos, barras, guiones y guiones bajos',
     ),
 })
 

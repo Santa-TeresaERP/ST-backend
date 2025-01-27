@@ -18,7 +18,12 @@ class Permissions
 
 Permissions.init(
   {
-    id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: uuid,
+      primaryKey: true,
+      unique: true,
+    },
     moduleId: { type: DataTypes.UUID, allowNull: false },
     canRead: { type: DataTypes.BOOLEAN, defaultValue: false },
     canWrite: { type: DataTypes.BOOLEAN, defaultValue: false },

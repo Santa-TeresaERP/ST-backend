@@ -1,5 +1,5 @@
 import { connectDb } from '@config/database'
-import createAdmin from '@createAdmin'
+import createAdmin from 'src/config/createAdmin'
 import { join } from 'node:path'
 import { readdirSync } from 'node:fs'
 import createModules from './createModules'

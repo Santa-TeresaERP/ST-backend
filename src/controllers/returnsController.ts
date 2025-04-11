@@ -1,4 +1,4 @@
-import Return from '../models/return'
+import Return from '../models/returns'
 import { Request, Response } from 'express'
 import { HttpError } from '../errors/http'
 import { productionValidation } from '../schemas/returnsSchema'

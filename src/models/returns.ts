@@ -1,13 +1,13 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
-import { returnAttributes } from '@type/return'
+import { returnsAttributes } from '@type/returns'
 import Product from '@models/products'
 import Sale from '@models/sale'
 import { v4 as uuid } from 'uuid'
 
 class Return
-  extends Model<returnAttributes, Optional<returnAttributes, 'id'>>
-  implements returnAttributes
+  extends Model<returnsAttributes, Optional<returnsAttributes, 'id'>>
+  implements returnsAttributes
 {
   public id!: string
   public productId!: string

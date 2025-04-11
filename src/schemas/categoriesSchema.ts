@@ -1,5 +1,5 @@
-import { CategoryAttributes } from '@type/categories';
-import { z } from 'zod';
+import { CategoryAttributes } from '@type/categories'
+import { z } from 'zod'
 
 const categoriesSchema = z.object({
   name: z
@@ -24,7 +24,7 @@ const categoriesSchema = z.object({
       (val) => !/<script|<\/script|SELECT|DROP|INSERT|--/i.test(val),
       'La descripción contiene caracteres no permitidos o posibles inyecciones',
     ),
-});
+})
 
 export const categoriesValidation = (data: CategoryAttributes) =>
-  categoriesSchema.safeParse(data);
+  categoriesSchema.safeParse(data)

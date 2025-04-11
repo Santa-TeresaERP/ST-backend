@@ -1,39 +1,43 @@
-import { productionAttributes } from '@type/production'
 import { z } from 'zod'
+import { productionAttributes } from '@type/production'
 
-const ProductionSchema = z.object({
+const productionSchema = z.object({
+  production_id: z
+    .string()
+    .uuid('El ID de la producción debe ser un UUID válido'),
+
   productId: z
     .string()
-    .uuid('El ID del producto debe ser un UUID válido')
-    .nonempty('El producto no puede estar vacío'),
+    .uuid('El ID del producto debe ser un UUID válido'),
 
   quantityProduced: z
-    .number({ invalid_type_error: 'Debe ser un número' })
-    .positive('La cantidad producida debe ser mayor a cero'),
-
-  quantityUsed: z
-    .number({ invalid_type_error: 'Debe ser un número' })
-    .positive('La cantidad utilizada debe ser mayor a cero'),
+    .number()
+    .int('La cantidad producida debe ser un número entero')
+    .positive('La cantidad producida debe ser positiva'),
 
   productionDate: z
     .string()
-    .refine(
-      (date) => !isNaN(Date.parse(date)),
-      'La fecha de producción debe ser válida',
-    )
-    .refine(
-      (date) => new Date(date) <= new Date(),
-      'La fecha de producción no puede ser futura',
-    ),
+    .refine(date => !isNaN(new Date(date).getTime()), {
+      message: 'La fecha de producción debe ser una fecha válida',
+    }),
 
   observation: z
     .string()
-    .max(150, 'La observación no puede superar los 150 caracteres')
-    .regex(
-      /^[a-zA-ZáéíóúÁÉÍÓÚÑñ\s0-9,.-]*$/,
-      'La observación solo puede contener letras, números, espacios y algunos caracteres especiales como: , . -',
-    ),
+    .max(255, 'La observación no debe exceder los 255 caracteres')
+    .optional(),
+
+  plant_id: z
+    .string()
+    .uuid('El ID de la planta debe ser un UUID válido'),
+
+  createdAt: z
+    .date()
+    .optional(),
+
+  updatedAt: z
+    .date()
+    .optional(),
 })
 
 export const productionValidation = (data: productionAttributes) =>
-  ProductionSchema.safeParse(data)
+  productionSchema.safeParse(data)

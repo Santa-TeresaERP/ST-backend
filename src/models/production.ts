@@ -1,55 +1,72 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { productionAttributes } from '@type/production'
-import products from '@models/products'
 import { v4 as uuid } from 'uuid'
+import Product from '@models/product'
+import PlantProduction from '@models/plant_production'
 
-class production
-  extends Model<productionAttributes, Optional<productionAttributes, 'id'>>
+class Production
+  extends Model<productionAttributes, Optional<productionAttributes, 'production_id'>> 
   implements productionAttributes
 {
-  public id!: string
+  public production_id!: string
   public productId!: string
   public quantityProduced!: number
-  public quantityUsed!: string
   public productionDate!: string
   public observation!: string
+  public plant_id!: string
+  public createdAt?: Date
+  public updatedAt?: Date
 }
 
-production.init(
+Production.init(
   {
-    id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
-    productId: { type: DataTypes.UUID, allowNull: false },
-    quantityProduced: { type: DataTypes.INTEGER, allowNull: false },
-    quantityUsed: { type: DataTypes.STRING, allowNull: false },
-    productionDate: { type: DataTypes.DATE, allowNull: false },
-    observation: { type: DataTypes.STRING, allowNull: true },
-    createdAt: {
+    production_id: {
+      type: DataTypes.UUID,
+      defaultValue: uuid,
+      primaryKey: true,
+    },
+    productId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    quantityProduced: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    productionDate: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
+    },
+    observation: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    plant_id: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
     },
     updatedAt: {
       type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
+      allowNull: true,
     },
   },
   {
     sequelize,
-    tableName: 'productions',
+    tableName: 'production',
     timestamps: true,
   },
 )
 
-production.belongsTo(products, {
-  foreignKey: 'productId',
-  as: 'product',
-})
+// Relaciones
+Production.belongsTo(Product, { foreignKey: 'productId' })
+Product.hasMany(Production, { foreignKey: 'productId' })
 
-products.hasMany(production, {
-  foreignKey: 'productId',
-  as: 'productions',
-})
+Production.belongsTo(PlantProduction, { foreignKey: 'plant_id' })
+PlantProduction.hasMany(Production, { foreignKey: 'plant_id' })
 
-export default production
+export default Production

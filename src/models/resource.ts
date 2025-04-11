@@ -4,10 +4,10 @@ import { resourceAttributes } from '@type/resource'
 import { v4 as uuid } from 'uuid'
 
 class resource
-  extends Model<resourceAttributes, Optional<resourceAttributes, 'id'>>
+  extends Model<resourceAttributes, Optional<resourceAttributes, 'resource_id'>>
   implements resourceAttributes
 {
-  public id!: string
+  public resource_id!: string
   public name!: string
   public quantity!: number
   public unitPrice!: number
@@ -19,7 +19,7 @@ class resource
 
 resource.init(
   {
-    id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
+    resource_id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false },
     quantity: { type: DataTypes.INTEGER, allowNull: false },
     unitPrice: { type: DataTypes.FLOAT, allowNull: false },

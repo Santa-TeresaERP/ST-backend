@@ -1,5 +1,5 @@
 export interface CategoryAttributes {
-  id?: string
+  category_id: string
   name: string
   description: string
   creatdAt?: Date

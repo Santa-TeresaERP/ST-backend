@@ -1,9 +1,9 @@
 export interface ProductAttributes {
-  id?: string
+  product_id?: string 
   name: string
-  category_id: string
-  price: number
-  stock: number
+  category_id: string 
+  price: number 
+  stock: number 
   description: string
   imagen_url: string
   createdAt?: Date

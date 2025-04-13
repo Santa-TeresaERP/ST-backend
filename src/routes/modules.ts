@@ -1,13 +1,15 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
-import modulesController from '@controllers/modulesController'
+import { getModuleById } from '@controllers/Modules/getModuleById'
+import { getModules } from '@controllers/Modules/getModules'
+import { updateModule } from '@controllers/Modules/updateModule'
 
 const router = express.Router()
 
-router.get('/', authorization, modulesController.getModules) // Ruta para obtener todos los módulos
+router.get('/', authorization, getModules) // Ruta para obtener todos los módulos
 
-router.get('/:id', authorization, modulesController.getModuleById) // Ruta para obtener un módulo por su ID
+router.get('/:id', authorization, getModuleById) // Ruta para obtener un módulo por su ID
 
-router.patch('/:id', authorization, modulesController.updateModule) // Ruta para actualizar un módulo
+router.patch('/:id', authorization, updateModule) // Ruta para actualizar un módulo
 
 export default router

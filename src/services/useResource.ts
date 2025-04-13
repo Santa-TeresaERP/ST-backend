@@ -1,6 +1,6 @@
 import resource from '@models/resource'
-import { resourceAttributes } from '@type/resource'
-import { resourceValidation } from 'src/schemas/resourceSchema'
+import { resourceAttributes } from '@type/inventory/resource'
+import { resourceValidation } from 'src/schemas/Inventory/resourceSchema'
 
 class useResource {
   static async createResource(body: resourceAttributes) {

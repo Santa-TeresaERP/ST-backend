@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { serviceChangePassword } from '@services/User/serviceChangePassword'
+import { serviceChangePassword } from '@services/user/serviceChangePassword'
 
 export async function changePassword(req: Request, res: Response) {
   try {

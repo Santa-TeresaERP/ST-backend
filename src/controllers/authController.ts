@@ -1,6 +1,6 @@
 import { Response } from 'express'
-import { AuthRequest } from '@type/auth'
-import { serviceCheckUser } from '@services/User/serviceCheckUser'
+import { AuthRequest } from '@type/user/auth'
+import { serviceCheckUser } from '@services/user/serviceCheckUser'
 import { HttpError } from '@errors/http'
 
 class authController {

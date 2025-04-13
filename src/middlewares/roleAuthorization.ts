@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express'
-import { AuthRequest } from '@type/auth'
+import { AuthRequest } from '@type/user/auth'
 import Permissions from '@models/permissions'
 import RolesPermissions from '@models/rolesPermissions'
 import Module from '@models/modules'

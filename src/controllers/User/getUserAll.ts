@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { serviceGetUsersAll } from '@services/User/serviceGetUserAll'
+import { serviceGetUsersAll } from '@services/user/serviceGetUserAll'
 
 // Método para obtener todos los usuarios (activos e inactivos)
 export async function getUsersAll(_req: Request, res: Response) {

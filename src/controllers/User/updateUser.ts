@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { serviceUpdateUser } from '@services/User/serviceUpdateUser'
+import { serviceUpdateUser } from '@services/user/serviceUpdateUser'
 import { HttpError } from '@errors/http'
 
 export async function updateUser(req: Request, res: Response) {

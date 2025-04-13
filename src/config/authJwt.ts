@@ -1,5 +1,5 @@
 import { SECRET_KEY } from '@environments'
-import { jwtData } from '@type/auth'
+import { jwtData } from '@type/user/auth'
 import jwt from 'jsonwebtoken'
 
 export const generateToken = (data: jwtData) =>

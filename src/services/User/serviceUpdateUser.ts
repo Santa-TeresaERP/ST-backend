@@ -1,6 +1,6 @@
 import User from '@models/user'
-import { UserAttributes } from '@type/auth'
-import { userValidationPartial } from 'src/schemas/userSchema'
+import { UserAttributes } from '@type/user/auth'
+import { userValidationPartial } from 'src/schemas/user/userSchema'
 
 export async function serviceUpdateUser(
   id: string,

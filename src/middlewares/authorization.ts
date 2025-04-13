@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express'
-import { AuthRequest } from '@type/auth'
+import { AuthRequest } from '@type/user/auth'
 import { validateToken } from '@config/jwt'
 import { HttpError } from '@errors/http'
 

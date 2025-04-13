@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs'
 import User from '@models/user'
-import { UserAttributes } from '@type/auth'
+import { UserAttributes } from '@type/user/auth'
 import { Op } from 'sequelize'
-import { userValidationPartial } from 'src/schemas/userSchema'
+import { userValidationPartial } from 'src/schemas/user/userSchema'
 
 export async function serviceCreateUser(body: UserAttributes) {
   const validation = userValidationPartial(body)

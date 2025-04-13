@@ -1,4 +1,4 @@
-import  User  from '@models/user'
+import User from '@models/user'
 
 export async function serviceGetUser(id: string) {
   const user = await User.findByPk(id)
@@ -6,7 +6,7 @@ export async function serviceGetUser(id: string) {
     return null
   }
 
-  const { password, id: userId, ...userData } = user.toJSON()
+  const { ...userData } = user.toJSON()
 
   return userData
 }

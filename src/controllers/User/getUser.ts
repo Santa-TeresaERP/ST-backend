@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { serviceGetUser } from '@services/User/serviceGetUser'
 import { HttpError } from '@errors/http'
-  
+
 export async function getUser(req: Request, res: Response) {
   try {
     const userId = req.params.id

@@ -2,8 +2,10 @@ import User from '@models/user'
 import { UserAttributes } from '@type/auth'
 import { userValidationPartial } from 'src/schemas/userSchema'
 
-
-export async function serviceUpdateUser(id: string, body: Partial<UserAttributes>) {
+export async function serviceUpdateUser(
+  id: string,
+  body: Partial<UserAttributes>,
+) {
   const validation = userValidationPartial(body)
   if (!validation.success) {
     return { error: validation.error.errors }
@@ -15,7 +17,7 @@ export async function serviceUpdateUser(id: string, body: Partial<UserAttributes
   }
 
   // Elimina el campo password del objeto body si existe
-  const { password, ...updateData } = body
+  const { ...updateData } = body
 
   await user.update(updateData)
   // Recarga el usuario para obtener los datos actualizados

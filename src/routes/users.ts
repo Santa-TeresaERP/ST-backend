@@ -1,12 +1,12 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
 import { createUser } from '@controllers/User/createUser'
-import {getUsers} from '@controllers/User/getUsers'
-import {getUsersAll} from '@controllers/User/getUserAll'
-import {getUser} from '@controllers/User/getUser'
-import {deleteUser} from '@controllers/User/deleteUser'
-import {updateUser} from '@controllers/User/updateUser'
-import {changePassword} from '@controllers/User/changePassword'
+import { getUsers } from '@controllers/User/getUsers'
+import { getUsersAll } from '@controllers/User/getUserAll'
+import { getUser } from '@controllers/User/getUser'
+import { deleteUser } from '@controllers/User/deleteUser'
+import { updateUser } from '@controllers/User/updateUser'
+import { changePassword } from '@controllers/User/changePassword'
 
 const router = express.Router()
 

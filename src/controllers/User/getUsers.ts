@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import {serviceGetUsers} from '@services/User/serviceGetUsers'
+import { serviceGetUsers } from '@services/User/serviceGetUsers'
 
 export async function getUsers(_req: Request, res: Response) {
   try {

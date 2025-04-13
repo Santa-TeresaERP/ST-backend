@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import { AuthRequest as Request } from '@type/auth'
 import { HttpError } from '@errors/http'
-import {serviceCreateUser} from '@services/User/serviceCreateUser'
+import { serviceCreateUser } from '@services/User/serviceCreateUser'
 
 export async function createUser(req: Request, res: Response) {
   try {

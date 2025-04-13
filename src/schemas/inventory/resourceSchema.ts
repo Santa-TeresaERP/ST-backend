@@ -1,4 +1,4 @@
-import { resourceAttributes } from '@type/resource'
+import { resourceAttributes } from '@type/inventory/resource'
 import { z } from 'zod'
 
 const resourceSchema = z.object({

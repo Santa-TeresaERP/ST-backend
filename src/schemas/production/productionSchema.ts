@@ -1,4 +1,4 @@
-import { productionAttributes } from '@type/production'
+import { productionAttributes } from '@type/production/production'
 import { z } from 'zod'
 
 const ProductionSchema = z.object({

@@ -1,6 +1,6 @@
 import production from '@models/production'
-import { productionAttributes } from '@type/production'
-import { productionValidation } from 'src/schemas/productionSchema'
+import { productionAttributes } from '@type/production/production'
+import { productionValidation } from 'src/schemas/production/productionSchema'
 
 class useProduction {
   static async createProduction(body: productionAttributes) {

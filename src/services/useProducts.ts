@@ -1,7 +1,7 @@
 import Product from '@models/products'
 import Category from '@models/categories'
-import { ProductAttributes } from '@type/products'
-import { productsValidation } from 'src/schemas/productsSchema'
+import { ProductAttributes } from '@type/production/products'
+import { productsValidation } from 'src/schemas/production/productsSchema'
 import { Identifier } from 'sequelize'
 
 class useProducts {

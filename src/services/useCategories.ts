@@ -1,6 +1,6 @@
 import Category from '@models/categories'
-import { CategoryAttributes } from '@type/categories'
-import { categoriesValidation } from 'src/schemas/categoriesSchema'
+import { CategoryAttributes } from '@type/production/categories'
+import { categoriesValidation } from 'src/schemas/production/categoriesSchema'
 
 class useCategories {
   // Crear una categoría

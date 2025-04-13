@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize'
 import sequelize from '@config/database'
-import { resourceProductionAttributes } from '@type/production'
+import { resourceProductionAttributes } from '@type/production/production'
 import resource from '@models/resource'
 import production from '@models/production'
 

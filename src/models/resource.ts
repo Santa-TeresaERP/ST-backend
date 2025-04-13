@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
-import { resourceAttributes } from '@type/resource'
+import { resourceAttributes } from '@type/inventory/resource'
 import { v4 as uuid } from 'uuid'
 
 class resource

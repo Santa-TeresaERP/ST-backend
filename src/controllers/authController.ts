@@ -1,12 +1,12 @@
 import { Response } from 'express'
 import { AuthRequest } from '@type/auth'
-import useUser from '@services/useUser'
+import { serviceCheckUser } from '@services/User/serviceCheckUser'
 import { HttpError } from '@errors/http'
 
 class authController {
   static async login(req: AuthRequest, res: Response) {
     try {
-      const token = await useUser.checkUser(req.body)
+      const token = await serviceCheckUser(req.body)
       if (!token) throw new HttpError('Incorrect credentials', 400)
 
       res.json(token)

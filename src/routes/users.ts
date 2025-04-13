@@ -1,21 +1,27 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
-import userController from '@controllers/userController'
+import { createUser } from '@controllers/User/createUser'
+import {getUsers} from '@controllers/User/getUsers'
+import {getUsersAll} from '@controllers/User/getUserAll'
+import {getUser} from '@controllers/User/getUser'
+import {deleteUser} from '@controllers/User/deleteUser'
+import {updateUser} from '@controllers/User/updateUser'
+import {changePassword} from '@controllers/User/changePassword'
 
 const router = express.Router()
 
-router.post('/', authorization, userController.createUser)
+router.post('/', authorization, createUser)
 
-router.get('/', authorization, userController.getUsers) // Ruta para obtener usuarios activos
+router.get('/', authorization, getUsers) // Ruta para obtener usuarios activos
 
-router.get('/all', authorization, userController.getUsersAll) // Ruta para obtener todos los usuarios (activos e inactivos)
+router.get('/all', authorization, getUsersAll) // Ruta para obtener todos los usuarios (activos e inactivos)
 
-router.get('/:id', authorization, userController.getUser)
+router.get('/:id', authorization, getUser)
 
-router.put('/:id', authorization, userController.deleteUser)
+router.put('/:id', authorization, deleteUser)
 
-router.patch('/:id', authorization, userController.updateUser)
+router.patch('/:id', authorization, updateUser)
 
-router.patch('/changes/:id', authorization, userController.changePassword)
+router.patch('/changes/:id', authorization, changePassword)
 
 export default router

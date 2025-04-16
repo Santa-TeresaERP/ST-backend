@@ -1,22 +1,18 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
-import rolesController from '@controllers/rolesController'
+import rolesController from '@controllers/roles'
 
 const router = express.Router()
 
 // Crear un rol||
-router.post('/', authorization, rolesController.createRoleController)
+router.post('/', authorization, rolesController.createRole)
 
 // Obtener todos los roles
-router.get('/', authorization, rolesController.getRolesController)
+router.get('/', authorization, rolesController.getRoles)
 
 // Obtener un rol
-router.get('/:id', authorization, rolesController.getRoleController)
-
-// Actualizar un rol
-router.patch('/:id', authorization, rolesController.updateRoleController)
-
-// Eliminar un rol
-router.delete('/:id', authorization, rolesController.deleteRoleController)
+router.get('/:id', authorization, rolesController.getRole)
+router.patch('/:id', authorization, rolesController.updateRole as any)
+router.delete('/:id', authorization, rolesController.deleteRole as any)
 
 export default router

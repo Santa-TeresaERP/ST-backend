@@ -1,11 +1,11 @@
 import User from '@models/user'
 import bcrypt from 'bcryptjs'
 
-export async function serviceChangePassword(
+const serviceChangePassword = async (
   id: string,
   currentPassword: string,
   newPassword: string,
-) {
+) => {
   // Buscar al usuario por ID
   const user = await User.findByPk(id)
   if (!user) {
@@ -27,3 +27,5 @@ export async function serviceChangePassword(
 
   return { message: 'Contraseña actualizada correctamente' }
 }
+
+export default serviceChangePassword

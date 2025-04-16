@@ -1,6 +1,6 @@
 import User from '@models/user'
 
-export async function serviceDeleteUser(id: string) {
+const serviceDeleteUser = async (id: string) => {
   const user = await User.findByPk(id)
   if (!user) {
     return null
@@ -9,3 +9,5 @@ export async function serviceDeleteUser(id: string) {
   await user.update({ status: false })
   return { message: 'Usuario eliminado correctamente' }
 }
+
+export default serviceDeleteUser

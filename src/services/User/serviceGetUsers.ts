@@ -1,6 +1,8 @@
 import User from '@models/user'
 
-export async function serviceGetUsers() {
+const serviceGetUsers = async () => {
   const users = await User.findAll({ where: { status: true } })
   return users
 }
+
+export default serviceGetUsers

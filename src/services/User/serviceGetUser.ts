@@ -1,6 +1,6 @@
 import User from '@models/user'
 
-export async function serviceGetUser(id: string) {
+const serviceGetUser = async (id: string) => {
   const user = await User.findByPk(id)
   if (!user) {
     return null
@@ -10,3 +10,5 @@ export async function serviceGetUser(id: string) {
 
   return userData
 }
+
+export default serviceGetUser

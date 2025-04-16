@@ -4,7 +4,7 @@ import User from '@models/user'
 import { jwtData, UserAttributes } from '@type/user/auth'
 import { userValidationPartial } from 'src/schemas/user/userSchema'
 
-export async function serviceCheckUser(body: UserAttributes) {
+const serviceCheckUser = async (body: UserAttributes) => {
   const validation = userValidationPartial(body)
   if (validation.error) {
     return null
@@ -35,3 +35,5 @@ export async function serviceCheckUser(body: UserAttributes) {
   const token = generateToken(tokenData)
   return { user: name, token }
 }
+
+export default serviceCheckUser

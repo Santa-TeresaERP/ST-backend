@@ -1,8 +1,8 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
-import { getModuleById } from '@controllers/Modules/getModuleById'
-import { getModules } from '@controllers/Modules/getModules'
-import { updateModule } from '@controllers/Modules/updateModule'
+import { getModuleById } from '@controllers/modules/getModuleById'
+import { getModules } from '@controllers/modules/getModules'
+import { updateModule } from '@controllers/modules/updateModule'
 
 const router = express.Router()
 

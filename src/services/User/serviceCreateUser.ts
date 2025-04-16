@@ -4,7 +4,7 @@ import { UserAttributes } from '@type/user/auth'
 import { Op } from 'sequelize'
 import { userValidationPartial } from 'src/schemas/user/userSchema'
 
-export async function serviceCreateUser(body: UserAttributes) {
+const serviceCreateUser = async (body: UserAttributes) => {
   const validation = userValidationPartial(body)
   if (!validation.success) {
     return { error: validation.error.errors }
@@ -35,3 +35,5 @@ export async function serviceCreateUser(body: UserAttributes) {
 
   return user
 }
+
+export default serviceCreateUser

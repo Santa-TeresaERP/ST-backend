@@ -1,8 +1,8 @@
 import Roles from '@models/roles'
 import Permissions from '@models/permissions'
 
-const getRole = async (id: string) => {
-  const role = await Roles.findByPk(id, {
+const serviceGetRoles = async () => {
+  const roles = await Roles.findAll({
     include: [
       {
         model: Permissions,
@@ -11,12 +11,7 @@ const getRole = async (id: string) => {
       },
     ],
   })
-
-  if (!role) {
-    return { error: 'El rol no existe' }
-  }
-
-  return role
+  return roles
 }
 
-export default getRole
+export default serviceGetRoles

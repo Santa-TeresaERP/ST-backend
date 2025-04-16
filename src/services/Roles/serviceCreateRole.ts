@@ -2,7 +2,7 @@ import Roles from '@models/roles'
 import { RolesAttributes } from '@type/user/roles'
 import { rolesValidation } from 'src/schemas/user/rolesSchema'
 
-const createRole = async (body: RolesAttributes) => {
+const serviceCreateRole = async (body: RolesAttributes) => {
   const validation = rolesValidation(body)
 
   if (!validation.success) {
@@ -20,4 +20,4 @@ const createRole = async (body: RolesAttributes) => {
   return newRole
 }
 
-export default createRole
+export default serviceCreateRole

@@ -1,6 +1,6 @@
 import Roles from '@models/roles'
 
-const deleteRole = async (id: string) => {
+const serviceDeleteRole = async (id: string) => {
   const role = await Roles.findByPk(id)
 
   if (!role) {
@@ -11,4 +11,4 @@ const deleteRole = async (id: string) => {
   return { message: 'Rol eliminado correctamente' }
 }
 
-export default deleteRole
+export default serviceDeleteRole

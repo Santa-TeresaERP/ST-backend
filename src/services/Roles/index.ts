@@ -1,8 +1,8 @@
-import createRole from './createRole'
-import getRoles from './getRoles'
-import getRole from './getRole'
-import updateRole from './updateRole'
-import deleteRole from './deleteRole'
+import createRole from './serviceCreateRole'
+import getRoles from './serviceGetRoles'
+import getRole from './serviceGetRole'
+import updateRole from './serviceUpdateRole'
+import deleteRole from './serviceDeleteRole'
 
 const useRoles = {
   createRole,

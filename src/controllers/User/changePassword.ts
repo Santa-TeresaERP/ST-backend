@@ -1,12 +1,12 @@
 import { Request, Response } from 'express'
-import { serviceChangePassword } from '@services/user/serviceChangePassword'
+import useUser from '@services/user/index'
 
-export async function changePassword(req: Request, res: Response) {
+const changePassword = async (req: Request, res: Response) => {
   try {
     const { currentPassword, newPassword } = req.body
     const userId = req.params.id
 
-    const result = await serviceChangePassword(
+    const result = await useUser.serviceChangePassword(
       userId,
       currentPassword,
       newPassword,
@@ -22,3 +22,5 @@ export async function changePassword(req: Request, res: Response) {
     res.status(500).json({ message: 'Error al cambiar contraseña' })
   }
 }
+
+export default changePassword

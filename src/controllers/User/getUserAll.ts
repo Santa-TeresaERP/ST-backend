@@ -1,13 +1,15 @@
 import { Request, Response } from 'express'
-import { serviceGetUsersAll } from '@services/user/serviceGetUserAll'
+import useUser from '@services/user/index'
 
 // Método para obtener todos los usuarios (activos e inactivos)
-export async function getUsersAll(_req: Request, res: Response) {
+const getUsersAll = async (_req: Request, res: Response) => {
   try {
-    const users = await serviceGetUsersAll()
+    const users = await useUser.serviceGetUsersAll()
     res.json(users)
   } catch (error) {
     console.error('Error al obtener todos los usuarios:', error)
     res.status(500).json({ message: 'Error al obtener todos los usuarios' })
   }
 }
+
+export default getUsersAll

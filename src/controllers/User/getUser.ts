@@ -1,11 +1,11 @@
 import { Request, Response } from 'express'
-import { serviceGetUser } from '@services/user/serviceGetUser'
+import useUser from '@services/user/index'
 import { HttpError } from '@errors/http'
 
-export async function getUser(req: Request, res: Response) {
+const getUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id
-    const user = await serviceGetUser(userId)
+    const user = await useUser.serviceGetUser(userId)
     if (!user) throw new HttpError('User not found', 404)
     res.json(user)
   } catch (error) {
@@ -13,3 +13,5 @@ export async function getUser(req: Request, res: Response) {
     res.status(500).json({ message: 'Error al obtener usuario' })
   }
 }
+
+export default getUser

@@ -1,13 +1,12 @@
 export interface RentalAttributes {
-  id?: string
+  rental_id?: string
   customer_id: string
-  location_id: string
-  user_id: string
-  event_description: string
+  place_id: string
   start_date: Date
   end_date: Date
-  price: string
+  income_id?: string
   status: string
+  expense_id?: string
   createdAt?: Date
   updatedAt?: Date
 }

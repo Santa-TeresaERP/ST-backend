@@ -1,7 +1,7 @@
 export interface CustomerAttributes {
-  id?: string
+  customer_id?: string
   full_name: string
-  dni: string
+  dni: number
   phone: string
   email: string
   createdAt?: Date

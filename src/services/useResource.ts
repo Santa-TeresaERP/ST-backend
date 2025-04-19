@@ -1,11 +1,17 @@
 import resource from '@models/resource'
 import { resourceAttributes } from '@type/inventory/resource'
-import { resourceValidation } from 'src/schemas/inventory/resourceSchema'
+import {
+  resourceValidation,
+  resourceValidationPartial,
+} from 'src/schemas/inventory/resourceSchema'
 
 class useResource {
   static async createResource(body: resourceAttributes) {
+    console.log('Validando datos para crear recurso:', body)
     const validation = resourceValidation(body)
+
     if (!validation.success) {
+      console.error('Errores de validación:', validation.error.errors)
       return { error: validation.error.errors }
     }
 
@@ -19,6 +25,7 @@ class useResource {
       observation,
     } = body
 
+    console.log('Creando recurso con datos validados')
     const newResource = await resource.create({
       name,
       quantity,
@@ -29,37 +36,58 @@ class useResource {
       observation,
     })
 
+    console.log('Recurso creado:', newResource.toJSON())
     return newResource
   }
 
   static async getResources() {
+    console.log('Obteniendo todos los recursos')
     const resources = await resource.findAll()
+    console.log('Recursos obtenidos:', resources)
     return resources
   }
 
   static async deleteResource(id: string) {
-    const Resource = await resource.findByPk(id)
-    if (!Resource) {
+    console.log('Buscando recurso para eliminar con ID:', id)
+    const resourceToDelete = await resource.findByPk(id)
+    if (!resourceToDelete) {
+      console.log('Recurso no encontrado para eliminar:', id)
       return null
     }
 
-    await Resource.destroy()
+    await resourceToDelete.destroy()
+    console.log('Recurso eliminado:', id)
     return { message: 'Recurso eliminado correctamente' }
   }
 
-  static async updateResource(id: string, body: resourceAttributes) {
-    const validation = resourceValidation(body)
+  static async updateResource(id: string, body: Partial<resourceAttributes>) {
+    console.log('Actualizando recurso con ID:', id, 'y datos:', body)
+
+    if (!id) {
+      console.error('ID no proporcionado')
+      return { error: 'Resource id is required' }
+    }
+
+    const validation = resourceValidationPartial(body)
     if (!validation.success) {
+      console.error('Errores de validación:', validation.error.errors)
       return { error: validation.error.errors }
     }
 
-    const Resource = await resource.findByPk(id)
-    if (!Resource) {
-      return null
+    const resourceToUpdate = await resource.findByPk(id)
+    if (!resourceToUpdate) {
+      console.error('Recurso no encontrado para actualizar:', id)
+      return { error: 'Resource not found' }
     }
 
-    await Resource.update(body)
-    return Resource
+    await resourceToUpdate.update(body)
+    const updatedResource = await resource.findByPk(id)
+
+    console.log('Recurso actualizado:', updatedResource?.toJSON())
+    return {
+      message: 'Resource updated',
+      resource: updatedResource ? updatedResource.toJSON() : {},
+    }
   }
 }
 

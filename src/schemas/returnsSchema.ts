@@ -1,4 +1,4 @@
-import { returnAttributes } from '@type/return'
+import { returnsAttributes } from '@type/returns'
 import { z } from 'zod'
 
 export const returnSchema = z.object({
@@ -49,5 +49,5 @@ export const returnSchema = z.object({
     ),
 })
 
-export const returnValidation = (data: returnAttributes) =>
+export const returnValidation = (data: returnsAttributes) =>
   returnSchema.safeParse(data)

@@ -1,4 +1,4 @@
-import { salesAtributes } from '@type/sale'
+import { salesAttributes } from '@type/sale'
 import { z } from 'zod'
 
 // Definir el esquema de ventas, si salesAtributes es un tipo, necesitas crear el esquema de validación correspondiente.
@@ -30,5 +30,5 @@ const salesSchema = z.object({
     .refine((date) => date <= new Date(), 'La fecha no puede ser futura'),
 })
 
-export const saleValidation = (data: salesAtributes) =>
+export const saleValidation = (data: salesAttributes) =>
   salesSchema.safeParse(data)

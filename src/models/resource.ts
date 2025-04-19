@@ -4,7 +4,10 @@ import { resourceAttributes } from '@type/inventory/resource'
 import { v4 as uuid } from 'uuid'
 
 class resource
-  extends Model<resourceAttributes, Optional<resourceAttributes, 'id'>>
+  extends Model<
+    resourceAttributes,
+    Optional<resourceAttributes, 'id' | 'createdAt' | 'updatedAt'>
+  >
   implements resourceAttributes
 {
   public id!: string
@@ -43,6 +46,16 @@ resource.init(
     sequelize,
     tableName: 'resources',
     timestamps: true,
+    hooks: {
+      // Hook antes de crear un recurso
+      beforeCreate: (resource) => {
+        resource.totalCost = resource.quantity * resource.unitPrice
+      },
+      // Hook antes de actualizar un recurso
+      beforeUpdate: (resource) => {
+        resource.totalCost = resource.quantity * resource.unitPrice
+      },
+    },
   },
 )
 

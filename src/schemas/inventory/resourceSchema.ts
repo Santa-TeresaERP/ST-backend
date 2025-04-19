@@ -31,15 +31,20 @@ const resourceSchema = z.object({
     .refine(
       (date) => !isNaN(Date.parse(date)),
       'La fecha de compra debe ser válida',
-    ),
+    )
+    .optional(), // Ahora el campo es opcional
   observation: z
     .string()
     .max(150, 'La observación no debe exceder los 150 caracteres')
     .regex(
-      /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s./_-]+$/,
-      'La observación solo debe contener letras, espacios, puntos, barras, guiones y guiones bajos',
-    ),
+      /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/,
+      'La observación solo debe contener letras y espacios',
+    )
+    .optional(), // Ahora el campo es opcional
 })
 
 export const resourceValidation = (data: resourceAttributes) =>
   resourceSchema.safeParse(data)
+
+export const resourceValidationPartial = (data: Partial<resourceAttributes>) =>
+  resourceSchema.partial().safeParse(data)

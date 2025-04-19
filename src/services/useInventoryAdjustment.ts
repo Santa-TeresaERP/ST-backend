@@ -1,5 +1,5 @@
 import InventoryAdjustment from '@models/inventoryAdjustment'
-import Product from '@models/products'
+import Product from '@models/product'
 import { InventoryAdjustmentAttributes } from '@type/inventoryAdjustment'
 import { inventoryAdjustmentValidation } from 'src/schemas/inventoryAdjustmentSchema'
 

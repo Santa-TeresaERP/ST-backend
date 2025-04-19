@@ -1,4 +1,4 @@
-import Product from '@models/products'
+import Product from '@models/product'
 import Category from '@models/categories'
 import { ProductAttributes } from '@type/production/products'
 import { productsValidation } from 'src/schemas/production/productsSchema'

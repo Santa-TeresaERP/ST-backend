@@ -8,13 +8,15 @@ class Product
   extends Model<ProductAttributes, Optional<ProductAttributes, 'id'>>
   implements ProductAttributes
 {
-  public id!: string
+  public product_id!: string
   public name!: string
   public category_id!: string
   public price!: number
   public stock!: number
   public description!: string
   public imagen_url!: string
+  public createdAt?: Date
+  public updatedAt?: Date
 }
 
 Product.init(
@@ -22,18 +24,18 @@ Product.init(
     id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false },
     category_id: { type: DataTypes.UUID, allowNull: false },
-    price: { type: DataTypes.FLOAT, allowNull: false },
+    price: { type: DataTypes.DECIMAL, allowNull: false },
     stock: { type: DataTypes.INTEGER, allowNull: false },
     description: { type: DataTypes.STRING, allowNull: true },
     imagen_url: { type: DataTypes.STRING, allowNull: true },
     createdAt: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true, // Si la BD lo maneja automáticamente, puedes ponerlo como true
       defaultValue: DataTypes.NOW,
     },
     updatedAt: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true, // Lo mismo aquí
       defaultValue: DataTypes.NOW,
     },
   },

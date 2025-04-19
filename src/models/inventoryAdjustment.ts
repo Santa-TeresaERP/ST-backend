@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { InventoryAdjustmentAttributes } from '@type/inventoryAdjustment'
-import Product from '@models/products'
+import Product from '@models/product'
 import { v4 as uuid } from 'uuid'
 
 class InventoryAdjustment

@@ -5,10 +5,10 @@ import { v4 as uuid } from 'uuid'
 import Product from '@models/product'
 
 class Lost
-  extends Model<lostAttributes, Optional<lostAttributes, 'lost_id'>>
+  extends Model<lostAttributes, Optional<lostAttributes, 'id'>>
   implements lostAttributes
 {
-  public lost_id!: string
+  public id!: string
   public product_id!: string
   public quantity!: number
   public lost_type!: string
@@ -18,7 +18,7 @@ class Lost
 
 Lost.init(
   {
-    lost_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,
@@ -53,7 +53,7 @@ Lost.init(
     sequelize,
     tableName: 'losts',
     timestamps: false, // Ya estás usando created_at manualmente
-  }
+  },
 )
 
 // Relaciones

@@ -1,15 +1,12 @@
 import { productionAttributes } from '@type/production/production'
 import { z } from 'zod'
-import { productionAttributes } from '@type/production'
 
 const productionSchema = z.object({
   production_id: z
     .string()
     .uuid('El ID de la producción debe ser un UUID válido'),
 
-  productId: z
-    .string()
-    .uuid('El ID del producto debe ser un UUID válido'),
+  productId: z.string().uuid('El ID del producto debe ser un UUID válido'),
 
   quantityProduced: z
     .number()
@@ -18,7 +15,7 @@ const productionSchema = z.object({
 
   productionDate: z
     .string()
-    .refine(date => !isNaN(new Date(date).getTime()), {
+    .refine((date) => !isNaN(new Date(date).getTime()), {
       message: 'La fecha de producción debe ser una fecha válida',
     }),
 
@@ -27,17 +24,11 @@ const productionSchema = z.object({
     .max(255, 'La observación no debe exceder los 255 caracteres')
     .optional(),
 
-  plant_id: z
-    .string()
-    .uuid('El ID de la planta debe ser un UUID válido'),
+  plant_id: z.string().uuid('El ID de la planta debe ser un UUID válido'),
 
-  createdAt: z
-    .date()
-    .optional(),
+  createdAt: z.date().optional(),
 
-  updatedAt: z
-    .date()
-    .optional(),
+  updatedAt: z.date().optional(),
 })
 
 export const productionValidation = (data: productionAttributes) =>

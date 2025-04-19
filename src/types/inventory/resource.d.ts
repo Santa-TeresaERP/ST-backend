@@ -1,5 +1,5 @@
 export interface resourceAttributes {
-  resource_id?: string
+  id?: string
   name: string
   quantity: number
   unitPrice: number

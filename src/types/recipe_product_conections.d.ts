@@ -1,5 +1,4 @@
 export interface RecipeProductResourceAttributes {
-    recipe_id: string      
-    resource_id: number      
-  }
-  
+  recipe_id: string
+  resource_id: number
+}

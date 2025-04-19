@@ -1,6 +1,5 @@
 export interface plant_productionAttributes {
-    
-    plant_id : string
-    plant_name: string
-    adress: Date
+  id: string
+  plant_name: string
+  address: string // Corrected typo from 'adress' to 'address'
 }

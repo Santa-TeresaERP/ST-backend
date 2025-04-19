@@ -1,6 +1,9 @@
 import { CategoryAttributes } from '@type/production/categories'
 import { z } from 'zod'
 
+const categorySchema = z.object({
+  category_id: z.string().uuid('El ID de la categoría debe ser un UUID válido'),
+
   name: z
     .string()
     .min(1, 'El nombre no puede estar vacío')

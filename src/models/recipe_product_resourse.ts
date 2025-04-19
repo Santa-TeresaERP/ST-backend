@@ -4,10 +4,13 @@ import sequelize from '@config/database'
 import { RecipeProductResourceAttributes } from '@type/recipe_product_resourse'
 
 class RecipeProductResource
-  extends Model<RecipeProductResourceAttributes, Optional<RecipeProductResourceAttributes, never>>
+  extends Model<
+    RecipeProductResourceAttributes,
+    Optional<RecipeProductResourceAttributes, never>
+  >
   implements RecipeProductResourceAttributes
 {
-  public recipe_id!: string
+  public id!: string
   public product_id!: string
   public quantity_required!: string
   public unit!: string
@@ -17,7 +20,7 @@ class RecipeProductResource
 
 RecipeProductResource.init(
   {
-    recipe_id: {
+    id: {
       type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,

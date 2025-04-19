@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { RecipeProductResourceAttributes } from '@type/recipe_product_resourse'
 
 const recipeProductResourceSchema = z.object({
-  recipe_id: z.string().uuid('El ID de la receta debe ser un UUID válido'),
+  id: z.string().uuid('El ID de la receta debe ser un UUID válido'),
 
   product_id: z.string().uuid('El ID del producto debe ser un UUID válido'),
 
@@ -17,5 +17,6 @@ const recipeProductResourceSchema = z.object({
     .max(20, 'La unidad no debe exceder los 20 caracteres'),
 })
 
-export const recipeProductResourceValidation = (data: RecipeProductResourceAttributes) =>
-  recipeProductResourceSchema.safeParse(data)
+export const recipeProductResourceValidation = (
+  data: RecipeProductResourceAttributes,
+) => recipeProductResourceSchema.safeParse(data)

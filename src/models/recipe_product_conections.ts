@@ -36,7 +36,7 @@ RecipeProductResource.init(
     sequelize,
     tableName: 'recipe_product_resources',
     timestamps: false, // activa si quieres createdAt/updatedAt
-  }
+  },
 )
 
 // Relaciones (asumiendo los modelos existen y están bien nombrados)

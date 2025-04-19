@@ -12,5 +12,6 @@ const recipeProductResourceSchema = z.object({
     .positive('El ID del recurso debe ser mayor que cero'),
 })
 
-export const recipeProductResourceValidation = (data: RecipeProductResourceAttributes) =>
-  recipeProductResourceSchema.safeParse(data)
+export const recipeProductResourceValidation = (
+  data: RecipeProductResourceAttributes,
+) => recipeProductResourceSchema.safeParse(data)

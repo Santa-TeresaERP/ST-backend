@@ -1,4 +1,4 @@
-export interface returnAttributes {
+export interface returnsAttributes {
   id?: string
   productId: string
   salesId: string

@@ -1,18 +1,23 @@
-import { Request, Response } from 'express';
-import useRoles from '@services/Roles';
+import { Request, Response } from 'express'
+import useRoles from '@services/Roles/index'
 
-export default async function deleteRole(req: Request, res: Response) {
+const deleteRoleController = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const success = await useRoles.deleteRole(id);
+    const { id } = req.params
+    const result = await useRoles.deleteRole(id)
 
-    if (!success) {
-      return res.status(404).json({ error: 'Role not found' });
+    if (result?.error) {
+      res.status(404).json({ error: result.error })
     }
 
-    return res.status(200).json({ message: 'Role deleted successfully' });
+    res.status(200).json(result)
   } catch (error) {
-    console.error('Error deleting role:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    console.error('Error deleting role:', error)
+    res.status(500).json({
+      error: 'Internal Server Error',
+      message: error instanceof Error ? error.message : 'Unknown error',
+    })
   }
 }
+
+export default deleteRoleController

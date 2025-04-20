@@ -13,7 +13,7 @@ class useProducts {
       return { error: validation.error.errors }
     }
 
-    const { name, category_id, price, stock, description, imagen_url } =
+    const { name, category_id, price, description, imagen_url } =
       validation.data
 
     const categoryExists = await Category.findByPk(category_id)
@@ -25,7 +25,6 @@ class useProducts {
       name,
       category_id: category_id,
       price,
-      stock,
       description: description ?? '',
       imagen_url: imagen_url ?? '',
     })
@@ -74,14 +73,13 @@ class useProducts {
       return { error: 'El producto no existe' }
     }
 
-    const { name, category_id, price, stock, description, imagen_url } =
+    const { name, category_id, price, description, imagen_url } =
       validation.data
 
     await product.update({
       name,
       category_id: category_id, // Mapea categoryId a category_id
       price: parseFloat(price.toString()), // Asegúrate de que el precio sea un float
-      stock,
       description,
       imagen_url, // Mapea imagenUrl a imagen_url
     })

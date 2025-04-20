@@ -1,11 +1,11 @@
 import Category from '@models/categories'
 import { CategoryAttributes } from '@type/production/categories'
-import { categoriesValidation } from 'src/schemas/production/categoriesSchema'
+import { categoryValidation } from 'src/schemas/production/categoriesSchema'
 
 class useCategories {
   // Crear una categoría
   static async createCategory(body: CategoryAttributes) {
-    const validation = categoriesValidation(body)
+    const validation = categoryValidation(body)
 
     if (!validation.success) {
       return { error: validation.error.errors }
@@ -30,7 +30,7 @@ class useCategories {
 
   // Actualizar una categoría
   static async updateCategory(id: string, body: CategoryAttributes) {
-    const validation = categoriesValidation(body)
+    const validation = categoryValidation(body)
 
     if (!validation.success) {
       return { error: validation.error.errors }

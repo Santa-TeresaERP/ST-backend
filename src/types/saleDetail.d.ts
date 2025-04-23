@@ -1,5 +1,5 @@
-export interface salesItemsAttributes {
-  salesId: string
+export interface SaleDetailAttributes {
+  id?: string
   productId: string
   quantity: number
   createdAt?: Date

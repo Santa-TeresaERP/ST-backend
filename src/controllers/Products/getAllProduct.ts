@@ -1,6 +1,5 @@
 import index from '@services/Products/index'
 import { Request, Response } from 'express'
-
 const getAllProductController = async (
   _req: Request,
   res: Response,

@@ -1,6 +1,5 @@
 import index from '@services/Products/index'
 import { Request, Response } from 'express'
-
 const getConfectioneryProductController = async (
   _req: Request,
   res: Response,
@@ -14,5 +13,4 @@ const getConfectioneryProductController = async (
     return
   }
 }
-
 export default getConfectioneryProductController

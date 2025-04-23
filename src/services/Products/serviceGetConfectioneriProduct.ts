@@ -9,7 +9,6 @@ const serviceGetConfectioneriProduct = async () => {
     },
   })
   return confectioneryProducts
-
 }
 
 export default serviceGetConfectioneriProduct

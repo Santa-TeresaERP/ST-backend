@@ -1,9 +1,8 @@
-import Product from "@models/product"
-import Category from "@models/categories"
+import Product from '@models/product'
+import Category from '@models/categories'
 import { Identifier } from 'sequelize'
 
 const serviceGetProductByID = async (id: Identifier | undefined) => {
-
   if (!id) {
     throw new Error('El ID del producto es requerido') // Lanza un error si el ID no es válido
   }

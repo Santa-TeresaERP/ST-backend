@@ -1,7 +1,6 @@
-import Product from "@models/product"
+import Product from '@models/product'
 
 const serviceDeleteProduct = async (id: string) => {
-
   const product = await Product.findByPk(id)
 
   if (!product) {
@@ -10,6 +9,5 @@ const serviceDeleteProduct = async (id: string) => {
 
   await product.destroy()
   return { message: 'Producto eliminado correctamente' }
-
 }
 export default serviceDeleteProduct

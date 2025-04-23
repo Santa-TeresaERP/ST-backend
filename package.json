@@ -13,7 +13,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "backend": "file:",
     "bcryptjs": "^2.4.3",
@@ -51,5 +50,6 @@
   },
   "overrides": {
     "eslint": "^9.16.0"
-  }
+  },
+  "description": ""
 }

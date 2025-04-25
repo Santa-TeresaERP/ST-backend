@@ -1,7 +1,9 @@
 // @models/recipeProductResource.ts
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
-import { RecipeProductResourceAttributes } from '@type/recipe_product_resourse'
+import { RecipeProductResourceAttributes } from '@type/production/recipe_product_resourse'
+import Resource from '@models/resource'
+import RecipeProductConection from '@models/recipe_product_conections'
 
 class RecipeProductResource
   extends Model<
@@ -10,7 +12,7 @@ class RecipeProductResource
   >
   implements RecipeProductResourceAttributes
 {
-  public id!: string
+  public id?: string
   public product_id!: string
   public quantity_required!: string
   public unit!: string
@@ -55,3 +57,21 @@ RecipeProductResource.init(
     timestamps: true,
   },
 )
+
+// Relaciones (asumiendo los modelos existen y están bien nombrados)
+RecipeProductResource.belongsTo(Resource, { foreignKey: 'resource_id' })
+Resource.hasMany(RecipeProductResource, { foreignKey: 'resource_id' })
+
+RecipeProductResource.belongsToMany(Resource, {
+  through: RecipeProductConection,
+  foreignKey: 'recipe_id',
+  otherKey: 'resource_id',
+})
+
+Resource.belongsToMany(RecipeProductResource, {
+  through: RecipeProductConection,
+  foreignKey: 'resource_id',
+  otherKey: 'recipe_id',
+})
+
+export default RecipeProductResource

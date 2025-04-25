@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { plant_productionAttributes } from '@type/plant_production'
+import { plant_productionAttributes } from '@type/production/plant_production'
 
 const plantProductionSchema = z.object({
   id: z.string().uuid('El ID de la planta debe ser un UUID válido'),

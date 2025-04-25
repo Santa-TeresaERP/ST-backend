@@ -1,7 +1,7 @@
 export interface RentalAttributes {
   rental_id?: string
-  customer_id: string
-  place_id: string
+  customer_id?: string
+  place_id?: string
   start_date: Date
   end_date: Date
   income_id?: string

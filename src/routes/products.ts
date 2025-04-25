@@ -1,16 +1,20 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
-import productsController from '@controllers/productsController'
+import productsController from '@controllers/Products/index'
 
 const router = express.Router()
 
 router.post('/', authorization, productsController.createProduct)
 
-router.get('/', authorization, productsController.getProducts)
+router.get('/', authorization, productsController.getAllProduct)
 
-router.get('/confectionery', authorization, productsController.getConfectionery)
+router.get(
+  '/confectionery',
+  authorization,
+  productsController.getConfectioneryProduct,
+)
 
-router.get('/:id', authorization, productsController.getProduct)
+router.get('/:id', authorization, productsController.getProductByID)
 
 router.patch('/:id', authorization, productsController.updateProduct)
 

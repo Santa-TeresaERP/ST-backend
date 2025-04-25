@@ -1,4 +1,4 @@
-import { PermissionsAttributes } from '@type/permissions'
+import { PermissionsAttributes } from '@type/user/permissions'
 import { z } from 'zod'
 
 const PermissionsSchema = z.object({

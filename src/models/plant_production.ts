@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
-import { plant_productionAttributes } from '@type/plant_production'
+import { plant_productionAttributes } from '@type/production/plant_production'
 import { v4 as uuid } from 'uuid'
 
 class PlantProduction

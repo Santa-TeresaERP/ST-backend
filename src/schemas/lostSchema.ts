@@ -1,4 +1,4 @@
-import { lostAttributes } from '@type/lost'
+import { lostAttributes } from '@type/production/lost'
 import { z } from 'zod'
 
 const lostSchema = z.object({

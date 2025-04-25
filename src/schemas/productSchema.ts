@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { ProductAttributes } from '@type/product'
+import { ProductAttributes } from '@type/production/product'
 
 const productsSchema = z.object({
   product_id: z

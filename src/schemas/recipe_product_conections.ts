@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { RecipeProductResourceAttributes } from '@type/recipe_product_conections'
+import { RecipeProductResourceAttributes } from '@type/production/recipe_product_conections'
 
 const recipeProductResourceSchema = z.object({
   recipe_id: z.string().uuid('El ID de la receta debe ser un UUID válido'),

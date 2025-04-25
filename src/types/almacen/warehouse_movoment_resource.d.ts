@@ -1,0 +1,12 @@
+export interface WarehouseMovomentResourceAttributes {
+  movement_id: string
+  warehouse_id: string
+  resource_id: string
+  type: string
+  movement_type: string
+  quantity: number
+  movement_date: Date
+  obeservations?: string
+  createdAt?: Date
+  updatedAt?: Date
+}

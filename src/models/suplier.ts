@@ -1,53 +1,56 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
-import { ResourceAttributes } from '@type/almacen/resource'
+import { SuplierAttributes } from '@type/almacen/supplier'
 import { v4 as uuid } from 'uuid'
 
-class Resource
-  extends Model<ResourceAttributes, Optional<ResourceAttributes, 'resource_id'>>
-  implements ResourceAttributes
+class Supplier
+  extends Model<SuplierAttributes, Optional<SuplierAttributes, 'supplier_id'>>
+  implements SuplierAttributes
 {
-  public resource_id!: string
-  public name!: string
-  public entry_quantity!: number
-  public total_cost!: number
   public supplier_id!: string
-  public purchase_date!: Date
-  public observation?: string
+  public ruc!: number
+  public suplier_name!: string
+  public contact_name!: string
+  public email!: string
+  public phone!: number
+  public address!: string
   public createdAt?: Date
   public updatedAt?: Date
 }
 
-Resource.init(
+Supplier.init(
   {
-    resource_id: {
+    supplier_id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,
     },
-    name: {
+    ruc: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+    },
+    suplier_name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    entry_quantity: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    total_cost: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    supplier_id: {
-      type: DataTypes.UUID,
-      allowNull: false,
-    },
-    purchase_date: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    observation: {
+    contact_name: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isEmail: true,
+      },
+    },
+    phone: {
+      type: DataTypes.BIGINT,
+      allowNull: false,
+    },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -62,9 +65,9 @@ Resource.init(
   },
   {
     sequelize,
-    tableName: 'resources',
+    tableName: 'suppliers',
     timestamps: true,
   },
 )
 
-export default Resource
+export default Supplier

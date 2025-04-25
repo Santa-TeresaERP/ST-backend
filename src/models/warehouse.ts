@@ -1,29 +1,35 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
-import { WarehouseAttributes } from '@type/warehouse'
-import Product from '@models/product'
-import InventoryAdjustment from '@models/inventoryAdjustment'
+import { WarehouseAttributes } from '@type/almacen/warehouse'
 import { v4 as uuid } from 'uuid'
 
 class Warehouse
-  extends Model<WarehouseAttributes, Optional<WarehouseAttributes, 'id'>>
+  extends Model<
+    WarehouseAttributes,
+    Optional<WarehouseAttributes, 'warehouse_id'>
+  >
   implements WarehouseAttributes
 {
-  public id!: string
-  public product_id!: string
-  public quantity!: number
-  public inventory_adjustment_id!: string
-  public observations!: string
-  public created_at!: string
+  public warehouse_id!: string
+  public name!: string
+  public location!: string
+  public capacity!: number
+  public observation!: string
+  public createdAt!: Date
+  public updatedAt!: Date
 }
 
 Warehouse.init(
   {
-    id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
-    product_id: { type: DataTypes.UUID, allowNull: false },
-    quantity: { type: DataTypes.INTEGER, allowNull: false },
-    inventory_adjustment_id: { type: DataTypes.UUID, allowNull: true },
-    observations: { type: DataTypes.STRING, allowNull: true },
+    warehouse_id: {
+      type: DataTypes.UUID,
+      defaultValue: uuid,
+      primaryKey: true,
+    },
+    name: { type: DataTypes.STRING, allowNull: false },
+    location: { type: DataTypes.STRING, allowNull: false },
+    capacity: { type: DataTypes.INTEGER, allowNull: false },
+    observation: { type: DataTypes.STRING, allowNull: true },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -41,14 +47,5 @@ Warehouse.init(
     timestamps: true,
   },
 )
-
-// Relationships
-Warehouse.belongsTo(Product, { foreignKey: 'product_id', as: 'product' })
-Product.hasMany(Warehouse, { foreignKey: 'product_id', as: 'warehouses' })
-
-Warehouse.belongsTo(InventoryAdjustment, {
-  foreignKey: 'inventory_adjustment_id',
-  as: 'adjustment',
-})
 
 export default Warehouse

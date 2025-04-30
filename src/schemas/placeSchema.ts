@@ -1,4 +1,4 @@
-import { PlaceAttributes } from '@type/places'
+import { PlaceAttributes } from '@type/alquiler/places'
 import { z } from 'zod'
 
 const PlaceSchema = z.object({

@@ -1,4 +1,4 @@
-import { CustomerAttributes } from '@type/customers'
+import { CustomerAttributes } from '@type/alquiler/customers'
 import { z } from 'zod'
 
 const CustomerSchema = z.object({

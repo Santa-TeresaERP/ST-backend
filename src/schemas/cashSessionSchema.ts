@@ -1,4 +1,4 @@
-import { CashSessionAttributes } from '@type/cashSession'
+import { CashSessionAttributes } from '@type/ventas/cashSession'
 import { z } from 'zod'
 
 const cashSessionSchema = z.object({

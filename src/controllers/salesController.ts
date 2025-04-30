@@ -2,7 +2,7 @@ import Sale from '@models/sale'
 import User from '@models/user'
 import { Request, Response } from 'express'
 import { HttpError } from '@errors/http'
-import { salesAttributes } from '@type/sale'
+import { salesAttributes } from '@type/ventas/sale'
 
 class SalesController {
   static async createSale(req: Request, res: Response) {

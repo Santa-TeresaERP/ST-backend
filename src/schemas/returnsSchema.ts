@@ -1,4 +1,4 @@
-import { returnsAttributes } from '@type/returns'
+import { returnsAttributes } from '@type/ventas/returns'
 import { z } from 'zod'
 
 export const returnSchema = z.object({

@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
-import { PlaceAttributes } from '@type/places'
+import { PlaceAttributes } from '@type/alquiler/places'
 import { v4 as uuid } from 'uuid'
 import Location from '@models/locations'
 

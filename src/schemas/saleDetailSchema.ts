@@ -1,4 +1,4 @@
-import { SaleDetailAttributes } from '@type/saleDetail'
+import { SaleDetailAttributes } from '@type/ventas/saleDetail'
 import { z } from 'zod'
 
 const saleDetailSchema = z.object({

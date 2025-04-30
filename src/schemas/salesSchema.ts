@@ -1,4 +1,4 @@
-import { salesAttributes } from '@type/sale'
+import { salesAttributes } from '@type/ventas/sale'
 import { z } from 'zod'
 
 // Definir el esquema de ventas, si salesAtributes es un tipo, necesitas crear el esquema de validación correspondiente.

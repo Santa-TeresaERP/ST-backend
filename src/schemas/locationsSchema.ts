@@ -1,4 +1,4 @@
-import { LocationAttributes } from '@type/locations'
+import { LocationAttributes } from '@type/alquiler/locations'
 import { z } from 'zod'
 
 const LocationSchema = z.object({

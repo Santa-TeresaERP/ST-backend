@@ -1,4 +1,4 @@
-import { store as StoreAttributes } from '@type/store'
+import { store as StoreAttributes } from '@type/ventas/store'
 import { z } from 'zod'
 
 const storeSchema = z.object({

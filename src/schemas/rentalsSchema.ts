@@ -1,4 +1,4 @@
-import { RentalAttributes } from '@type/rentals'
+import { RentalAttributes } from '@type/alquiler/rentals'
 import { z } from 'zod'
 
 const RentalSchema = z.object({

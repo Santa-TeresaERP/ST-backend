@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
-import { CashSessionAttributes } from '@type/cashSession'
+import { CashSessionAttributes } from '@type/ventas/cashSession'
 import { v4 as uuid } from 'uuid'
 
 // Definimos los atributos opcionales (en este caso solo el ID)

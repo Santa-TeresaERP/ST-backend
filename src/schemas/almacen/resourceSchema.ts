@@ -2,11 +2,6 @@ import { z } from 'zod'
 import { ResourceAttributes } from '@type/almacen/resource'
 
 export const resourceSchema = z.object({
-  resource_id: z
-    .string()
-    .uuid('El ID del recurso debe ser un UUID válido')
-    .nonempty('El ID del recurso no puede estar vacío'),
-
   name: z
     .string()
     .min(1, 'El nombre del recurso es obligatorio')
@@ -33,14 +28,6 @@ export const resourceSchema = z.object({
   observation: z
     .string()
     .max(150, 'La observación no debe exceder los 150 caracteres')
-    .optional(),
-
-  createdAt: z
-    .date({ invalid_type_error: 'La fecha de creación debe ser válida' })
-    .optional(),
-
-  updatedAt: z
-    .date({ invalid_type_error: 'La fecha de actualización debe ser válida' })
     .optional(),
 })
 

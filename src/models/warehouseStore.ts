@@ -8,7 +8,7 @@ import Product from '@models/product'
 class WarehouseStore
   extends Model<
     warehouseStoreAttributes,
-    Optional<warehouseStoreAttributes, 'id'>
+    Optional<warehouseStoreAttributes, 'id' | 'createdAt' | 'updatedAt'>
   >
   implements warehouseStoreAttributes
 {

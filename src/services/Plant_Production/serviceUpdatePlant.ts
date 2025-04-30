@@ -1,6 +1,6 @@
 import PlantProduction from '@models/plant_production'
 import { plant_productionAttributes } from '@type/production/plant_production'
-import { plantProductionValidation } from 'src/schemas/plant_productionSchema'
+import { plantProductionValidation } from 'src/schemas/production/plant_productionSchema'
 
 const serviceUpdatePlant = async (
   id: string,

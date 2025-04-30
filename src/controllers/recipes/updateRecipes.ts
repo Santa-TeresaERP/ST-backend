@@ -1,5 +1,15 @@
 import { Request, Response } from 'express'
 import useRecipes from '@services/Recipes/index'
+import { z } from 'zod'
+
+const recipeIdSchema = z
+  .string()
+  .uuid('El ID de la receta debe ser un UUID válido')
+
+const updateRecipeSchema = z.object({
+  quantity_required: z.string().min(1, 'La cantidad requerida es obligatoria'),
+  unit: z.string().min(1, 'La unidad es obligatoria'),
+})
 
 const updateRecipesController = async (
   req: Request,
@@ -7,31 +17,37 @@ const updateRecipesController = async (
 ): Promise<void> => {
   try {
     const { recipeId } = req.params
-    const { resource_id } = req.body
 
-    if (!recipeId) {
+    // Validar el ID
+    const idValidation = recipeIdSchema.safeParse(recipeId)
+    if (!idValidation.success) {
       res.status(400).json({
-        message: 'Se requiere el ID de la receta',
+        message: 'ID de receta inválido',
+        errors: idValidation.error.errors,
       })
+      return
     }
 
-    if (!resource_id) {
+    // Validar el body
+    const bodyValidation = updateRecipeSchema.safeParse(req.body)
+    if (!bodyValidation.success) {
       res.status(400).json({
-        message: 'Se requiere el ID del recurso',
+        message: 'Datos de actualización inválidos',
+        errors: bodyValidation.error.errors,
       })
+      return
     }
 
     const [affectedCount, affectedRows] = await useRecipes.updateRecipes(
       recipeId,
-      {
-        resource_id,
-      },
+      bodyValidation.data,
     )
 
     if (affectedCount === 0) {
       res.status(404).json({
         message: 'Receta no encontrada',
       })
+      return
     }
 
     res.status(200).json({

@@ -6,23 +6,24 @@ const deleteRecipeController = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { recipeId } = req.params
+    const { id, product_id } = req.params
 
-    if (!recipeId) {
+    if (!id || !product_id) {
       res.status(400).json({
-        message: 'Se requiere el ID de la receta',
+        message: 'Se requiere el ID y el ID del producto',
       })
+      return
     }
 
-    await useRecipes.deleteRecipes(recipeId)
+    await useRecipes.deleteRecipes(id, product_id)
 
     res.status(200).json({
-      message: 'Receta eliminada exitosamente',
+      message: 'Recurso de receta eliminado exitosamente',
     })
   } catch (error) {
     console.error('Error en deleteRecipe:', error)
     res.status(500).json({
-      message: 'Error al eliminar la receta',
+      message: 'Error al eliminar el recurso de la receta',
       error: error instanceof Error ? error.message : 'Error desconocido',
     })
   }

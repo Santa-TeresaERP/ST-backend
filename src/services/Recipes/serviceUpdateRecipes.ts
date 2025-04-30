@@ -1,16 +1,19 @@
-import RecipeProductResource from '@models/recipe_product_conections'
+import RecipeProductResource from '@models/recipe_product_resourse'
+
+interface UpdateRecipeData {
+  quantity_required: string
+  unit: string
+}
 
 const serviceUpdateRecipes = async (
   recipeId: string,
-  updateData: {
-    resource_id?: number
-  },
+  updateData: UpdateRecipeData,
 ): Promise<[number, RecipeProductResource[]]> => {
   try {
     const [affectedCount, affectedRows] = await RecipeProductResource.update(
       updateData,
       {
-        where: { recipe_id: recipeId },
+        where: { id: recipeId },
         returning: true,
       },
     )

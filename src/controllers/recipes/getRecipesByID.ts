@@ -1,5 +1,10 @@
 import { Request, Response } from 'express'
 import useRecipes from '@services/Recipes/index'
+import { z } from 'zod'
+
+const recipeIdSchema = z
+  .string()
+  .uuid('El ID de la receta debe ser un UUID válido')
 
 const getRecipesByIDController = async (
   req: Request,
@@ -8,10 +13,14 @@ const getRecipesByIDController = async (
   try {
     const { recipeId } = req.params
 
-    if (!recipeId) {
+    // Validar que el ID sea un UUID válido
+    const validationResult = recipeIdSchema.safeParse(recipeId)
+    if (!validationResult.success) {
       res.status(400).json({
-        message: 'Se requiere el ID de la receta',
+        message: 'ID de receta inválido',
+        errors: validationResult.error.errors,
       })
+      return
     }
 
     const recipe = await useRecipes.getRecipesByID(recipeId)
@@ -20,6 +29,7 @@ const getRecipesByIDController = async (
       res.status(404).json({
         message: 'Receta no encontrada',
       })
+      return
     }
 
     res.status(200).json({

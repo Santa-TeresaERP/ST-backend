@@ -1,13 +1,21 @@
-import RecipeProductResource from '@models/recipe_product_conections'
+import RecipeProductResource from '@models/recipe_product_resourse'
+import { v4 as uuid } from 'uuid'
 
-const serviceCreateRecipe = async (recipeData: {
-  recipe_id: string
-  resource_id: number
-}): Promise<RecipeProductResource> => {
+interface RecipeData {
+  product_id: string
+  quantity_required: string
+  unit: string
+}
+
+const serviceCreateRecipe = async (
+  recipeData: RecipeData,
+): Promise<RecipeProductResource> => {
   try {
     const recipeProduct = await RecipeProductResource.create({
-      recipe_id: recipeData.recipe_id,
-      resource_id: recipeData.resource_id,
+      id: uuid(),
+      product_id: recipeData.product_id,
+      quantity_required: recipeData.quantity_required,
+      unit: recipeData.unit,
     })
 
     return recipeProduct

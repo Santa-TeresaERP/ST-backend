@@ -1,22 +1,34 @@
 import { Request, Response } from 'express'
 import useRecipes from '@services/Recipes/index'
+import { z } from 'zod'
+
+const recipeSchema = z.object({
+  product_id: z.string().uuid('El product_id debe ser un UUID válido'),
+  quantity_required: z.string().min(1, 'La cantidad requerida es obligatoria'),
+  unit: z.string().min(1, 'La unidad es obligatoria'),
+})
 
 const createRecipeController = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
   try {
-    const { recipe_id, resource_id } = req.body
+    const validationResult = recipeSchema.safeParse(req.body)
 
-    if (!recipe_id || !resource_id) {
+    if (!validationResult.success) {
       res.status(400).json({
-        message: 'Faltan campos requeridos: recipe_id y resource_id',
+        message: 'Datos inválidos',
+        errors: validationResult.error.errors,
       })
+      return
     }
 
+    const { product_id, quantity_required, unit } = validationResult.data
+
     const newRecipe = await useRecipes.createRecipe({
-      recipe_id,
-      resource_id,
+      product_id,
+      quantity_required,
+      unit,
     })
 
     res.status(201).json({

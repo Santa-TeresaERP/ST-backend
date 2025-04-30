@@ -12,6 +12,6 @@ router.get('/:recipeId', authorization, recipesController.getRecipesByID)
 
 router.patch('/:recipeId', authorization, recipesController.updateRecipes)
 
-router.delete('/:recipeId', authorization, recipesController.deleteRecipe)
+router.delete('/:id/:product_id', authorization, recipesController.deleteRecipe)
 
 export default router

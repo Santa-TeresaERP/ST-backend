@@ -1,19 +1,15 @@
-import RecipeProductResource from '@models/recipe_product_conections'
-import Resource from '@models/resource'
-import Recipe from '@models/recipe_product_conections'
+import RecipeProductResource from '@models/recipe_product_resourse'
 
 const serviceGetRecipes = async (): Promise<RecipeProductResource[]> => {
   try {
     const recipes = await RecipeProductResource.findAll({
-      include: [
-        {
-          model: Resource,
-          as: 'resource',
-        },
-        {
-          model: Recipe,
-          as: 'recipe',
-        },
+      attributes: [
+        'id',
+        'product_id',
+        'quantity_required',
+        'unit',
+        'createdAt',
+        'updatedAt',
       ],
     })
 

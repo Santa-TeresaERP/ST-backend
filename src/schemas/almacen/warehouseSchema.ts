@@ -2,11 +2,6 @@ import { z } from 'zod'
 import { WarehouseAttributes } from '@type/almacen/warehouse'
 
 export const warehouseSchema = z.object({
-  warehouse_id: z
-    .string()
-    .uuid('El ID del almacén debe ser un UUID válido')
-    .nonempty('El ID del almacén no puede estar vacío'),
-
   name: z
     .string()
     .min(1, 'El nombre es obligatorio')

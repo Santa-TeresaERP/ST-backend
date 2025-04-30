@@ -1,5 +1,5 @@
 export interface WarehouseAttributes {
-  warehouse_id: string
+  warehouse_id?: string
   name: string
   location: string
   capacity: number

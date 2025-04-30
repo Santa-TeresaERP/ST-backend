@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import supplierController from '@controllers/almacen/supplier'
+import supplierController from '@controllers/supplier'
 
 const router = Router()
 

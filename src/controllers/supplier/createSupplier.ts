@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import useSuppliers from '@services/almacen/supplier'
+import useSuppliers from '@services/supplier'
 
 const createSupplier = async (req: Request, res: Response) => {
   const result = await useSuppliers.createSupplier(req.body)

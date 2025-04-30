@@ -1,7 +1,6 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
 import userController from '@controllers/User/index'
-
 const router = express.Router()
 
 router.post('/', authorization, userController.createUser)

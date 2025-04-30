@@ -6,12 +6,17 @@ import Permission from './permissions'
 import RolesPermissions from './rolesPermissions'
 
 class Roles
-  extends Model<RolesAttributes, Optional<RolesAttributes, 'id'>>
+  extends Model<
+    RolesAttributes,
+    Optional<RolesAttributes, 'id' | 'status' | 'createdAt' | 'updatedAt'>
+  >
+  // Optional fields
   implements RolesAttributes
 {
   public id!: string
   public name!: string
   public description!: string
+  public status!: boolean
 }
 
 Roles.init(
@@ -19,6 +24,7 @@ Roles.init(
     id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.STRING, allowNull: true },
+    status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,

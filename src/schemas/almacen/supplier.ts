@@ -49,3 +49,7 @@ export const supplierSchema = z.object({
 // Validación segura
 export const supplierValidation = (data: SuplierAttributes) =>
   supplierSchema.safeParse(data)
+export const supplierUpdateSchema = supplierSchema.partial()
+
+export const supplierUpdateValidation = (data: Partial<SuplierAttributes>) =>
+  supplierUpdateSchema.safeParse(data)

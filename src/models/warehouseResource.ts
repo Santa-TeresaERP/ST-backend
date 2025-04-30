@@ -35,7 +35,7 @@ WarehouseResource.init(
       allowNull: false,
     },
     quantity: {
-      type: DataTypes.DECIMAL(10, 2),
+      type: DataTypes.FLOAT,
       allowNull: false,
     },
     entry_date: {

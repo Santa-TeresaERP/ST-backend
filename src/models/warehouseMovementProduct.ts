@@ -17,7 +17,7 @@ class WarehouseMovementProduct
   public movement_type!: string
   public quantity!: number
   public movement_date!: Date
-  public obeservations?: string
+  public observations?: string
   public createdAt?: Date
   public updatedAt?: Date
 }
@@ -53,7 +53,7 @@ WarehouseMovementProduct.init(
       type: DataTypes.DATE,
       allowNull: false,
     },
-    obeservations: {
+    observations: {
       type: DataTypes.STRING,
       allowNull: true,
     },

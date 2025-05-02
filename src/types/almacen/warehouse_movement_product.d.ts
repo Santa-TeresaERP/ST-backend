@@ -6,7 +6,7 @@ export interface WarehouseMovomentProductAttributes {
   movement_type: string
   quantity: number
   movement_date: Date
-  obeservations?: string
+  observations?: string
   createdAt?: Date
   updatedAt?: Date
 }

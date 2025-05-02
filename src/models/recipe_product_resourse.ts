@@ -44,8 +44,8 @@ RecipeProductResource.init(
       type: DataTypes.UUID,
       allowNull: true,
       references: {
-        model: 'resources',
-        key: 'id',
+        model: Resource, // Referencia al modelo directamente
+        key: 'resource_id', // Usar el nombre correcto de la PK
       },
     },
     createdAt: {

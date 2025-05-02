@@ -13,7 +13,7 @@ const productsSchema = z.object({
 
   description: z
     .string()
-    .max(255, 'La descripción no debe exceder los 255 caracteres')
+    .max(2048, 'La descripción no debe exceder los 2048 caracteres')
     .optional(),
 
   imagen_url: z.string().url('La URL de la imagen debe ser válida').optional(),

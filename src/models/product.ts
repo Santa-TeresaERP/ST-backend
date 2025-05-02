@@ -8,7 +8,7 @@ class Product
   extends Model<ProductAttributes, Optional<ProductAttributes, 'id'>>
   implements ProductAttributes
 {
-  public product_id!: string
+  public id!: string
   public name!: string
   public category_id!: string
   public price!: number
@@ -25,7 +25,7 @@ Product.init(
     category_id: { type: DataTypes.UUID, allowNull: false },
     price: { type: DataTypes.DECIMAL, allowNull: false },
     description: { type: DataTypes.STRING, allowNull: true },
-    imagen_url: { type: DataTypes.STRING, allowNull: true },
+    imagen_url: { type: DataTypes.STRING(2048), allowNull: true },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: true, // Si la BD lo maneja automáticamente, puedes ponerlo como true
@@ -44,8 +44,14 @@ Product.init(
   },
 )
 
-// Relaciones
-Product.belongsTo(Category, { foreignKey: 'id' })
-Category.hasMany(Product, { foreignKey: 'id' })
+Product.belongsTo(Category, {
+  foreignKey: 'category_id',
+  targetKey: 'id',
+})
+
+Category.hasMany(Product, {
+  foreignKey: 'category_id',
+  sourceKey: 'id',
+})
 
 export default Product

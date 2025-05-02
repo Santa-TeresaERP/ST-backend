@@ -43,6 +43,12 @@ User.init(
       type: DataTypes.UUID,
       allowNull: true,
       defaultValue: null,
+      references: {
+        model: 'roles',
+        key: 'id',
+      },
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -54,7 +60,7 @@ User.init(
       allowNull: false,
       defaultValue: DataTypes.NOW,
     },
-    status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
+    status: { type: DataTypes.BOOLEAN, defaultValue: true },
   },
   {
     sequelize,

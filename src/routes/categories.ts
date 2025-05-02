@@ -4,12 +4,24 @@ import categoriesController from '@controllers/categoriesController'
 
 const router = express.Router()
 
-router.post('/', authorization, categoriesController.createCategory)
+router.post(
+  '/api/categories',
+  authorization,
+  categoriesController.createCategory,
+)
 
-router.get('/', authorization, categoriesController.getCategories)
+router.get('/api/categories', authorization, categoriesController.getCategories)
 
-router.patch('/:id', authorization, categoriesController.updateCategory)
+router.patch(
+  '/api/categories/:id',
+  authorization,
+  categoriesController.updateCategory,
+)
 
-router.delete('/:id', authorization, categoriesController.deleteCategory)
+router.delete(
+  '/api/categories/:id',
+  authorization,
+  categoriesController.deleteCategory,
+)
 
 export default router

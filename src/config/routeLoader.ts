@@ -10,9 +10,8 @@ const routesLoader = (app: Express) => {
 
     for (const file of files) {
       if (file.endsWith('.ts')) {
-        const pathName = file.replace('.ts', '')
         const route = await import(join(dirsPath, file))
-        app.use(`/${pathName}`, route.default)
+        app.use('/', route.default)
       }
     }
   }

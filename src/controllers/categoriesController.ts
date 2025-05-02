@@ -27,8 +27,9 @@ class categoriesController {
     try {
       const categories = await useCategories.getCategories()
       res.json(categories)
-    } catch {
-      res.status(500).json({ error: 'Error interno del servidor' })
+    } catch (error) {
+      console.error('Error in getCategories controller:', error)
+      res.status(500).json({ error: 'Error interno del servidorrr' })
     }
   }
 

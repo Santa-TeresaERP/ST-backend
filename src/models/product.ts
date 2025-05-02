@@ -45,7 +45,7 @@ Product.init(
 )
 
 // Relaciones
-Product.belongsTo(Category, { foreignKey: 'category_id' })
-Category.hasMany(Product, { foreignKey: 'category_id' })
+Product.belongsTo(Category, { foreignKey: 'id' })
+Category.hasMany(Product, { foreignKey: 'id' })
 
 export default Product

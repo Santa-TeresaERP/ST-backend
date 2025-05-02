@@ -4,20 +4,20 @@ import { CategoryAttributes } from '@type/production/categories'
 import { v4 as uuid } from 'uuid'
 
 class Category
-  extends Model<CategoryAttributes, Optional<CategoryAttributes, 'category_id'>>
+  extends Model<CategoryAttributes, Optional<CategoryAttributes, 'id'>>
   implements CategoryAttributes
 {
-  public category_id!: string
+  public id!: string
   public name!: string
   public description!: string
 }
 
 Category.init(
   {
-    category_id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
+    id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.STRING, allowNull: true },
-    creatdAt: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: DataTypes.NOW,

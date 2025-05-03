@@ -2,10 +2,6 @@ import { productionAttributes } from '@type/production/production'
 import { z } from 'zod'
 
 const productionSchema = z.object({
-  production_id: z
-    .string()
-    .uuid('El ID de la producción debe ser un UUID válido'),
-
   productId: z.string().uuid('El ID del producto debe ser un UUID válido'),
 
   quantityProduced: z

@@ -47,6 +47,7 @@ Product.init(
 Product.belongsTo(Category, {
   foreignKey: 'category_id',
   targetKey: 'id',
+  as: 'category', // Alias para la relación
 })
 
 Category.hasMany(Product, {

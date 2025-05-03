@@ -8,12 +8,6 @@ router.post('/', authorization, productsController.createProduct)
 
 router.get('/', authorization, productsController.getAllProduct)
 
-router.get(
-  '/confectionery',
-  authorization,
-  productsController.getConfectioneryProduct,
-)
-
 router.get('/:id', authorization, productsController.getProductByID)
 
 router.patch('/:id', authorization, productsController.updateProduct)

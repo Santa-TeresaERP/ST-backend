@@ -1,5 +1,5 @@
 import Category from '@models/categories'
-import Product from '@models/product'
+import Product from '@models/product' // Importa el modelo de productos
 import { CategoryAttributes } from '@type/production/categories'
 import { categoryValidation } from 'src/schemas/production/categoriesSchema'
 
@@ -33,13 +33,11 @@ class useCategories {
   // Obtener todas las categorías
   static async getCategories() {
     try {
-      const categories = await Category.findAll({
-        include: [Product], // Si incluyes productos relacionados
-      })
+      const categories = await Category.findAll()
       return categories
     } catch (error) {
-      console.error('Error in getCategories service:', error)
-      throw error
+      console.error('Error al obtener categorías:', error)
+      throw new Error('Error al obtener categorías')
     }
   }
 
@@ -64,14 +62,31 @@ class useCategories {
 
   // Eliminar una categoría
   static async deleteCategory(id: string) {
-    const category = await Category.findByPk(id)
+    try {
+      const category = await Category.findByPk(id)
 
-    if (!category) {
-      return { error: 'La categoría no existe' }
+      if (!category) {
+        return { error: 'La categoría no existe' }
+      }
+
+      // Verifica si la categoría tiene productos asociados
+      const associatedProducts = await Product.findAll({
+        where: { category_id: id },
+      })
+      if (associatedProducts.length > 0) {
+        return {
+          error:
+            'No se puede eliminar la categoría porque tiene productos asociados.',
+        }
+      }
+
+      // Elimina la categoría
+      await category.destroy()
+      return { message: 'Categoría eliminada correctamente' }
+    } catch (error) {
+      console.error('Error en deleteCategory service:', error)
+      throw new Error('Error interno del servidor')
     }
-
-    await category.destroy()
-    return { message: 'Categoría eliminada correctamente' }
   }
 }
 

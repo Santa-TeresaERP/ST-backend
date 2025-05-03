@@ -1,4 +1,4 @@
-import RecipeProductResource from '@models/recipe_product_resourse'
+import RecipeProductResource from '@models/recipe_product_resource'
 
 const serviceGetRecipesByID = async (
   recipeId: string,
@@ -10,7 +10,6 @@ const serviceGetRecipesByID = async (
         'id',
         'product_id',
         'quantity_required',
-        'unit',
         'createdAt',
         'updatedAt',
       ],

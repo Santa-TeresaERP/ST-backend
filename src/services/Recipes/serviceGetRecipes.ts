@@ -1,4 +1,4 @@
-import RecipeProductResource from '@models/recipe_product_resourse'
+import RecipeProductResource from '@models/recipe_product_resource'
 
 const serviceGetRecipes = async (): Promise<RecipeProductResource[]> => {
   try {
@@ -7,7 +7,6 @@ const serviceGetRecipes = async (): Promise<RecipeProductResource[]> => {
         'id',
         'product_id',
         'quantity_required',
-        'unit',
         'createdAt',
         'updatedAt',
       ],

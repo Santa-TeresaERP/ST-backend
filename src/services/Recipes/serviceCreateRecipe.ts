@@ -1,10 +1,9 @@
-import RecipeProductResource from '@models/recipe_product_resourse'
+import RecipeProductResource from '@models/recipe_product_resource'
 import { v4 as uuid } from 'uuid'
 
 interface RecipeData {
   product_id: string
   quantity_required: string
-  unit: string
 }
 
 const serviceCreateRecipe = async (
@@ -15,7 +14,6 @@ const serviceCreateRecipe = async (
       id: uuid(),
       product_id: recipeData.product_id,
       quantity_required: recipeData.quantity_required,
-      unit: recipeData.unit,
     })
 
     return recipeProduct

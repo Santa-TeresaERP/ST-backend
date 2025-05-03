@@ -1,4 +1,4 @@
-import RecipeProductResource from '@models/recipe_product_resourse'
+import RecipeProductResource from '@models/recipe_product_resource'
 
 interface UpdateRecipeData {
   quantity_required: string

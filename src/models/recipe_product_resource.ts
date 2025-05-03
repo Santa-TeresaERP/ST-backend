@@ -3,6 +3,7 @@ import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { RecipeProductResourceAttributes } from '@type/production/recipe_product_resourse'
 import Resource from '@models/resource'
+import Product from '@models/product'
 
 class RecipeProductResource
   extends Model<
@@ -14,7 +15,6 @@ class RecipeProductResource
   public id!: string
   public product_id!: string
   public quantity_required!: string
-  public unit!: string
   public resource_id?: string
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
@@ -33,10 +33,6 @@ RecipeProductResource.init(
       primaryKey: true,
     },
     quantity_required: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    unit: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -75,6 +71,11 @@ RecipeProductResource.belongsTo(Resource, {
 Resource.hasMany(RecipeProductResource, {
   foreignKey: 'resource_id',
   as: 'recipeProductResources',
+})
+
+RecipeProductResource.belongsTo(Product, {
+  foreignKey: 'product_id',
+  as: 'product',
 })
 
 export default RecipeProductResource

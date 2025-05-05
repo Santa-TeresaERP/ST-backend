@@ -1,0 +1,13 @@
+import serviceCreatewarehouseMovementProduct from './serviceCreatewarehouse_movement_product'
+import serviceDeletewarehouseMovementProduct from './serviceDeletewarehouse_movement_product'
+import serviceGetwarehouseMovementProducts from './serviceGetwarehouse_movement_products'
+import serviceUpdatewarehouseMovementProduct from './serviceUpdatewarehouse_movement_product'
+
+const useWarehouseMovementProduct = {
+  serviceCreatewarehouseMovementProduct,
+  serviceDeletewarehouseMovementProduct,
+  serviceGetwarehouseMovementProducts,
+  serviceUpdatewarehouseMovementProduct,
+}
+
+export default useWarehouseMovementProduct

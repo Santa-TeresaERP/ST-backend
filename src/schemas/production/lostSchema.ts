@@ -2,8 +2,6 @@ import { lostAttributes } from '@type/production/lost'
 import { z } from 'zod'
 
 const lostSchema = z.object({
-  id: z.string().uuid('El ID de pérdida debe ser un UUID válido'),
-
   product_id: z.string().uuid('El ID del producto debe ser un UUID válido'),
 
   quantity: z
@@ -20,11 +18,6 @@ const lostSchema = z.object({
     .string()
     .max(255, 'Las observaciones no deben exceder los 255 caracteres')
     .optional(), // opcional si lo defines así en la base de datos
-
-  created_at: z.date({
-    required_error: 'La fecha de creación es obligatoria',
-    invalid_type_error: 'La fecha de creación debe ser válida',
-  }),
 })
 
 export const lostValidation = (data: lostAttributes) =>

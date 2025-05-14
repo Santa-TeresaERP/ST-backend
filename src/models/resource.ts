@@ -11,7 +11,8 @@ class Resource
   public name!: string
   public entry_quantity!: number
   public total_cost!: number
-  public supplier_id!: string
+  public type_unit!: string
+  public supplier_id?: string
   public purchase_date!: Date
   public observation?: string
   public createdAt?: Date
@@ -35,6 +36,10 @@ Resource.init(
     },
     total_cost: {
       type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    type_unit: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     supplier_id: {

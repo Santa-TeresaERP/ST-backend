@@ -16,6 +16,11 @@ export const resourceSchema = z.object({
     .number({ invalid_type_error: 'El costo total debe ser un número' })
     .positive('El costo total debe ser mayor que cero'),
 
+  type_unit: z
+    .string()
+    .min(1, 'El tipo de unidad es obligatorio')
+    .max(50, 'El tipo de unidad no debe exceder los 50 caracteres'),
+
   supplier_id: z
     .string()
     .uuid('El ID del proveedor debe ser un UUID válido')

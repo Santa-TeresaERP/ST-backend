@@ -13,9 +13,9 @@ export const warehouseResourceSchema = z.object({
     .nonempty('El ID del almacén no puede estar vacío'),
 
   resource_id: z
-    .number({ invalid_type_error: 'El ID del recurso debe ser un número' })
-    .int('El ID del recurso debe ser un número entero')
-    .nonnegative('El ID del recurso no puede ser negativo'),
+    .string()
+    .uuid('El ID del almacén debe ser un UUID válido')
+    .nonempty('El ID del almacén no puede estar vacío'),
 
   quantity: z
     .number({ invalid_type_error: 'La cantidad debe ser un número' })

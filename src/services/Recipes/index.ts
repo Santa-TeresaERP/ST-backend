@@ -3,6 +3,7 @@ import serviceGetRecipes from './serviceGetRecipes'
 import serviceGetRecipesByID from './serviceGetRecipesByID'
 import serviceUpdateRecipes from './serviceUpdateRecipes'
 import serviceDeleteRecipes from './serviceDeleteRecipes'
+import serviceConversion from './serviceConversion'
 
 const useRecipes = {
   createRecipe: serviceCreateRecipe,
@@ -10,6 +11,7 @@ const useRecipes = {
   getRecipesByID: serviceGetRecipesByID,
   updateRecipes: serviceUpdateRecipes,
   deleteRecipes: serviceDeleteRecipes,
+  conversion: serviceConversion,
 }
 
 export default useRecipes

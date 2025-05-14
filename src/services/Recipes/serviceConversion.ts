@@ -1,4 +1,5 @@
-import { ResourceAttributes } from '@type/almacen/resource'
+import WarehouseResource from '../../models/warehouseResource'
+import Resource from '../../models/resource'
 
 // Conversión de unidades a gramos
 export const convertToGrams = (typeUnit: string, quantity: number): number => {
@@ -28,13 +29,40 @@ export const convertFromGrams = (typeUnit: string, grams: number): number => {
   }
 }
 
-const serviceConversion = async (body: ResourceAttributes) => {
+// Función para realizar la conversión a gramos y viceversa usando el ID del recurso
+const serviceConversion = async (resourceId: string) => {
   try {
-    const { type_unit, entry_quantity } = body
+    // Buscar el recurso en el inventario (WarehouseResource)
+    const warehouseResource = await WarehouseResource.findOne({
+      where: { warehouse_resource_id: resourceId },
+    })
 
-    const grams = convertToGrams(type_unit, entry_quantity)
+    if (!warehouseResource) {
+      throw new Error(
+        `Recurso con ID ${resourceId} no encontrado en el inventario`,
+      )
+    }
+
+    // Buscar el recurso relacionado en la tabla Resource
+    const resource = await Resource.findOne({
+      where: { resource_id: warehouseResource.resource_id },
+    })
+
+    if (!resource) {
+      throw new Error(
+        `Recurso relacionado con ID ${warehouseResource.resource_id} no encontrado`,
+      )
+    }
+
+    // Extraer los datos necesarios
+    const { quantity } = warehouseResource
+    const { type_unit } = resource
+
+    // Conversión a gramos
+    const grams = convertToGrams(type_unit, quantity)
     console.log(`Cantidad en gramos: ${grams}`)
 
+    // Conversión inversa (de gramos a la unidad original)
     const originalQuantity = convertFromGrams(type_unit, grams)
     console.log(`Cantidad en ${type_unit}: ${originalQuantity}`)
 

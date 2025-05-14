@@ -2,9 +2,7 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { RecipeProductResourceAttributes } from '@type/production/recipe_product_resourse'
-import Resource from '@models/resource'
 import Product from './product'
-import RecipeProductConection from './recipe_product_conections'
 
 class RecipeProductResource
   extends Model<
@@ -31,7 +29,6 @@ RecipeProductResource.init(
     product_id: {
       type: DataTypes.UUID,
       allowNull: false,
-      primaryKey: true,
     },
     quantity_required: {
       type: DataTypes.STRING,
@@ -59,21 +56,12 @@ RecipeProductResource.init(
   },
 )
 
-RecipeProductConection.belongsTo(RecipeProductResource, {
+RecipeProductResource.belongsTo(Product, {
   foreignKey: 'product_id',
 })
-RecipeProductConection.belongsTo(Resource, { foreignKey: 'resource_id' })
 
-RecipeProductResource.belongsToMany(Product, {
-  through: RecipeProductConection,
+Product.hasMany(RecipeProductResource, {
   foreignKey: 'product_id',
-  as: 'product',
-})
-
-RecipeProductResource.belongsToMany(Resource, {
-  through: RecipeProductConection,
-  foreignKey: 'resource_id',
-  as: 'resource',
 })
 
 export default RecipeProductResource

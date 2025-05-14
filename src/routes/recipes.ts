@@ -14,4 +14,10 @@ router.patch('/:recipeId', authorization, recipesController.updateRecipes)
 
 router.delete('/:id/:product_id', authorization, recipesController.deleteRecipe)
 
+router.post(
+  '/conversion/:recipeId',
+  authorization,
+  recipesController.conversion,
+)
+
 export default router

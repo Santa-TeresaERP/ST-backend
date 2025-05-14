@@ -2,6 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { ResourceAttributes } from '@type/almacen/resource'
 import { v4 as uuid } from 'uuid'
+import Supplier from '@models/suplier'
 
 class Resource
   extends Model<ResourceAttributes, Optional<ResourceAttributes, 'resource_id'>>
@@ -71,5 +72,14 @@ Resource.init(
     timestamps: true,
   },
 )
+
+Resource.belongsTo(Supplier, {
+  foreignKey: 'supplier_id',
+  as: 'supplier',
+})
+Supplier.hasMany(Resource, {
+  foreignKey: 'supplier_id',
+  as: 'resources',
+})
 
 export default Resource

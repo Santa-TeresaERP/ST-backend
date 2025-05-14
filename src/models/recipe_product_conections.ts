@@ -10,7 +10,7 @@ class RecipeProductConection
   implements RecipeProductConectionAttributes
 {
   public recipe_id!: string
-  public resource_id!: number
+  public resource_id!: string
 }
 
 RecipeProductConection.init(
@@ -21,13 +21,9 @@ RecipeProductConection.init(
       primaryKey: true,
     },
     resource_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true,
-      references: {
-        model: 'resources',
-        key: 'id',
-      },
     },
   },
   {

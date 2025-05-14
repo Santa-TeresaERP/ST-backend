@@ -1,6 +1,8 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { WarehouseResourceAttributes } from '@type/almacen/warehouse_resource'
+import Resource from '@models/resource'
+import Warehouse from '@models/warehouse'
 import { v4 as uuidv4 } from 'uuid'
 
 class WarehouseResource
@@ -59,5 +61,22 @@ WarehouseResource.init(
     timestamps: true,
   },
 )
+
+WarehouseResource.belongsTo(Resource, {
+  foreignKey: 'resource_id',
+  as: 'resource',
+})
+Resource.hasMany(WarehouseResource, {
+  foreignKey: 'resource_id',
+  as: 'warehouse_resources',
+})
+WarehouseResource.belongsTo(Warehouse, {
+  foreignKey: 'warehouse_id',
+  as: 'warehouse',
+})
+Warehouse.hasMany(WarehouseResource, {
+  foreignKey: 'warehouse_id',
+  as: 'warehouse_resources',
+})
 
 export default WarehouseResource

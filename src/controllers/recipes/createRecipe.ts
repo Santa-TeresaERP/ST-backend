@@ -5,7 +5,6 @@ import { z } from 'zod'
 const recipeSchema = z.object({
   product_id: z.string().uuid('El product_id debe ser un UUID válido'),
   quantity_required: z.string().min(1, 'La cantidad requerida es obligatoria'),
-  unit: z.string().min(1, 'La unidad es obligatoria'),
 })
 
 const createRecipeController = async (
@@ -23,12 +22,11 @@ const createRecipeController = async (
       return
     }
 
-    const { product_id, quantity_required, unit } = validationResult.data
+    const { product_id, quantity_required } = validationResult.data
 
     const newRecipe = await useRecipes.createRecipe({
       product_id,
       quantity_required,
-      unit,
     })
 
     res.status(201).json({

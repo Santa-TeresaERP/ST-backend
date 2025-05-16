@@ -1,23 +1,25 @@
 import { DataTypes, Model, Optional } from 'sequelize'
+import { v4 as uuid } from 'uuid'
 import sequelize from '@config/database'
 import { CategoryAttributes } from '@type/production/categories'
-import { v4 as uuid } from 'uuid'
 
 class Category
-  extends Model<CategoryAttributes, Optional<CategoryAttributes, 'category_id'>>
+  extends Model<CategoryAttributes, Optional<CategoryAttributes, 'id'>>
   implements CategoryAttributes
 {
-  public category_id!: string
+  public id!: string
   public name!: string
   public description!: string
+  public readonly createdAt!: Date // Agregado para timestamps
+  public readonly updatedAt!: Date // Agregado para timestamps
 }
 
 Category.init(
   {
-    category_id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
+    id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
     name: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.STRING, allowNull: true },
-    creatdAt: {
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: DataTypes.NOW,
@@ -31,7 +33,7 @@ Category.init(
   {
     sequelize,
     tableName: 'categories',
-    timestamps: true,
+    timestamps: true, // Esto asegura que Sequelize maneje createdAt y updatedAt automáticamente
   },
 )
 

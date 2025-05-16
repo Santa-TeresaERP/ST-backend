@@ -10,9 +10,9 @@ const createProductController = async (req: Request, res: Response) => {
     }
     res.status(201).json({ message: 'Producto creado exitosamente', product })
     return
-  } catch {
+  } catch (error) {
+    console.error('Error in createProduct controller:', error) // Log del error
     res.status(500).json({ error: 'Error interno del servidor' })
-    return
   }
 }
 export default createProductController

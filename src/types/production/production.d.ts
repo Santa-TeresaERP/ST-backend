@@ -1,5 +1,5 @@
 export interface productionAttributes {
-  production_id: string
+  id: string
   productId: string
   quantityProduced: number
   productionDate: string

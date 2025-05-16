@@ -13,7 +13,7 @@ router.get('/', PlantController.getPlants)
 router.get('/:id', PlantController.getPlant)
 
 // Actualizar una planta
-router.put('/:id', PlantController.updatePlant)
+router.patch('/:id', PlantController.updatePlant)
 
 // Eliminar una planta
 router.delete('/:id', PlantController.deletePlant)

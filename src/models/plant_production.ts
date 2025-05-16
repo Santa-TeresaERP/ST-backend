@@ -21,7 +21,17 @@ PlantProduction.init(
   {
     id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
     plant_name: { type: DataTypes.STRING, allowNull: false },
-    address: { type: DataTypes.STRING, allowNull: false }, // Definimos el tipo DATE para la dirección
+    address: { type: DataTypes.STRING, allowNull: false },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: DataTypes.NOW, // Fecha de creación por defecto
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: DataTypes.NOW, // Fecha de actualización por defecto
+    },
   },
   {
     sequelize,

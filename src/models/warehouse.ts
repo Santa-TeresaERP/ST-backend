@@ -4,24 +4,21 @@ import { WarehouseAttributes } from '@type/almacen/warehouse'
 import { v4 as uuid } from 'uuid'
 
 class Warehouse
-  extends Model<
-    WarehouseAttributes,
-    Optional<WarehouseAttributes, 'warehouse_id'>
-  >
+  extends Model<WarehouseAttributes, Optional<WarehouseAttributes, 'id'>>
   implements WarehouseAttributes
 {
-  public warehouse_id!: string
+  public id?: string
   public name!: string
   public location!: string
   public capacity!: number
-  public observation!: string
-  public createdAt!: Date
-  public updatedAt!: Date
+  public observation?: string
+  public createdAt?: Date
+  public updatedAt?: Date
 }
 
 Warehouse.init(
   {
-    warehouse_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,

@@ -12,7 +12,7 @@ class WarehouseResource
 {
   public warehouse_resource_id!: string
   public warehouse_id!: string
-  public resource_id!: number
+  public resource_id!: string
   public quantity!: number
   public entry_date!: Date
   public readonly createdAt?: Date
@@ -31,7 +31,7 @@ WarehouseResource.init(
       allowNull: false,
     },
     resource_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.UUID,
       allowNull: false,
     },
     quantity: {

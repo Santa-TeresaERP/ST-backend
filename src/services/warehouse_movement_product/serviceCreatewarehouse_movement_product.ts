@@ -12,6 +12,7 @@ const serviceCreatewarehouseMovementProduct = async (
   }
 
   const {
+    id,
     warehouse_id,
     store_id,
     product_id,
@@ -19,11 +20,14 @@ const serviceCreatewarehouseMovementProduct = async (
     quantity,
     movement_date,
     observations,
+    createdAt,
+    updatedAt,
   } = validation.data
 
   try {
     // Crear un nuevo registro en la base de datos
     const newMovement = await WarehouseMovementProduct.create({
+      id,
       warehouse_id,
       store_id,
       product_id,
@@ -31,6 +35,8 @@ const serviceCreatewarehouseMovementProduct = async (
       quantity,
       movement_date,
       observations,
+      createdAt,
+      updatedAt,
     })
 
     return { success: true, movement: newMovement }

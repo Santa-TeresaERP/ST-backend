@@ -20,6 +20,8 @@ const serviceUpdatewarehouseMovementProduct = async (
     quantity,
     movement_date,
     observations,
+    createdAt,
+    updatedAt,
   } = validation.data
 
   // Buscar el movimiento de producto por ID
@@ -40,6 +42,8 @@ const serviceUpdatewarehouseMovementProduct = async (
       quantity,
       movement_date,
       observations,
+      createdAt,
+      updatedAt,
     })
 
     return { success: true, movement }

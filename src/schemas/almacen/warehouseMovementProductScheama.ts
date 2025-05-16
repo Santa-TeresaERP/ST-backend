@@ -2,10 +2,10 @@ import { z } from 'zod'
 import { WarehouseMovomentProductAttributes } from '@type/almacen/warehouse_movement_product'
 
 export const warehouseMovementProductSchema = z.object({
-  movement_id: z
+  id: z
     .string()
     .uuid('El ID del movimiento debe ser un UUID válido')
-    .nonempty('El ID del movimiento no puede estar vacío'),
+    .nonempty('El ID del almacén no puede estar vacío'),
 
   warehouse_id: z
     .string()

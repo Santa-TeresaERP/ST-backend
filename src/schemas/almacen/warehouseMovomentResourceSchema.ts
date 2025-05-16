@@ -6,7 +6,7 @@ export const warehouseMovementResourceSchema = z.object({
     .string()
     .uuid('El ID del movimiento debe ser un UUID válido')
     .nonempty('El ID del movimiento no puede estar vacío')
-    .optional(),
+    .nonempty('El ID del almacén no puede estar vacío'),
 
   warehouse_id: z
     .string()

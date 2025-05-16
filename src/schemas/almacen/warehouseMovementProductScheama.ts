@@ -22,6 +22,12 @@ export const warehouseMovementProductSchema = z.object({
     .uuid('El ID del producto debe ser un UUID válido')
     .nonempty('El ID del producto no puede estar vacío'),
 
+  type_unit: z.enum(['kg', 'l', 'ml', 'g', 'unidad'], {
+    errorMap: () => ({
+      message: 'El tipo de unidad debe ser "unidad", "kilogramo" o "litro"',
+    }),
+  }),
+
   movement_type: z.enum(['salida', 'entrada'], {
     errorMap: () => ({
       message: 'El tipo de movimiento debe ser "salida" o "entrada"',

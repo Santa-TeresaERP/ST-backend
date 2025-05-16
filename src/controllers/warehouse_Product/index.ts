@@ -1,10 +1,10 @@
-import create from './create'
-import getAll from './getAll'
-import getById from './getById'
-import getByWarehouse from './getByWarehouse'
-import getByProduct from './getByProduct'
-import update from './update'
-import deleteWarehouseProduct from './delete'
+import create from './createWHProducts'
+import getAll from './getAllWHProducts'
+import getById from './getByIdWHProducts'
+import getByWarehouse from './getByWarehouse_WHProducts'
+import getByProduct from './getByProduct_WHProducts'
+import update from './updateWHProducts'
+import deleteWarehouseProduct from './deleteWHProducts'
 
 const warehouseProductController = {
   createWarehouseProduct: create,

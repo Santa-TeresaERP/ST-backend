@@ -1,5 +1,5 @@
 export interface WarehouseMovomentResourceAttributes {
-  Id: string
+  id?: string
   warehouse_id: string
   resource_id: string
   movement_type: string

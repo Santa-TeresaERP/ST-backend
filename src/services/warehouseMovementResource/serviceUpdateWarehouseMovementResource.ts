@@ -11,11 +11,10 @@ const serviceUpdateWarehouseMovementResource = async (
     return { error: 'Recurso de movimiento de almacén no encontrado' }
   }
 
-  // Para validar requerimos rellenar movement_id porque el schema lo exige
   const validation = warehouseMovementResourceValidation({
     ...record.toJSON(),
     ...body,
-    Id: id, // aseguramos que tenga un ID válido para validación
+    id, // aseguramos que tenga un id válido para validación
   })
 
   if (!validation.success) {

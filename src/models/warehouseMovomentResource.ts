@@ -6,11 +6,11 @@ import { v4 as uuid } from 'uuid'
 class WarehouseMovementResource
   extends Model<
     WarehouseMovomentResourceAttributes,
-    Optional<WarehouseMovomentResourceAttributes, 'Id'>
+    Optional<WarehouseMovomentResourceAttributes, 'id'>
   >
   implements WarehouseMovomentResourceAttributes
 {
-  public Id!: string
+  public id?: string
   public warehouse_id!: string
   public resource_id!: string
   public movement_type!: string
@@ -24,7 +24,7 @@ class WarehouseMovementResource
 
 WarehouseMovementResource.init(
   {
-    Id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,

@@ -2,10 +2,11 @@ import { z } from 'zod'
 import { WarehouseMovomentResourceAttributes } from '@type/almacen/warehouse_movoment_resource'
 
 export const warehouseMovementResourceSchema = z.object({
-  Id: z
+  id: z
     .string()
     .uuid('El ID del movimiento debe ser un UUID válido')
-    .nonempty('El ID del movimiento no puede estar vacío'),
+    .nonempty('El ID del movimiento no puede estar vacío')
+    .optional(),
 
   warehouse_id: z
     .string()

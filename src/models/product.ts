@@ -13,7 +13,7 @@ class Product
   public category_id!: string
   public price!: number
   public description!: string
-  public imagen_url!: string
+  public imagen_url?: string
   public createdAt?: Date
   public updatedAt?: Date
 }

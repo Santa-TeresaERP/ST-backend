@@ -4,7 +4,7 @@ export interface ProductAttributes {
   category_id: string
   price: number
   description: string
-  imagen_url: string
+  imagen_url?: string
   createdAt?: Date
   updatedAt?: Date
 }

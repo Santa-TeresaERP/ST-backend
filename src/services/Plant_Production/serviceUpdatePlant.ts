@@ -6,8 +6,7 @@ const serviceUpdatePlant = async (
   id: string,
   body: plant_productionAttributes,
 ) => {
-  // Asegúrate de que este tipo esté correctamente definido y exportado
-
+  // Validar los datos usando el esquema
   const validation = plantProductionValidation(body)
 
   if (!validation.success) {
@@ -16,16 +15,16 @@ const serviceUpdatePlant = async (
 
   const { plant_name, address } = validation.data
 
+  // Buscar la planta por ID
   const plant = await PlantProduction.findByPk(id)
   if (!plant) {
     return { error: 'La planta no existe' }
   }
 
-  const addressToUpdate = address instanceof Date ? address : new Date(address)
-
+  // Actualizar los campos
   await plant.update({
     plant_name,
-    address: addressToUpdate,
+    address, // `address` ya es un string, no necesita conversión
   })
 
   return plant

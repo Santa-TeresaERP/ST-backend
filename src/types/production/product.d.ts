@@ -3,7 +3,6 @@ export interface ProductAttributes {
   name: string
   category_id: string
   price: number
-  stock: number
   description: string
   imagen_url: string
   createdAt?: Date

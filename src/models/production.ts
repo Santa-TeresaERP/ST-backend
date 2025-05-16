@@ -6,13 +6,10 @@ import Product from '@models/product'
 import PlantProduction from '@models/plant_production'
 
 class Production
-  extends Model<
-    productionAttributes,
-    Optional<productionAttributes, 'production_id'>
-  >
+  extends Model<productionAttributes, Optional<productionAttributes, 'id'>>
   implements productionAttributes
 {
-  public production_id!: string
+  public id!: string
   public productId!: string
   public quantityProduced!: number
   public productionDate!: string
@@ -24,7 +21,7 @@ class Production
 
 Production.init(
   {
-    production_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,

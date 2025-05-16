@@ -16,10 +16,10 @@ export const resourceSchema = z.object({
     .number({ invalid_type_error: 'El costo total debe ser un número' })
     .positive('El costo total debe ser mayor que cero'),
 
-  type_unit: z
-    .string()
-    .min(1, 'El tipo de unidad es obligatorio')
-    .max(50, 'El tipo de unidad no debe exceder los 50 caracteres'),
+  type_unit: z.enum(['g', 'kg', 'ml', 'l', 'unidades'], {
+    invalid_type_error:
+      'El tipo de unidad debe ser uno de: g, kg, ml, l, unidades',
+  }),
 
   supplier_id: z
     .string()

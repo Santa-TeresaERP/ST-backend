@@ -42,6 +42,7 @@ Resource.init(
     type_unit: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: 'unidades',
     },
     supplier_id: {
       type: DataTypes.UUID,

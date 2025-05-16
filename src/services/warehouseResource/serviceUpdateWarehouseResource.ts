@@ -8,7 +8,7 @@ const serviceUpdateWarehouseResource = async (
 ) => {
   const validation = warehouseResourceValidation({
     ...body,
-    warehouse_resource_id: id,
+    id,
   } as WarehouseResourceAttributes)
 
   if (!validation.success) {

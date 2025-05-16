@@ -3,7 +3,7 @@ import WarehouseResource from '@models/warehouseResource'
 const serviceDeleteWarehouseResource = async (id: string) => {
   try {
     const deleted = await WarehouseResource.destroy({
-      where: { warehouse_resource_id: id },
+      where: { id },
     })
 
     if (!deleted) {

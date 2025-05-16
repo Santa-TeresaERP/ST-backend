@@ -6,11 +6,11 @@ import { v4 as uuidv4 } from 'uuid'
 class WarehouseResource
   extends Model<
     WarehouseResourceAttributes,
-    Optional<WarehouseResourceAttributes, 'warehouse_resource_id'>
+    Optional<WarehouseResourceAttributes, 'id'>
   >
   implements WarehouseResourceAttributes
 {
-  public warehouse_resource_id!: string
+  public id?: string
   public warehouse_id!: string
   public resource_id!: string
   public quantity!: number
@@ -21,7 +21,7 @@ class WarehouseResource
 
 WarehouseResource.init(
   {
-    warehouse_resource_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: uuidv4,
       primaryKey: true,

@@ -1,5 +1,6 @@
 import index from '@services/Products/index'
 import { Request, Response } from 'express'
+
 const deleteProductController = async (
   req: Request,
   res: Response,

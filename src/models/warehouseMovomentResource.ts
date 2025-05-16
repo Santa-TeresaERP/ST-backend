@@ -6,25 +6,25 @@ import { v4 as uuid } from 'uuid'
 class WarehouseMovementResource
   extends Model<
     WarehouseMovomentResourceAttributes,
-    Optional<WarehouseMovomentResourceAttributes, 'movement_id'>
+    Optional<WarehouseMovomentResourceAttributes, 'Id'>
   >
   implements WarehouseMovomentResourceAttributes
 {
-  public movement_id!: string
+  public Id!: string
   public warehouse_id!: string
   public resource_id!: string
-  public type!: string
   public movement_type!: string
   public quantity!: number
   public movement_date!: Date
-  public observations?: string
+  public observations?: string | null
   public createdAt?: Date
   public updatedAt?: Date
+  public status?: string
 }
 
 WarehouseMovementResource.init(
   {
-    movement_id: {
+    Id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,
@@ -35,10 +35,6 @@ WarehouseMovementResource.init(
     },
     resource_id: {
       type: DataTypes.UUID,
-      allowNull: false,
-    },
-    type: {
-      type: DataTypes.STRING,
       allowNull: false,
     },
     movement_type: {
@@ -64,8 +60,13 @@ WarehouseMovementResource.init(
     },
     updatedAt: {
       type: DataTypes.DATE,
-      allowNull: true,
+      allowNull: false,
       defaultValue: DataTypes.NOW,
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'active',
     },
   },
   {

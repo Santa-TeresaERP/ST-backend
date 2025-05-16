@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { WarehouseMovomentResourceAttributes } from '@type/almacen/warehouse_movoment_resource'
 
 export const warehouseMovementResourceSchema = z.object({
-  movement_id: z
+  Id: z
     .string()
     .uuid('El ID del movimiento debe ser un UUID válido')
     .nonempty('El ID del movimiento no puede estar vacío'),
@@ -16,11 +16,6 @@ export const warehouseMovementResourceSchema = z.object({
     .string()
     .uuid('El ID del recurso debe ser un UUID válido')
     .nonempty('El ID del recurso no puede estar vacío'),
-
-  type: z
-    .string()
-    .min(1, 'El tipo de movimiento es obligatorio')
-    .max(50, 'El tipo de movimiento no debe exceder los 50 caracteres'),
 
   movement_type: z
     .string()
@@ -50,6 +45,12 @@ export const warehouseMovementResourceSchema = z.object({
     .date({
       invalid_type_error: 'La fecha de actualización debe ser una fecha válida',
     })
+    .optional(),
+
+  status: z
+    .string()
+    .min(1, 'El status es obligatorio')
+    .max(20, 'El status no debe exceder los 20 caracteres')
     .optional(),
 })
 

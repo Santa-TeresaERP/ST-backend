@@ -4,7 +4,7 @@ import { warehouseMovementResourceValidation } from 'src/schemas/almacen/warehou
 
 const serviceUpdateWarehouseMovementResource = async (
   id: string,
-  body: Partial<WarehouseMovomentResourceAttributes>, // ✅ actualización parcial
+  body: Partial<WarehouseMovomentResourceAttributes>,
 ) => {
   const record = await WarehouseMovementResource.findByPk(id)
   if (!record) {
@@ -15,7 +15,7 @@ const serviceUpdateWarehouseMovementResource = async (
   const validation = warehouseMovementResourceValidation({
     ...record.toJSON(),
     ...body,
-    movement_id: id, // aseguramos que tenga un ID válido para validación
+    Id: id, // aseguramos que tenga un ID válido para validación
   })
 
   if (!validation.success) {
@@ -25,21 +25,25 @@ const serviceUpdateWarehouseMovementResource = async (
   const {
     warehouse_id,
     resource_id,
-    type,
     movement_type,
     quantity,
     movement_date,
     observations,
+    createdAt,
+    updatedAt,
+    status,
   } = validation.data
 
   await record.update({
     warehouse_id,
     resource_id,
-    type,
     movement_type,
     quantity,
     movement_date,
     observations: observations ?? undefined,
+    createdAt,
+    updatedAt,
+    status,
   })
 
   return record

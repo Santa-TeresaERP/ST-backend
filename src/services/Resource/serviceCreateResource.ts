@@ -11,7 +11,7 @@ const serviceCreateResource = async (body: ResourceAttributes) => {
 
   const {
     name,
-    entry_quantity,
+    unit_price,
     total_cost,
     type_unit,
     supplier_id,
@@ -26,7 +26,7 @@ const serviceCreateResource = async (body: ResourceAttributes) => {
 
   const newResource = await Resource.create({
     name,
-    entry_quantity,
+    unit_price,
     total_cost,
     type_unit,
     supplier_id,

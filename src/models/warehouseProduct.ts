@@ -2,6 +2,8 @@ import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { WarehouseProductAttributes } from '@type/almacen/warehouse_product'
 import { v4 as uuid } from 'uuid'
+import Product from '@models/product'
+import Warehouse from '@models/warehouse'
 
 class WarehouseProduct
   extends Model<
@@ -59,5 +61,25 @@ WarehouseProduct.init(
     timestamps: true,
   },
 )
+
+WarehouseProduct.belongsTo(Warehouse, {
+  foreignKey: 'warehouse_id',
+  as: 'warehouse',
+})
+
+Warehouse.hasMany(WarehouseProduct, {
+  foreignKey: 'warehouse_id',
+  as: 'warehouse_products',
+})
+
+WarehouseProduct.belongsTo(Product, {
+  foreignKey: 'product_id',
+  as: 'product',
+})
+
+Product.hasMany(WarehouseProduct, {
+  foreignKey: 'product_id',
+  as: 'warehouse_products',
+})
 
 export default WarehouseProduct

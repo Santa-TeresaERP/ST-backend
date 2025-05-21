@@ -2,7 +2,7 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { RecipeProductResourceAttributes } from '@type/production/recipe_product_resourse'
-import Resource from '@models/resource'
+import Product from './product'
 
 class RecipeProductResource
   extends Model<
@@ -15,7 +15,6 @@ class RecipeProductResource
   public product_id!: string
   public quantity_required!: string
   public unit!: string
-  public resource_id?: string
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }
@@ -30,7 +29,6 @@ RecipeProductResource.init(
     product_id: {
       type: DataTypes.UUID,
       allowNull: false,
-      primaryKey: true,
     },
     quantity_required: {
       type: DataTypes.STRING,
@@ -39,14 +37,6 @@ RecipeProductResource.init(
     unit: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    resource_id: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: 'resources',
-        key: 'id',
-      },
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -66,15 +56,19 @@ RecipeProductResource.init(
   },
 )
 
-// Relaciones
-RecipeProductResource.belongsTo(Resource, {
-  foreignKey: 'resource_id',
-  as: 'resource',
+RecipeProductResource.belongsTo(Product, {
+  foreignKey: 'product_id',
 })
 
-Resource.hasMany(RecipeProductResource, {
-  foreignKey: 'resource_id',
-  as: 'recipeProductResources',
+Product.hasMany(RecipeProductResource, {
+  foreignKey: 'product_id',
+})
+
+RecipeProductResource.belongsTo(Product, {
+  foreignKey: 'product_id',
+})
+Product.hasMany(RecipeProductResource, {
+  foreignKey: 'product_id',
 })
 
 export default RecipeProductResource

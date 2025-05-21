@@ -2,6 +2,8 @@ import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { WarehouseMovomentResourceAttributes } from '@type/almacen/warehouse_movoment_resource'
 import { v4 as uuid } from 'uuid'
+import Warehouse from '@models/warehouse'
+import Resource from '@models/resource'
 
 class WarehouseMovementResource
   extends Model<
@@ -74,5 +76,25 @@ WarehouseMovementResource.init(
     timestamps: true,
   },
 )
+
+WarehouseMovementResource.belongsTo(Warehouse, {
+  foreignKey: 'warehouse_id',
+  as: 'warehouse',
+})
+
+Warehouse.hasMany(WarehouseMovementResource, {
+  foreignKey: 'warehouse_id',
+  as: 'warehouse_movement_resources',
+})
+
+WarehouseMovementResource.belongsTo(Resource, {
+  foreignKey: 'product_id',
+  as: 'product',
+})
+
+Resource.hasMany(WarehouseMovementResource, {
+  foreignKey: 'product_id',
+  as: 'warehouse_movement_resources',
+})
 
 export default WarehouseMovementResource

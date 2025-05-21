@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { RecipeProductConectionAttributes } from '@type/production/recipe_product_conections'
-import RecipeProductResource from '@models/recipe_product_resourse'
+import RecipeProductResource from '@models/recipe_product_resource'
 import Resource from '@models/resource'
 
 class RecipeProductConection

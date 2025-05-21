@@ -3,7 +3,7 @@ import { productionAttributes } from '@type/production/production'
 import { productionValidation } from 'src/schemas/production/productionSchema'
 import Product from '@models/product'
 import PlantProduction from '@models/plant_production'
-import RecipeProductResource from '@models/recipe_product_resourse'
+import RecipeProductResource from '@models/recipe_product_resource'
 import WarehouseResource from '@models/warehouseResource'
 
 const serviceCreateProduction = async (body: productionAttributes) => {

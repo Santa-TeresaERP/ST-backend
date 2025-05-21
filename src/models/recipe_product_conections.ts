@@ -17,16 +17,8 @@ class RecipeProductConection
 
 RecipeProductConection.init(
   {
-    recipe_id: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      primaryKey: true, // <- clave primaria compuesta
-    },
-    resource_id: {
-      type: DataTypes.UUID,
-      allowNull: false,
-      primaryKey: true, // <- clave primaria compuesta
-    },
+    recipe_id: { type: DataTypes.UUID, allowNull: false, primaryKey: true },
+    resource_id: { type: DataTypes.UUID, allowNull: false, primaryKey: true },
   },
   {
     sequelize,
@@ -36,25 +28,36 @@ RecipeProductConection.init(
 )
 
 RecipeProductConection.belongsTo(RecipeProductResource, {
-  foreignKey: 'recipe_id', // Define la clave foránea
-  as: 'recipe', // Alias para la relación
+  foreignKey: 'recipe_id',
+  as: 'recipe',
+})
+
+RecipeProductConection.belongsTo(Resource, {
+  foreignKey: 'resource_id',
+  as: 'resource',
 })
 
 RecipeProductResource.hasMany(RecipeProductConection, {
-  foreignKey: 'recipe_id', // Define la clave foránea en la tabla pivote
-  as: 'recipe_product_conections', // Alias para la relación
+  foreignKey: 'recipe_id',
+  as: 'recipe_product_conections',
+})
+
+Resource.hasMany(RecipeProductConection, {
+  foreignKey: 'resource_id',
+  as: 'recipe_product_conections',
 })
 
 RecipeProductResource.belongsToMany(Resource, {
   through: RecipeProductConection,
-  foreignKey: 'resource_id',
-  as: 'resource',
+  foreignKey: 'recipe_id',
+  otherKey: 'resource_id',
+  as: 'resources',
 })
 
 Resource.belongsToMany(RecipeProductResource, {
   through: RecipeProductConection,
   foreignKey: 'resource_id',
+  otherKey: 'recipe_id',
   as: 'recipe_product_resources',
 })
-
 export default RecipeProductConection

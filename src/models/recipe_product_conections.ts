@@ -20,16 +20,18 @@ RecipeProductConection.init(
     recipe_id: {
       type: DataTypes.UUID,
       allowNull: false,
+      primaryKey: true, // <- clave primaria compuesta
     },
     resource_id: {
       type: DataTypes.UUID,
       allowNull: false,
+      primaryKey: true, // <- clave primaria compuesta
     },
   },
   {
     sequelize,
     tableName: 'recipe_product_conexions',
-    timestamps: false, // activa si quieres createdAt/updatedAt
+    timestamps: true, // activa si quieres createdAt/updatedAt
   },
 )
 

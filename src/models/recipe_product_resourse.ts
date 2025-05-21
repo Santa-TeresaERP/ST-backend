@@ -64,4 +64,11 @@ Product.hasMany(RecipeProductResource, {
   foreignKey: 'product_id',
 })
 
+RecipeProductResource.belongsTo(Product, {
+  foreignKey: 'product_id',
+})
+Product.hasMany(RecipeProductResource, {
+  foreignKey: 'product_id',
+})
+
 export default RecipeProductResource

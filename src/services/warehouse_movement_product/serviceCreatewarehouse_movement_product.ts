@@ -1,4 +1,5 @@
 import WarehouseMovementProduct from '@models/warehouseMovementProduct'
+import WarehouseProduct from '@models/warehouseProduct'
 import { WarehouseMovomentProductAttributes } from '@type/almacen/warehouse_movement_product'
 import { warehouseMovementProductValidation } from 'src/schemas/almacen/warehouseMovementProductScheama'
 
@@ -8,7 +9,7 @@ const serviceCreatewarehouseMovementProduct = async (
   // Validar los datos antes de proceder
   const validation = warehouseMovementProductValidation(data)
   if (!validation.success) {
-    return { error: validation.error.errors }
+    return { success: false, error: validation.error.issues }
   }
 
   const {
@@ -33,7 +34,30 @@ const serviceCreatewarehouseMovementProduct = async (
       observations,
     })
 
-    return { success: true, movement: newMovement }
+    // Find the WarehouseProduct
+    const warehouseProduct = await WarehouseProduct.findOne({
+      where: { warehouse_id, product_id },
+    })
+
+    // If WarehouseProduct is not found, return an error
+    if (!warehouseProduct) {
+      return { success: false, error: 'WarehouseProduct not found' }
+    }
+
+    // Update quantity based on movement_type
+    if (movement_type === 'entrada') {
+      warehouseProduct.quantity += quantity
+    } else if (movement_type === 'salida') {
+      if (warehouseProduct.quantity < quantity) {
+        return { success: false, error: 'Insufficient quantity in stock' }
+      }
+      warehouseProduct.quantity -= quantity
+    }
+
+    // Save the updated WarehouseProduct
+    await warehouseProduct.save()
+
+    return { success: true, movement: newMovement, warehouseProduct }
   } catch (error) {
     return {
       success: false,

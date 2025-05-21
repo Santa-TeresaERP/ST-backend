@@ -1,5 +1,5 @@
 export interface ModuleAttributes {
-  id: string
+  id?: string
   name: string
   description?: string
   createdAt?: Date

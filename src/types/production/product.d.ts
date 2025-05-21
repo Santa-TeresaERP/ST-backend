@@ -2,10 +2,10 @@ export interface ProductAttributes {
   id?: string
   name: string
   category_id: string
-  price: number
+  price?: number
   stock: number
-  description: string
-  imagen_url: string
+  description?: string
+  imagen_url?: string
   createdAt?: Date
   updatedAt?: Date
 }

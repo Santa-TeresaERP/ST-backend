@@ -1,10 +1,17 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
+import upload from '@middlewares/upload' // Asegúrate de importarlo
 import productsController from '@controllers/Products/index'
 
 const router = express.Router()
 
-router.post('/', authorization, productsController.createProduct)
+// ¡Importante! primero upload.single('imagen'), luego authorization
+router.post(
+  '/',
+  upload.single('imagen'),
+  authorization,
+  productsController.createProduct,
+)
 
 router.get('/', authorization, productsController.getAllProduct)
 

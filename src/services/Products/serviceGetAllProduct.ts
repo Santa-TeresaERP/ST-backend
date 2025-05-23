@@ -11,7 +11,6 @@ const serviceGetAllProduct = async () => {
       { model: Category, as: 'category' },
       {
         model: RecipeProductResource,
-        as: 'recipe',
         include: [
           {
             model: RecipeProductConection,
@@ -19,7 +18,7 @@ const serviceGetAllProduct = async () => {
             include: [
               {
                 model: Resource,
-                as: 'resources',
+                as: 'resource',
               },
             ],
           },

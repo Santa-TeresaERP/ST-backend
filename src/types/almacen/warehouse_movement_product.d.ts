@@ -7,5 +7,4 @@ export interface WarehouseMovomentProductAttributes {
   quantity: number
   movement_date: Date
   observations?: string
-  updatedAt?: Date
 }

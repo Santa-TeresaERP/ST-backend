@@ -40,12 +40,6 @@ export const warehouseMovementProductSchema = z.object({
     .string()
     .max(150, 'Las observaciones no deben exceder los 150 caracteres')
     .optional(),
-
-  updatedAt: z
-    .date({
-      invalid_type_error: 'La fecha de actualización debe ser una fecha válida',
-    })
-    .optional(),
 })
 
 // Validación segura

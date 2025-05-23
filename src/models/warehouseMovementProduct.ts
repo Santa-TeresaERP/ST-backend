@@ -18,7 +18,6 @@ class WarehouseMovementProduct
   public quantity!: number
   public movement_date!: Date
   public observations?: string
-  public updatedAt?: Date
 }
 
 WarehouseMovementProduct.init(
@@ -55,11 +54,6 @@ WarehouseMovementProduct.init(
     observations: {
       type: DataTypes.STRING,
       allowNull: true,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: DataTypes.NOW,
     },
   },
   {

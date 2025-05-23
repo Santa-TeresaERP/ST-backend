@@ -2,8 +2,6 @@ import { CustomerAttributes } from '@type/alquiler/customers'
 import { z } from 'zod'
 
 const CustomerSchema = z.object({
-  id: z.string().uuid().optional(),
-
   full_name: z
     .string()
     .min(1, 'El nombre completo es obligatorio')

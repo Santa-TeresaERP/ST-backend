@@ -2,8 +2,6 @@ import { z } from 'zod'
 import { ResourceAttributes } from '@type/almacen/resource'
 
 export const resourceSchema = z.object({
-  id: z.string().uuid('El ID del recurso debe ser un UUID válido').optional(),
-
   name: z
     .string()
     .min(1, 'El nombre del recurso es obligatorio')
@@ -23,18 +21,17 @@ export const resourceSchema = z.object({
   supplier_id: z
     .string()
     .uuid('El ID del proveedor debe ser un UUID válido')
-    .nonempty('El ID del proveedor no puede estar vacío'),
+    .optional(),
 
   observation: z
     .string()
     .max(150, 'La observación no debe exceder los 150 caracteres')
-    .nonempty('El ID del proveedor no puede estar vacío'),
+    .optional(),
 
   purchase_date: z.coerce.date({
     invalid_type_error: 'La fecha de compra debe ser válida',
   }),
 })
 
-// Validación segura
 export const resourceValidation = (data: ResourceAttributes) =>
   resourceSchema.safeParse(data)

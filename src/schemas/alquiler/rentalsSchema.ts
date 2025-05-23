@@ -2,8 +2,6 @@ import { RentalAttributes } from '@type/alquiler/rentals'
 import { z } from 'zod'
 
 const RentalSchema = z.object({
-  id: z.string().uuid().optional(),
-
   customer_id: z.string().uuid({
     message: 'El ID del cliente debe ser un UUID válido',
   }),

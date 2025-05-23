@@ -2,11 +2,6 @@ import { z } from 'zod'
 import { WarehouseProductAttributes } from '@type/almacen/warehouse_product'
 
 export const warehouseProductSchema = z.object({
-  id: z
-    .string()
-    .uuid('El ID del producto de almacén debe ser un UUID válido')
-    .nonempty('El ID del producto de almacén no puede estar vacío'),
-
   warehouse_id: z
     .string()
     .uuid('El ID del almacén debe ser un UUID válido')
@@ -26,6 +21,5 @@ export const warehouseProductSchema = z.object({
   }),
 })
 
-// Validación segura
 export const warehouseProductValidation = (data: WarehouseProductAttributes) =>
   warehouseProductSchema.safeParse(data)

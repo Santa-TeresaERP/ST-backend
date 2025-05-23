@@ -6,7 +6,7 @@ import Customer from '@models/customers'
 import Place from '@models/places'
 
 class Rental
-  extends Model<RentalAttributes, Optional<RentalAttributes, 'rental_id'>>
+  extends Model<RentalAttributes, Optional<RentalAttributes, 'id'>>
   implements RentalAttributes
 {
   public rental_id!: string
@@ -24,7 +24,7 @@ class Rental
 
 Rental.init(
   {
-    rental_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,

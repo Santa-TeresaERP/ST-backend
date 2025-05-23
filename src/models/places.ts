@@ -5,21 +5,18 @@ import { v4 as uuid } from 'uuid'
 import Location from '@models/locations'
 
 class Place
-  extends Model<PlaceAttributes, Optional<PlaceAttributes, 'place_id'>>
+  extends Model<PlaceAttributes, Optional<PlaceAttributes, 'id'>>
   implements PlaceAttributes
 {
-  public place_id!: string
+  public id!: string
   public location_id!: string
   public name!: string
   public area!: string
-
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
 }
 
 Place.init(
   {
-    place_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,
@@ -35,16 +32,6 @@ Place.init(
     area: {
       type: DataTypes.STRING(100),
       allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
     },
   },
   {

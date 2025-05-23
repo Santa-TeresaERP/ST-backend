@@ -3,6 +3,4 @@ export interface PlaceAttributes {
   location_id: string
   name: string
   area: string
-  createdAt?: Date
-  updatedAt?: Date
 }

@@ -4,5 +4,4 @@ export interface WarehouseProductAttributes {
   product_id: string
   quantity: number
   entry_date: Date
-  updatedAt?: Date
 }

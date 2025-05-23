@@ -24,12 +24,6 @@ export const warehouseProductSchema = z.object({
   entry_date: z.coerce.date({
     invalid_type_error: 'La fecha de entrada debe ser válida',
   }),
-
-  updatedAt: z
-    .date({
-      invalid_type_error: 'La fecha de actualización debe ser una fecha válida',
-    })
-    .optional(),
 })
 
 // Validación segura

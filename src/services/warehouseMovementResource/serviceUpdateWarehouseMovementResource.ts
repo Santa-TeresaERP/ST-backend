@@ -15,7 +15,7 @@ const serviceUpdateWarehouseMovementResource = async (
   const validation = warehouseMovementResourceValidation({
     ...record.toJSON(),
     ...body,
-    movement_id: id, // aseguramos que tenga un ID válido para validación
+    id, // aseguramos que tenga un ID válido para validación
   })
 
   if (!validation.success) {

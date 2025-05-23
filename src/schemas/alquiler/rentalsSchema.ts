@@ -11,6 +11,9 @@ const RentalSchema = z.object({
   place_id: z.string().uuid({
     message: 'El ID del lugar debe ser un UUID válido',
   }),
+  User_id: z.string().uuid({
+    message: 'El ID del lugar debe ser un UUID válido',
+  }),
 
   start_date: z.date({
     invalid_type_error: 'La fecha de inicio debe ser una fecha válida',

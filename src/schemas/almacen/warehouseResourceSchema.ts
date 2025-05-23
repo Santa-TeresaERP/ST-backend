@@ -23,12 +23,6 @@ export const warehouseResourceSchema = z.object({
     invalid_type_error: 'La fecha de entrada debe ser válida',
   }),
 
-  createdAt: z
-    .date({
-      invalid_type_error: 'La fecha de creación debe ser una fecha válida',
-    })
-    .optional(),
-
   updatedAt: z
     .date({
       invalid_type_error: 'La fecha de actualización debe ser una fecha válida',

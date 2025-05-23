@@ -7,6 +7,5 @@ export interface ResourceAttributes {
   supplier_id?: string
   observation?: string
   purchase_date: Date
-  createdAt?: Date
   updatedAt?: Date
 }

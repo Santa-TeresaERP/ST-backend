@@ -7,6 +7,4 @@ export interface RentalAttributes {
   income_id?: string
   status: string
   expense_id?: string
-  createdAt?: Date
-  updatedAt?: Date
 }

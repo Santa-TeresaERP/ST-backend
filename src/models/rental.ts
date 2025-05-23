@@ -6,10 +6,10 @@ import Customer from '@models/customers'
 import Place from '@models/places'
 
 class Rental
-  extends Model<RentalAttributes, Optional<RentalAttributes, 'rental_id'>>
+  extends Model<RentalAttributes, Optional<RentalAttributes, 'id'>>
   implements RentalAttributes
 {
-  public rental_id!: string
+  public id!: string
   public customer_id!: string
   public place_id!: string
   public start_date!: Date
@@ -24,7 +24,7 @@ class Rental
 
 Rental.init(
   {
-    rental_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,
@@ -56,16 +56,6 @@ Rental.init(
     status: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
     },
   },
   {

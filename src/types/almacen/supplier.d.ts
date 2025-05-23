@@ -6,6 +6,5 @@ export interface SuplierAttributes {
   email: string
   phone: number
   address: string
-  createdAt?: Date
   updatedAt?: Date
 }

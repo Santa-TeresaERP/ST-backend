@@ -37,10 +37,6 @@ export const supplierSchema = z.object({
     .min(1, 'La dirección es obligatoria')
     .max(200, 'La dirección no debe exceder los 200 caracteres'),
 
-  createdAt: z
-    .date({ invalid_type_error: 'La fecha de creación debe ser válida' })
-    .optional(),
-
   updatedAt: z
     .date({ invalid_type_error: 'La fecha de actualización debe ser válida' })
     .optional(),

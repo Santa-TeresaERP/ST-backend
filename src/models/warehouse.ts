@@ -12,7 +12,6 @@ class Warehouse
   public location!: string
   public capacity!: number
   public observation?: string
-  public updatedAt?: Date
 }
 
 Warehouse.init(
@@ -26,11 +25,6 @@ Warehouse.init(
     location: { type: DataTypes.STRING, allowNull: false },
     capacity: { type: DataTypes.INTEGER, allowNull: false },
     observation: { type: DataTypes.STRING, allowNull: true },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: DataTypes.NOW,
-    },
   },
   {
     sequelize,

@@ -4,5 +4,4 @@ export interface WarehouseAttributes {
   location: string
   capacity: number
   observation?: string
-  updatedAt?: Date
 }

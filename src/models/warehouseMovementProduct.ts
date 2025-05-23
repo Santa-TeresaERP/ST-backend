@@ -6,11 +6,11 @@ import { v4 as uuid } from 'uuid'
 class WarehouseMovementProduct
   extends Model<
     WarehouseMovomentProductAttributes,
-    Optional<WarehouseMovomentProductAttributes, 'movement_id'>
+    Optional<WarehouseMovomentProductAttributes, 'id'>
   >
   implements WarehouseMovomentProductAttributes
 {
-  public movement_id!: string
+  public id!: string
   public warehouse_id!: string
   public store_id!: string
   public product_id!: string
@@ -18,13 +18,12 @@ class WarehouseMovementProduct
   public quantity!: number
   public movement_date!: Date
   public observations?: string
-  public createdAt?: Date
   public updatedAt?: Date
 }
 
 WarehouseMovementProduct.init(
   {
-    movement_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,
@@ -56,11 +55,6 @@ WarehouseMovementProduct.init(
     observations: {
       type: DataTypes.STRING,
       allowNull: true,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
     },
     updatedAt: {
       type: DataTypes.DATE,

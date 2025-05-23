@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { WarehouseMovomentProductAttributes } from '@type/almacen/warehouse_movement_product'
 
 export const warehouseMovementProductSchema = z.object({
-  movement_id: z
+  id: z
     .string()
     .uuid('El ID del movimiento debe ser un UUID válido')
     .nonempty('El ID del movimiento no puede estar vacío'),
@@ -39,12 +39,6 @@ export const warehouseMovementProductSchema = z.object({
   observations: z
     .string()
     .max(150, 'Las observaciones no deben exceder los 150 caracteres')
-    .optional(),
-
-  createdAt: z
-    .date({
-      invalid_type_error: 'La fecha de creación debe ser una fecha válida',
-    })
     .optional(),
 
   updatedAt: z

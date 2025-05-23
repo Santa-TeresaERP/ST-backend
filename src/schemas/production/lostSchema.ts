@@ -2,8 +2,6 @@ import { lostAttributes } from '@type/production/lost'
 import { z } from 'zod'
 
 const lostSchema = z.object({
-  product_id: z.string().uuid('El ID del producto debe ser un UUID válido'),
-
   quantity: z
     .number()
     .int('La cantidad debe ser un número entero')

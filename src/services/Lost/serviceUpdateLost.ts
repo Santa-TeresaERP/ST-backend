@@ -12,8 +12,8 @@ export default async function updateLost(
       throw new Error('Registro de pérdida no encontrado')
     }
 
-    if (updateData.product_id) {
-      const product = await Product.findByPk(updateData.product_id)
+    if (updateData.production_id) {
+      const product = await Product.findByPk(updateData.production_id)
       if (!product) {
         throw new Error('Producto no encontrado')
       }

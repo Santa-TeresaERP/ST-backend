@@ -1,6 +1,6 @@
 export interface lostAttributes {
   id: string
-  product_id: string
+  production_id: string
   quantity: number
   lost_type: string
   observations: string

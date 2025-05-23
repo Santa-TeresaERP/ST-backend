@@ -4,5 +4,4 @@ export interface WarehouseResourceAttributes {
   resource_id: string
   quantity: number
   entry_date: Date
-  updatedAt?: Date
 }

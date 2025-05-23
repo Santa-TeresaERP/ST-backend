@@ -8,11 +8,11 @@ import Warehouse from '@models/warehouse'
 class WarehouseProduct
   extends Model<
     WarehouseProductAttributes,
-    Optional<WarehouseProductAttributes, 'warehouse_product_id'>
+    Optional<WarehouseProductAttributes, 'id'>
   >
   implements WarehouseProductAttributes
 {
-  public warehouse_product_id!: string
+  public id?: string
   public warehouse_id!: string
   public product_id!: string
   public quantity!: number
@@ -23,7 +23,7 @@ class WarehouseProduct
 
 WarehouseProduct.init(
   {
-    warehouse_product_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,

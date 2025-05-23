@@ -1,5 +1,5 @@
 export interface RentalAttributes {
-  rental_id?: string
+  id?: string
   customer_id?: string
   place_id?: string
   start_date: Date

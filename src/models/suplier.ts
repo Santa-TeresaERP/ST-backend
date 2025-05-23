@@ -4,10 +4,10 @@ import { SuplierAttributes } from '@type/almacen/supplier'
 import { v4 as uuid } from 'uuid'
 
 class Supplier
-  extends Model<SuplierAttributes, Optional<SuplierAttributes, 'supplier_id'>>
+  extends Model<SuplierAttributes, Optional<SuplierAttributes, 'id'>>
   implements SuplierAttributes
 {
-  public supplier_id!: string
+  public id?: string
   public ruc!: number
   public suplier_name!: string
   public contact_name!: string
@@ -20,7 +20,7 @@ class Supplier
 
 Supplier.init(
   {
-    supplier_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,

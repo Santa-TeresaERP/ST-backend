@@ -1,5 +1,5 @@
 export interface SuplierAttributes {
-  supplier_id: string
+  id?: string
   ruc: number
   suplier_name: string
   contact_name: string

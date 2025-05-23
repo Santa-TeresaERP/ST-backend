@@ -1,12 +1,12 @@
 export interface ResourceAttributes {
-  resource_id?: string
+  id?: string
   name: string
-  entry_quantity: number
-  total_cost: number
+  unit_price: string
   type_unit: string
+  total_cost: number
   supplier_id?: string
-  purchase_date: Date
   observation?: string
+  purchase_date: Date
   createdAt?: Date
   updatedAt?: Date
 }

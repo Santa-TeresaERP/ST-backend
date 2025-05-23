@@ -4,13 +4,9 @@ import Warehouse from '@models/warehouse'
 import { WarehouseProductAttributes } from '@type/almacen/warehouse_product.d'
 
 export default async function createWarehouseProduct(
-  data: Omit<
-    WarehouseProductAttributes,
-    'warehouse_product_id' | 'createdAt' | 'updatedAt'
-  >,
+  data: Omit<WarehouseProductAttributes, 'createdAt' | 'updatedAt'>,
 ) {
   try {
-    // Verificar que existan el producto y el almacén
     const product = await Product.findByPk(data.product_id)
     if (!product) {
       throw new Error('Producto no encontrado')

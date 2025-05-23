@@ -1,11 +1,9 @@
 import WarehouseProduct from '@models/warehouseProduct'
 
-export default async function deleteWarehouseProduct(
-  warehouseProductId: string,
-) {
+export default async function deleteWarehouseProduct(id: string) {
   try {
     const deletedCount = await WarehouseProduct.destroy({
-      where: { warehouse_product_id: warehouseProductId },
+      where: { id },
     })
 
     if (deletedCount === 0) {

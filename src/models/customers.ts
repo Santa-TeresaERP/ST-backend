@@ -7,7 +7,7 @@ class Customer
   extends Model<CustomerAttributes, Optional<CustomerAttributes, 'id'>>
   implements CustomerAttributes
 {
-  public customer_id!: string
+  public id!: string
   public full_name!: string
   public dni!: number
   public phone!: string

@@ -8,7 +8,7 @@ class Place
   extends Model<PlaceAttributes, Optional<PlaceAttributes, 'id'>>
   implements PlaceAttributes
 {
-  public place_id!: string
+  public id!: string
   public location_id!: string
   public name!: string
   public area!: string

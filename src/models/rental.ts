@@ -9,7 +9,7 @@ class Rental
   extends Model<RentalAttributes, Optional<RentalAttributes, 'id'>>
   implements RentalAttributes
 {
-  public rental_id!: string
+  public id!: string
   public customer_id!: string
   public place_id!: string
   public start_date!: Date

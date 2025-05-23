@@ -14,7 +14,6 @@ class Supplier
   public email!: string
   public phone!: number
   public address!: string
-  public updatedAt?: Date
 }
 
 Supplier.init(
@@ -50,11 +49,6 @@ Supplier.init(
     address: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: DataTypes.NOW,
     },
   },
   {

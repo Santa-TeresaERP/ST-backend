@@ -51,5 +51,13 @@
   "overrides": {
     "eslint": "^9.16.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Santa-TeresaERP/ST-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Santa-TeresaERP/ST-backend/issues"
+  },
+  "homepage": "https://github.com/Santa-TeresaERP/ST-backend#readme",
   "description": ""
 }

@@ -2,8 +2,6 @@ import Product from '@models/product'
 import Category from '@models/categories'
 import { ProductAttributes } from '@type/production/products'
 import { productsValidation } from 'src/schemas/production/productsSchema'
-
-// Crear un producto
 const serviceCreateProduct = async (body: ProductAttributes) => {
   const validation = productsValidation(body)
 

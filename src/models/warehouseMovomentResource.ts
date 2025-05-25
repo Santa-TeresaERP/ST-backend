@@ -15,7 +15,6 @@ class WarehouseMovementResource
   public movement_id!: string
   public warehouse_id!: string
   public resource_id!: string
-  public type!: string
   public movement_type!: string
   public quantity!: number
   public movement_date!: Date
@@ -37,10 +36,6 @@ WarehouseMovementResource.init(
     },
     resource_id: {
       type: DataTypes.UUID,
-      allowNull: false,
-    },
-    type: {
-      type: DataTypes.STRING,
       allowNull: false,
     },
     movement_type: {

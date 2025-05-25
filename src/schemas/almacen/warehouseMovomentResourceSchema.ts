@@ -17,15 +17,11 @@ export const warehouseMovementResourceSchema = z.object({
     .uuid('El ID del recurso debe ser un UUID válido')
     .nonempty('El ID del recurso no puede estar vacío'),
 
-  type: z
-    .string()
-    .min(1, 'El tipo de movimiento es obligatorio')
-    .max(50, 'El tipo de movimiento no debe exceder los 50 caracteres'),
-
-  movement_type: z
-    .string()
-    .min(1, 'El tipo de movimiento es obligatorio')
-    .max(50, 'El tipo de movimiento no debe exceder los 50 caracteres'),
+  movement_type: z.enum(['salida', 'entrada'], {
+    errorMap: () => ({
+      message: 'El tipo de movimiento debe ser "salida" o "entrada"',
+    }),
+  }),
 
   quantity: z
     .number({ invalid_type_error: 'La cantidad debe ser un número' })

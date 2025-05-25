@@ -35,18 +35,28 @@ describe('serviceCreatewarehouseMovementProduct', () => {
       quantity: 5,
       save: jest.fn().mockResolvedValue(this), // Will be fixed later
     }
-    mockWarehouseProduct.save = jest.fn().mockResolvedValue(mockWarehouseProduct);
+    mockWarehouseProduct.save = jest
+      .fn()
+      .mockResolvedValue(mockWarehouseProduct)
 
+    const mockCreatedMovement = { ...mockMovementData, id: 'mov1' }
 
-    const mockCreatedMovement = { ...mockMovementData, id: 'mov1' };
-
-    (warehouseMovementProductValidation as jest.Mock).mockReturnValue({ success: true, data: mockMovementData });
-    (WarehouseMovementProduct.create as jest.Mock).mockResolvedValue(mockCreatedMovement);
-    (WarehouseProduct.findOne as jest.Mock).mockResolvedValue(mockWarehouseProduct)
+    ;(warehouseMovementProductValidation as jest.Mock).mockReturnValue({
+      success: true,
+      data: mockMovementData,
+    })
+    ;(WarehouseMovementProduct.create as jest.Mock).mockResolvedValue(
+      mockCreatedMovement,
+    )
+    ;(WarehouseProduct.findOne as jest.Mock).mockResolvedValue(
+      mockWarehouseProduct,
+    )
 
     const result = await serviceCreatewarehouseMovementProduct(mockMovementData)
 
-    expect(warehouseMovementProductValidation).toHaveBeenCalledWith(mockMovementData)
+    expect(warehouseMovementProductValidation).toHaveBeenCalledWith(
+      mockMovementData,
+    )
     expect(WarehouseMovementProduct.create).toHaveBeenCalledWith(
       expect.objectContaining({
         warehouse_id: mockMovementData.warehouse_id,
@@ -59,7 +69,10 @@ describe('serviceCreatewarehouseMovementProduct', () => {
       }),
     )
     expect(WarehouseProduct.findOne).toHaveBeenCalledWith({
-      where: { warehouse_id: mockMovementData.warehouse_id, product_id: mockMovementData.product_id },
+      where: {
+        warehouse_id: mockMovementData.warehouse_id,
+        product_id: mockMovementData.product_id,
+      },
     })
     expect(mockWarehouseProduct.save).toHaveBeenCalled()
     expect(result.success).toBe(true)
@@ -88,18 +101,28 @@ describe('serviceCreatewarehouseMovementProduct', () => {
       quantity: 10,
       save: jest.fn(),
     }
-    mockWarehouseProduct.save = jest.fn().mockResolvedValue(mockWarehouseProduct);
+    mockWarehouseProduct.save = jest
+      .fn()
+      .mockResolvedValue(mockWarehouseProduct)
 
+    const mockCreatedMovement = { ...mockMovementData, id: 'mov2' }
 
-    const mockCreatedMovement = { ...mockMovementData, id: 'mov2' };
-
-    (warehouseMovementProductValidation as jest.Mock).mockReturnValue({ success: true, data: mockMovementData });
-    (WarehouseMovementProduct.create as jest.Mock).mockResolvedValue(mockCreatedMovement);
-    (WarehouseProduct.findOne as jest.Mock).mockResolvedValue(mockWarehouseProduct)
+    ;(warehouseMovementProductValidation as jest.Mock).mockReturnValue({
+      success: true,
+      data: mockMovementData,
+    })
+    ;(WarehouseMovementProduct.create as jest.Mock).mockResolvedValue(
+      mockCreatedMovement,
+    )
+    ;(WarehouseProduct.findOne as jest.Mock).mockResolvedValue(
+      mockWarehouseProduct,
+    )
 
     const result = await serviceCreatewarehouseMovementProduct(mockMovementData)
 
-    expect(warehouseMovementProductValidation).toHaveBeenCalledWith(mockMovementData)
+    expect(warehouseMovementProductValidation).toHaveBeenCalledWith(
+      mockMovementData,
+    )
     expect(WarehouseMovementProduct.create).toHaveBeenCalledWith(
       expect.objectContaining({
         warehouse_id: mockMovementData.warehouse_id,
@@ -111,7 +134,10 @@ describe('serviceCreatewarehouseMovementProduct', () => {
       }),
     )
     expect(WarehouseProduct.findOne).toHaveBeenCalledWith({
-      where: { warehouse_id: mockMovementData.warehouse_id, product_id: mockMovementData.product_id },
+      where: {
+        warehouse_id: mockMovementData.warehouse_id,
+        product_id: mockMovementData.product_id,
+      },
     })
     expect(mockWarehouseProduct.save).toHaveBeenCalled()
     expect(result.success).toBe(true)
@@ -140,16 +166,27 @@ describe('serviceCreatewarehouseMovementProduct', () => {
       quantity: 10,
       save: jest.fn(),
     }
-    mockWarehouseProduct.save = jest.fn().mockResolvedValue(mockWarehouseProduct);
+    mockWarehouseProduct.save = jest
+      .fn()
+      .mockResolvedValue(mockWarehouseProduct)
 
-
-    (warehouseMovementProductValidation as jest.Mock).mockReturnValue({ success: true, data: mockMovementData });
-    (WarehouseMovementProduct.create as jest.Mock).mockResolvedValue({ ...mockMovementData, id: 'mov3' }); 
-    (WarehouseProduct.findOne as jest.Mock).mockResolvedValue(mockWarehouseProduct)
+    ;(warehouseMovementProductValidation as jest.Mock).mockReturnValue({
+      success: true,
+      data: mockMovementData,
+    })
+    ;(WarehouseMovementProduct.create as jest.Mock).mockResolvedValue({
+      ...mockMovementData,
+      id: 'mov3',
+    })
+    ;(WarehouseProduct.findOne as jest.Mock).mockResolvedValue(
+      mockWarehouseProduct,
+    )
 
     const result = await serviceCreatewarehouseMovementProduct(mockMovementData)
 
-    expect(warehouseMovementProductValidation).toHaveBeenCalledWith(mockMovementData)
+    expect(warehouseMovementProductValidation).toHaveBeenCalledWith(
+      mockMovementData,
+    )
     // WarehouseMovementProduct.create will be called before the stock check
     expect(WarehouseMovementProduct.create).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -162,7 +199,10 @@ describe('serviceCreatewarehouseMovementProduct', () => {
       }),
     )
     expect(WarehouseProduct.findOne).toHaveBeenCalledWith({
-      where: { warehouse_id: mockMovementData.warehouse_id, product_id: mockMovementData.product_id },
+      where: {
+        warehouse_id: mockMovementData.warehouse_id,
+        product_id: mockMovementData.product_id,
+      },
     })
     expect(mockWarehouseProduct.save).not.toHaveBeenCalled()
     expect(result.success).toBe(false)
@@ -182,15 +222,23 @@ describe('serviceCreatewarehouseMovementProduct', () => {
       movement_date: new Date(),
       user_id: '1',
       observations: '',
-    };
+    }
 
-    (warehouseMovementProductValidation as jest.Mock).mockReturnValue({ success: true, data: mockMovementData });
-    (WarehouseMovementProduct.create as jest.Mock).mockResolvedValue({ ...mockMovementData, id: 'mov4' });
-    (WarehouseProduct.findOne as jest.Mock).mockResolvedValue(null) // WarehouseProduct not found
+    ;(warehouseMovementProductValidation as jest.Mock).mockReturnValue({
+      success: true,
+      data: mockMovementData,
+    })
+    ;(WarehouseMovementProduct.create as jest.Mock).mockResolvedValue({
+      ...mockMovementData,
+      id: 'mov4',
+    })
+    ;(WarehouseProduct.findOne as jest.Mock).mockResolvedValue(null) // WarehouseProduct not found
 
     const result = await serviceCreatewarehouseMovementProduct(mockMovementData)
 
-    expect(warehouseMovementProductValidation).toHaveBeenCalledWith(mockMovementData)
+    expect(warehouseMovementProductValidation).toHaveBeenCalledWith(
+      mockMovementData,
+    )
     // WarehouseMovementProduct.create will be called before the WarehouseProduct.findOne check
     expect(WarehouseMovementProduct.create).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -203,7 +251,10 @@ describe('serviceCreatewarehouseMovementProduct', () => {
       }),
     )
     expect(WarehouseProduct.findOne).toHaveBeenCalledWith({
-      where: { warehouse_id: mockMovementData.warehouse_id, product_id: mockMovementData.product_id },
+      where: {
+        warehouse_id: mockMovementData.warehouse_id,
+        product_id: mockMovementData.product_id,
+      },
     })
     expect(result.success).toBe(false)
     expect(result.error).toBe('WarehouseProduct not found')
@@ -224,18 +275,22 @@ describe('serviceCreatewarehouseMovementProduct', () => {
     }
 
     // Adjust the mock to match ZodError structure
-    const validationError = { 
-      success: false, 
-      error: { issues: [{ message: 'Invalid movement_type' }] } 
-    };
-    (warehouseMovementProductValidation as jest.Mock).mockReturnValue(validationError)
+    const validationError = {
+      success: false,
+      error: { issues: [{ message: 'Invalid movement_type' }] },
+    }
+    ;(warehouseMovementProductValidation as jest.Mock).mockReturnValue(
+      validationError,
+    )
 
     const result = await serviceCreatewarehouseMovementProduct(mockMovementData)
 
-    expect(warehouseMovementProductValidation).toHaveBeenCalledWith(mockMovementData)
+    expect(warehouseMovementProductValidation).toHaveBeenCalledWith(
+      mockMovementData,
+    )
     expect(WarehouseMovementProduct.create).not.toHaveBeenCalled()
     expect(WarehouseProduct.findOne).not.toHaveBeenCalled()
     expect(result.success).toBe(false)
-    expect(result.error).toEqual(validationError.error.issues) 
+    expect(result.error).toEqual(validationError.error.issues)
   })
 })

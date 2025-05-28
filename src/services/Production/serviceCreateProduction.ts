@@ -29,7 +29,6 @@ const serviceCreateProduction = async (body: productionAttributes) => {
     plant_id,
   })
 
-  // 🔁 Procesar recetas y descontar recursos del almacén
   const recetas = await RecipeProductResource.findAll({
     where: { product_id: productId },
   })
@@ -58,8 +57,6 @@ const serviceCreateProduction = async (body: productionAttributes) => {
       let cantidadRestante = cantidadTotal
 
       for (const entrada of entradas) {
-        if (cantidadRestante <= 0) break
-
         const cantidadDisponible = entrada.quantity
         const cantidadADescontar = Math.min(
           cantidadDisponible,
@@ -70,6 +67,26 @@ const serviceCreateProduction = async (body: productionAttributes) => {
         await entrada.save()
 
         cantidadRestante -= cantidadADescontar
+
+        if (cantidadRestante <= 0) break
+      }
+
+      // Si aún falta descontar, restar lo que falta a la última entrada (puede quedar en negativo)
+      if (cantidadRestante > 0) {
+        const ultimaEntrada = entradas[entradas.length - 1]
+
+        if (ultimaEntrada) {
+          ultimaEntrada.quantity -= cantidadRestante
+          await ultimaEntrada.save()
+        } else {
+          // No había entradas — crear una sola con cantidad negativa si se desea
+          await WarehouseResource.create({
+            warehouse_id: plant_id,
+            resource_id: conexion.resource_id,
+            quantity: -cantidadRestante,
+            entry_date: new Date(),
+          })
+        }
       }
 
       const recurso = await Resource.findByPk(conexion.resource_id)

@@ -69,4 +69,7 @@ Product.hasMany(Production, { foreignKey: 'productId' })
 Production.belongsTo(PlantProduction, { foreignKey: 'plant_id' })
 PlantProduction.hasMany(Production, { foreignKey: 'plant_id' })
 
+// ✅ Tipo explícito de instancia
+export type ProductionInstance = InstanceType<typeof Production>
+
 export default Production

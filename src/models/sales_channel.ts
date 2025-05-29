@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
-import { salesChannelAttributes } from '@type/museo/Sales_channel'
+import { salesChannelAttributes } from '@type/museo/sales_channel'
 import { v4 as uuid } from 'uuid'
 
 class SalesChannel

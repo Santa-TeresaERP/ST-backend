@@ -1,10 +1,8 @@
 import WarehouseProduct from '@models/warehouseProduct'
 
-export default async function getWarehouseProductById(
-  warehouseProductId: string,
-) {
+export default async function getWarehouseProductById(id: string) {
   try {
-    const record = await WarehouseProduct.findByPk(warehouseProductId)
+    const record = await WarehouseProduct.findByPk(id)
     if (!record) {
       throw new Error('Registro en almacén no encontrado')
     }

@@ -12,20 +12,24 @@ const serviceCreateWarehouseResource = async (
   }
 
   const {
-    warehouse_resource_id,
+    id,
     warehouse_id,
     resource_id,
     quantity,
     entry_date,
+    createdAt,
+    updatedAt,
   } = validation.data
 
   try {
     const newWarehouseResource = await WarehouseResource.create({
-      warehouse_resource_id,
+      id,
       warehouse_id,
       resource_id,
       quantity,
       entry_date,
+      createdAt,
+      updatedAt,
     })
 
     return newWarehouseResource

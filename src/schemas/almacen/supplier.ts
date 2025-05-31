@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { SuplierAttributes } from '@type/almacen/supplier'
 
 export const supplierSchema = z.object({
-  supplier_id: z
+  id: z
     .string()
     .uuid('El ID del proveedor debe ser un UUID válido')
     .nonempty('El ID del proveedor no puede estar vacío'),

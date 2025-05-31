@@ -1,4 +1,4 @@
-import RecipeProductResource from '@models/recipe_product_resourse'
+import RecipeProductResource from '@models/recipe_product_resource'
 import { RecipeProductResourceAttributes } from '@type/production/recipe_product_resourse'
 
 const serviceUpdateRecipeProductResource = async (

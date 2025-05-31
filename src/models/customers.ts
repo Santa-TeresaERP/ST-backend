@@ -4,10 +4,10 @@ import { CustomerAttributes } from '@type/alquiler/customers'
 import { v4 as uuid } from 'uuid'
 
 class Customer
-  extends Model<CustomerAttributes, Optional<CustomerAttributes, 'customer_id'>>
+  extends Model<CustomerAttributes, Optional<CustomerAttributes, 'id'>>
   implements CustomerAttributes
 {
-  public customer_id!: string
+  public id!: string
   public full_name!: string
   public dni!: number
   public phone!: string
@@ -16,7 +16,7 @@ class Customer
 
 Customer.init(
   {
-    customer_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,

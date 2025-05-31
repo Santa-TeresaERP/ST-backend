@@ -1,5 +1,5 @@
 export interface PlaceAttributes {
-  place_id?: string
+  id?: string
   location_id: string
   name: string
   area: string

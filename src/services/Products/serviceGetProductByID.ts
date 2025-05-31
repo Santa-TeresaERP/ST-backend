@@ -1,15 +1,39 @@
 import Product from '@models/product'
 import Category from '@models/categories'
-import { Identifier } from 'sequelize'
+import RecipeProductResource from '@models/recipe_product_resource'
+import RecipeProductConection from '@models/recipe_product_conections'
+import Resource from '@models/resource'
+const serviceGetProductByID = async (id: string) => {
+  const product = await Product.findByPk(id, {
+    attributes: ['id', 'name', 'description', 'price', 'imagen_url'],
+    include: [
+      {
+        model: Category,
+        as: 'category',
+        attributes: ['id', 'name'],
+      },
+      {
+        model: RecipeProductResource,
+        include: [
+          {
+            model: RecipeProductConection,
+            as: 'recipe_product_conections',
+            include: [
+              {
+                model: Resource,
+                as: 'resource',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  })
 
-const serviceGetProductByID = async (id: Identifier | undefined) => {
-  if (!id) {
-    throw new Error('El ID del producto es requerido') // Lanza un error si el ID no es válido
-  }
-  const product = await Product.findByPk(id, { include: Category })
   if (!product) {
-    throw new Error('Producto no encontrado') // Maneja el caso en que no se encuentre el producto
+    return { error: 'El producto no existe' }
   }
+
   return product
 }
 

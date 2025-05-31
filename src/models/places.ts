@@ -5,10 +5,10 @@ import { v4 as uuid } from 'uuid'
 import Location from '@models/locations'
 
 class Place
-  extends Model<PlaceAttributes, Optional<PlaceAttributes, 'place_id'>>
+  extends Model<PlaceAttributes, Optional<PlaceAttributes, 'id'>>
   implements PlaceAttributes
 {
-  public place_id!: string
+  public id!: string
   public location_id!: string
   public name!: string
   public area!: string
@@ -19,7 +19,7 @@ class Place
 
 Place.init(
   {
-    place_id: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: uuid,
       primaryKey: true,

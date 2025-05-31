@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { WarehouseResourceAttributes } from '@type/almacen/warehouse_resource'
 
 export const warehouseResourceSchema = z.object({
-  warehouse_resource_id: z
+  id: z
     .string()
     .uuid('El ID del recurso de almacén debe ser un UUID válido')
     .nonempty('El ID del recurso de almacén no puede estar vacío'),

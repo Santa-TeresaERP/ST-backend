@@ -2,7 +2,7 @@ import { CustomerAttributes } from '@type/alquiler/customers'
 import { z } from 'zod'
 
 const CustomerSchema = z.object({
-  customer_id: z.string().uuid().optional(),
+  id: z.string().uuid().optional(),
 
   full_name: z
     .string()

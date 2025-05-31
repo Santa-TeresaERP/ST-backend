@@ -11,7 +11,7 @@ const serviceUpdateResource = async (id: string, body: ResourceAttributes) => {
 
   const {
     name,
-    entry_quantity,
+    unit_price,
     total_cost,
     type_unit,
     supplier_id,
@@ -27,7 +27,7 @@ const serviceUpdateResource = async (id: string, body: ResourceAttributes) => {
   await resources
     .update({
       name,
-      entry_quantity,
+      unit_price,
       total_cost,
       type_unit,
       supplier_id,

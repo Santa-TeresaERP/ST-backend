@@ -15,7 +15,7 @@ router.get(
   '/:id',
   warehouseMovementResourceController.getWarehouseMovementResource,
 )
-router.put(
+router.patch(
   '/:id',
   warehouseMovementResourceController.updateWarehouseMovementResource,
 )

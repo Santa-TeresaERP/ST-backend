@@ -31,6 +31,7 @@ Lost.init(
   },
   {
     sequelize,
+    modelName: 'lost',
     tableName: 'lost',
     timestamps: true,
   },

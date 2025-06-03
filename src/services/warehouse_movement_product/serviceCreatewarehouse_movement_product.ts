@@ -23,7 +23,31 @@ const serviceCreatewarehouseMovementProduct = async (
   } = validation.data
 
   try {
-    // Crear un nuevo registro en la base de datos
+    // Buscar el WarehouseProduct antes de crear el movimiento
+    const warehouseProduct = await WarehouseProduct.findOne({
+      where: { warehouse_id, product_id },
+    })
+
+    if (!warehouseProduct) {
+      return { success: false, error: 'WarehouseProduct not found' }
+    }
+
+    // Validar stock suficiente antes de crear el movimiento
+    if (movement_type === 'salida' && warehouseProduct.quantity < quantity) {
+      return { success: false, error: 'Insufficient quantity in stock' }
+    }
+
+    // Actualizar cantidad
+    if (movement_type === 'entrada') {
+      warehouseProduct.quantity += quantity
+    } else if (movement_type === 'salida') {
+      warehouseProduct.quantity -= quantity
+    }
+
+    // Guardar el WarehouseProduct actualizado
+    await warehouseProduct.save()
+
+    // Ahora sí, crear el movimiento
     const newMovement = await WarehouseMovementProduct.create({
       warehouse_id,
       store_id,
@@ -33,29 +57,6 @@ const serviceCreatewarehouseMovementProduct = async (
       movement_date,
       observations,
     })
-
-    // Find the WarehouseProduct
-    const warehouseProduct = await WarehouseProduct.findOne({
-      where: { warehouse_id, product_id },
-    })
-
-    // If WarehouseProduct is not found, return an error
-    if (!warehouseProduct) {
-      return { success: false, error: 'WarehouseProduct not found' }
-    }
-
-    // Update quantity based on movement_type
-    if (movement_type === 'entrada') {
-      warehouseProduct.quantity += quantity
-    } else if (movement_type === 'salida') {
-      if (warehouseProduct.quantity < quantity) {
-        return { success: false, error: 'Insufficient quantity in stock' }
-      }
-      warehouseProduct.quantity -= quantity
-    }
-
-    // Save the updated WarehouseProduct
-    await warehouseProduct.save()
 
     return { success: true, movement: newMovement, warehouseProduct }
   } catch (error) {

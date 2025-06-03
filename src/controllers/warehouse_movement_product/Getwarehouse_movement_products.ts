@@ -9,8 +9,15 @@ const controllerGetWarehouseMovementProducts = async (
     const result =
       await useWarehouseMovementProduct.serviceGetwarehouseMovementProducts()
     res.json(result)
-  } catch {
-    res.status(500).json({ error: 'Error interno del servidor' })
+  } catch (error) {
+    console.error('Error al obtener movimientos:', error) // Log en consola
+
+    // Enviar el error también en la respuesta de Postman
+    res.status(500).json({
+      error: 'Error interno del servidor',
+      message: error instanceof Error ? error.message : 'Error desconocido',
+      stack: error instanceof Error ? error.stack : null, // Opcional, útil para debugging
+    })
   }
 }
 

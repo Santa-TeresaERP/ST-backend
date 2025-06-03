@@ -1,5 +1,5 @@
 export interface WarehouseMovomentResourceAttributes {
-  movement_id: string
+  id?: string
   warehouse_id: string
   resource_id: string
   type: string
@@ -7,6 +7,4 @@ export interface WarehouseMovomentResourceAttributes {
   quantity: number
   movement_date: Date
   observations?: string | null
-  createdAt?: Date
-  updatedAt?: Date
 }

@@ -17,8 +17,6 @@ class WarehouseProduct
   public product_id!: string
   public quantity!: number
   public entry_date!: Date
-  public createdAt?: Date
-  public updatedAt?: Date
 }
 
 WarehouseProduct.init(
@@ -43,16 +41,6 @@ WarehouseProduct.init(
     entry_date: {
       type: DataTypes.DATE,
       allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: DataTypes.NOW,
     },
   },
   {

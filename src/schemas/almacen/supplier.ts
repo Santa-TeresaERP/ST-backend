@@ -2,11 +2,6 @@ import { z } from 'zod'
 import { SuplierAttributes } from '@type/almacen/supplier'
 
 export const supplierSchema = z.object({
-  id: z
-    .string()
-    .uuid('El ID del proveedor debe ser un UUID válido')
-    .nonempty('El ID del proveedor no puede estar vacío'),
-
   ruc: z
     .number({ invalid_type_error: 'El RUC debe ser un número' })
     .min(1000000000, 'El RUC debe ser un número de 10 dígitos')
@@ -36,20 +31,10 @@ export const supplierSchema = z.object({
     .string()
     .min(1, 'La dirección es obligatoria')
     .max(200, 'La dirección no debe exceder los 200 caracteres'),
-
-  createdAt: z
-    .date({ invalid_type_error: 'La fecha de creación debe ser válida' })
-    .optional(),
-
-  updatedAt: z
-    .date({ invalid_type_error: 'La fecha de actualización debe ser válida' })
-    .optional(),
 })
 
-// Validación segura
 export const supplierValidation = (data: SuplierAttributes) =>
   supplierSchema.safeParse(data)
 export const supplierUpdateSchema = supplierSchema.partial()
-
 export const supplierUpdateValidation = (data: Partial<SuplierAttributes>) =>
   supplierUpdateSchema.safeParse(data)

@@ -7,7 +7,7 @@ import Product from './product'
 class RecipeProductResource
   extends Model<
     RecipeProductResourceAttributes,
-    Optional<RecipeProductResourceAttributes, never>
+    Optional<RecipeProductResourceAttributes, 'id'>
   >
   implements RecipeProductResourceAttributes
 {

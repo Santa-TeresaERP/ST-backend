@@ -8,6 +8,11 @@ const recipeProductResourceSchema = z.object({
     .string()
     .min(1, 'La cantidad requerida no puede estar vacía')
     .max(50, 'La cantidad requerida no debe exceder los 50 caracteres'),
+
+  unit: z.enum(['g', 'kg', 'ml', 'l', 'unidades'], {
+    invalid_type_error:
+      'El tipo de unidad debe ser uno de: g, kg, ml, l, unidades',
+  }),
 })
 
 export const recipeProductResourceValidation = (

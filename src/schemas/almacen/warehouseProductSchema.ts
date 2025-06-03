@@ -2,11 +2,6 @@ import { z } from 'zod'
 import { WarehouseProductAttributes } from '@type/almacen/warehouse_product'
 
 export const warehouseProductSchema = z.object({
-  id: z
-    .string()
-    .uuid('El ID del producto de almacén debe ser un UUID válido')
-    .nonempty('El ID del producto de almacén no puede estar vacío'),
-
   warehouse_id: z
     .string()
     .uuid('El ID del almacén debe ser un UUID válido')
@@ -24,20 +19,7 @@ export const warehouseProductSchema = z.object({
   entry_date: z.coerce.date({
     invalid_type_error: 'La fecha de entrada debe ser válida',
   }),
-
-  createdAt: z
-    .date({
-      invalid_type_error: 'La fecha de creación debe ser una fecha válida',
-    })
-    .optional(),
-
-  updatedAt: z
-    .date({
-      invalid_type_error: 'La fecha de actualización debe ser una fecha válida',
-    })
-    .optional(),
 })
 
-// Validación segura
 export const warehouseProductValidation = (data: WarehouseProductAttributes) =>
   warehouseProductSchema.safeParse(data)

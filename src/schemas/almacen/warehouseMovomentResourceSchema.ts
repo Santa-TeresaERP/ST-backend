@@ -2,11 +2,6 @@ import { z } from 'zod'
 import { WarehouseMovomentResourceAttributes } from '@type/almacen/warehouse_movoment_resource'
 
 export const warehouseMovementResourceSchema = z.object({
-  movement_id: z
-    .string()
-    .uuid('El ID del movimiento debe ser un UUID válido')
-    .nonempty('El ID del movimiento no puede estar vacío'),
-
   warehouse_id: z
     .string()
     .uuid('El ID del almacén debe ser un UUID válido')
@@ -39,21 +34,8 @@ export const warehouseMovementResourceSchema = z.object({
     .string()
     .max(150, 'Las observaciones no deben exceder los 150 caracteres')
     .optional(),
-
-  createdAt: z
-    .date({
-      invalid_type_error: 'La fecha de creación debe ser una fecha válida',
-    })
-    .optional(),
-
-  updatedAt: z
-    .date({
-      invalid_type_error: 'La fecha de actualización debe ser una fecha válida',
-    })
-    .optional(),
 })
 
-// Validación segura
 export const warehouseMovementResourceValidation = (
   data: WarehouseMovomentResourceAttributes,
 ) => warehouseMovementResourceSchema.safeParse(data)

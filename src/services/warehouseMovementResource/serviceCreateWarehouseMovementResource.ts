@@ -12,7 +12,7 @@ const serviceCreateWarehouseMovementResource = async (
   }
 
   const {
-    movement_id,
+    id,
     warehouse_id,
     resource_id,
     type,
@@ -23,7 +23,7 @@ const serviceCreateWarehouseMovementResource = async (
   } = validation.data
 
   const newRecord = await WarehouseMovementResource.create({
-    movement_id,
+    id,
     warehouse_id,
     resource_id,
     type,

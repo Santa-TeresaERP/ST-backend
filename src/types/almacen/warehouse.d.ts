@@ -1,9 +1,7 @@
 export interface WarehouseAttributes {
-  warehouse_id?: string
+  id?: string
   name: string
   location: string
   capacity: number
   observation?: string
-  createdAt?: Date
-  updatedAt?: Date
 }

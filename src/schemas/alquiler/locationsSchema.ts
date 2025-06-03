@@ -2,8 +2,6 @@ import { LocationAttributes } from '@type/alquiler/locations'
 import { z } from 'zod'
 
 const LocationSchema = z.object({
-  id: z.string().uuid().optional(),
-
   name: z
     .string()
     .min(1, 'El nombre es obligatorio')

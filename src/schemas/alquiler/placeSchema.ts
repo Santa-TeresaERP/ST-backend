@@ -2,8 +2,6 @@ import { PlaceAttributes } from '@type/alquiler/places'
 import { z } from 'zod'
 
 const PlaceSchema = z.object({
-  id: z.string().uuid().optional(),
-
   location_id: z.string().uuid({
     message: 'El ID de la ubicación debe ser un UUID válido',
   }),

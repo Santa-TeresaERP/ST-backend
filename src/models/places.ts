@@ -12,9 +12,6 @@ class Place
   public location_id!: string
   public name!: string
   public area!: string
-
-  public readonly createdAt!: Date
-  public readonly updatedAt!: Date
 }
 
 Place.init(
@@ -35,16 +32,6 @@ Place.init(
     area: {
       type: DataTypes.STRING(100),
       allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
     },
   },
   {

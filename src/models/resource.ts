@@ -16,8 +16,6 @@ class Resource
   public supplier_id?: string
   public observation?: string
   public purchase_date!: Date
-  public createdAt?: Date
-  public updatedAt?: Date
 }
 
 Resource.init(
@@ -55,16 +53,6 @@ Resource.init(
     purchase_date: {
       type: DataTypes.DATE,
       allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: DataTypes.NOW,
     },
   },
   {

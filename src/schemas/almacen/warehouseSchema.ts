@@ -21,18 +21,6 @@ export const warehouseSchema = z.object({
     .string()
     .max(150, 'La observación no debe exceder los 150 caracteres')
     .optional(),
-
-  createdAt: z
-    .date({
-      invalid_type_error: 'La fecha de creación debe ser una fecha válida',
-    })
-    .optional(),
-
-  updatedAt: z
-    .date({
-      invalid_type_error: 'La fecha de actualización debe ser una fecha válida',
-    })
-    .optional(),
 })
 
 // Validación segura

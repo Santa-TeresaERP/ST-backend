@@ -1,43 +1,44 @@
-import Resource from '@models/resource'
-import { ResourceAttributes } from '@type/almacen/resource'
-import { resourceValidation } from 'src/schemas/almacen/resourceSchema'
+import RecipeProductConection from '@models/recipe_product_conections'
+import RecipeProductResource from '@models/recipe_product_resource'
+import { RecipeProductResourceAttributes } from '@type/production/recipe_product_resourse'
+import { recipeProductResourceValidation } from 'src/schemas/production/recipe_product_resourse'
 
-const serviceUpdateResource = async (id: string, body: ResourceAttributes) => {
-  const validation = resourceValidation(body)
+const serviceUpdateRecipeProductResource = async (
+  id: string,
+  body: { resource_id: string } & RecipeProductResourceAttributes,
+) => {
+  const { resource_id, ...RecipeProductResourceData } = body
+
+  const validation = recipeProductResourceValidation(RecipeProductResourceData)
 
   if (!validation.success) {
-    return { error: validation.error.errors }
+    return { error: validation.error.flatten().fieldErrors }
   }
 
-  const {
-    name,
-    unit_price,
-    total_cost,
-    type_unit,
-    supplier_id,
-    purchase_date,
-    observation,
-  } = validation.data
+  const { product_id, quantity_required, unit } = validation.data
 
-  const resources = await Resource.findByPk(id)
-  if (!resources) {
-    return { error: 'El rol no existe' }
+  const recipeProduct = await RecipeProductResource.findByPk(id)
+  if (!recipeProduct) throw new Error('RecipeProductResource no encontrado')
+
+  await recipeProduct.update({
+    product_id,
+    quantity_required,
+    unit,
+  })
+
+  // Manejar la relación con el recurso (igual que en create)
+  const existingRelation = await RecipeProductConection.findOne({
+    where: { resource_id, recipe_id: recipeProduct.id },
+  })
+
+  if (!existingRelation) {
+    await RecipeProductConection.create({
+      resource_id,
+      recipe_id: recipeProduct.id,
+    })
   }
 
-  await resources
-    .update({
-      name,
-      unit_price,
-      total_cost,
-      type_unit,
-      supplier_id,
-      purchase_date,
-      observation,
-    })
-    .catch((error) => {
-      return { error: 'Error al actualizar el recurso', details: error.message }
-    })
-  return resources
+  return recipeProduct
 }
 
-export default serviceUpdateResource
+export default serviceUpdateRecipeProductResource

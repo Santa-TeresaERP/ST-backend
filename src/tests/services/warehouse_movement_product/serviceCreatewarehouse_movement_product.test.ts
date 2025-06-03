@@ -169,7 +169,10 @@ describe('serviceCreatewarehouseMovementProduct', () => {
     mockWarehouseProduct.save = jest
       .fn()
       .mockResolvedValue(mockWarehouseProduct)
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/Endpoint_Images
     ;(warehouseMovementProductValidation as jest.Mock).mockReturnValue({
       success: true,
       data: mockMovementData,

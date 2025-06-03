@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import useUser from '@services/user/index'
+import useUser from '@services/User/index'
 
 const changePassword = async (req: Request, res: Response) => {
   try {

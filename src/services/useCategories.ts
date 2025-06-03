@@ -41,6 +41,16 @@ class useCategories {
     }
   }
 
+  static async getCategory(id: string) {
+    try {
+      const categories = await Category.findByPk(id)
+      return categories
+    } catch (error) {
+      console.error('Error al obtener categorías:', error)
+      throw new Error('Error al obtener categorías')
+    }
+  }
+
   // Actualizar una categoría
   static async updateCategory(id: string, body: CategoryAttributes) {
     const validation = categoryValidation(body)

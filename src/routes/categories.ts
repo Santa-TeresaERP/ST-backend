@@ -8,6 +8,8 @@ router.post('/', authorization, categoriesController.createCategory)
 
 router.get('/', authorization, categoriesController.getCategories)
 
+router.get('/:id', authorization, categoriesController.getCategory)
+
 router.patch('/:id', authorization, categoriesController.updateCategory)
 
 router.delete('/:id', authorization, categoriesController.deleteCategory)

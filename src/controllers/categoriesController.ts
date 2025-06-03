@@ -36,6 +36,24 @@ class categoriesController {
     }
   }
 
+  // Obtener una categoría por ID
+  static getCategory: RequestHandler = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    try {
+      const category = await useCategories.getCategory(req.params.id)
+      if (!category) {
+        res.status(404).json({ error: 'Categoría no encontrada' })
+      } else {
+        res.json(category)
+      }
+    } catch (error) {
+      console.error('Error al obtener la categoría:', error)
+      res.status(500).json({ error: 'Error interno del servidor' })
+    }
+  }
+
   // Actualizar una categoría
   static updateCategory: RequestHandler = async (
     req: Request,

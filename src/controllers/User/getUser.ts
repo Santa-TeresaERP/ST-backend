@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import useUser from '@services/user/index'
+import useUser from '@services/User/index'
 import { HttpError } from '@errors/http'
 
 const getUser = async (req: Request, res: Response) => {

@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import { AuthRequest as Request } from '@type/user/auth'
 import { HttpError } from '@errors/http'
-import useUser from '@services/user/index'
+import useUser from '@services/User/index'
 
 const createUser = async (req: Request, res: Response) => {
   try {

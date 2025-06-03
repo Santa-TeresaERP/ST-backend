@@ -88,12 +88,12 @@ Warehouse.hasMany(WarehouseMovementResource, {
 })
 
 WarehouseMovementResource.belongsTo(Resource, {
-  foreignKey: 'product_id',
-  as: 'product',
+  foreignKey: 'resource_id',
+  as: 'resource',
 })
 
 Resource.hasMany(WarehouseMovementResource, {
-  foreignKey: 'product_id',
+  foreignKey: 'resource_id',
   as: 'warehouse_movement_resources',
 })
 

@@ -1,7 +1,6 @@
 import Category from '@models/categories'
 import Product from '@models/product'
-import RecipeProductConection from '@models/recipe_product_conections'
-import RecipeProductResource from '@models/recipe_product_resource'
+import Recipe from '@models/recipe'
 import Resource from '@models/resource'
 
 const serviceGetAllProduct = async () => {
@@ -10,17 +9,12 @@ const serviceGetAllProduct = async () => {
     include: [
       { model: Category, as: 'category' },
       {
-        model: RecipeProductResource,
+        model: Recipe,
         include: [
           {
-            model: RecipeProductConection,
-            as: 'recipe_product_conections',
-            include: [
-              {
-                model: Resource,
-                as: 'resource',
-              },
-            ],
+            model: Resource,
+            as: 'resource',
+            attributes: ['id', 'name', 'description', 'unit'],
           },
         ],
       },

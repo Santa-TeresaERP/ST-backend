@@ -1,7 +1,6 @@
 import Product from '@models/product'
 import Category from '@models/categories'
-import RecipeProductResource from '@models/recipe_product_resource'
-import RecipeProductConection from '@models/recipe_product_conections'
+import Recipe from '@models/recipe'
 import Resource from '@models/resource'
 const serviceGetProductByID = async (id: string) => {
   const product = await Product.findByPk(id, {
@@ -13,17 +12,12 @@ const serviceGetProductByID = async (id: string) => {
         attributes: ['id', 'name'],
       },
       {
-        model: RecipeProductResource,
+        model: Recipe,
         include: [
           {
-            model: RecipeProductConection,
-            as: 'recipe_product_conections',
-            include: [
-              {
-                model: Resource,
-                as: 'resource',
-              },
-            ],
+            model: Resource,
+            as: 'resource',
+            attributes: ['id', 'name', 'description', 'unit'],
           },
         ],
       },

@@ -67,7 +67,7 @@ Recipe.belongsTo(Resource, {
   as: 'resource',
 })
 
-Product.hasOne(Recipe, {
+Product.hasMany(Recipe, {
   foreignKey: 'productId',
   as: 'recipe', // Nota: en singular
 })

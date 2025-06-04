@@ -8,30 +8,39 @@ const serviceCreateWarehouseResource = async (
   const validation = warehouseResourceValidation(body)
 
   if (!validation.success) {
-    return { error: validation.error.errors }
+    // Devuelve el error detallado de validación
+    return {
+      error: 'Error de validación',
+      details: validation.error.errors,
+      body, // Incluye el body recibido para depuración
+    }
   }
 
-  const { id, warehouse_id, resource_id, quantity, entry_date } =
-    validation.data
+  const { warehouse_id, resource_id, quantity, entry_date } = validation.data
 
   try {
     const newWarehouseResource = await WarehouseResource.create({
-      id,
       warehouse_id,
       resource_id,
       quantity,
       entry_date,
     })
 
-    return newWarehouseResource
+    return { resource: newWarehouseResource }
   } catch (error: unknown) {
+    // Devuelve el error real de la base de datos con detalles
     if (error instanceof Error) {
       return {
         error: 'Error al crear el recurso de almacén',
         details: error.message,
+        stack: error.stack,
+        body, // Incluye el body recibido para depuración
       }
     }
-    return { error: 'Error desconocido al crear el recurso de almacén' }
+    return {
+      error: 'Error desconocido al crear el recurso de almacén',
+      body,
+    }
   }
 }
 

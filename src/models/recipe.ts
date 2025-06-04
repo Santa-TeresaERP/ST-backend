@@ -76,3 +76,5 @@ Resource.hasMany(Recipe, {
   foreignKey: 'resourceId',
   as: 'recipes',
 })
+
+export default Recipe

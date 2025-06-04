@@ -13,7 +13,6 @@ const serviceCreateWarehouseMovementResource = async (
   }
 
   const {
-    id,
     warehouse_id,
     resource_id,
     // type, // Removed type
@@ -52,7 +51,6 @@ const serviceCreateWarehouseMovementResource = async (
   }
 
   const newRecord = await WarehouseMovementResource.create({
-    id,
     warehouse_id,
     resource_id,
     // type, // Removed type

@@ -34,6 +34,7 @@ const serviceUpdateWarehouseMovementResource = async (
   await record.update({
     warehouse_id,
     resource_id,
+
     movement_type,
     quantity,
     movement_date,

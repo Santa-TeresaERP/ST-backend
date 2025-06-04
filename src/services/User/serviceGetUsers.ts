@@ -1,7 +1,6 @@
 import Roles from '@models/roles'
 import User from '@models/user'
 import Permissions from '@models/permissions'
-import RolesPermissions from '@models/rolesPermissions'
 
 const serviceGetUsers = async (): Promise<User[]> => {
   const users = await User.findAll({
@@ -11,12 +10,7 @@ const serviceGetUsers = async (): Promise<User[]> => {
         model: Roles,
         include: [
           {
-            model: RolesPermissions,
-            include: [
-              {
-                model: Permissions,
-              },
-            ],
+            model: Permissions,
           },
         ],
       },

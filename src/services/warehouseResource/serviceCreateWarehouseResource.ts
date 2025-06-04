@@ -11,12 +11,10 @@ const serviceCreateWarehouseResource = async (
     return { error: validation.error.errors }
   }
 
-  const { id, warehouse_id, resource_id, quantity, entry_date } =
-    validation.data
+  const { warehouse_id, resource_id, quantity, entry_date } = validation.data
 
   try {
     const newWarehouseResource = await WarehouseResource.create({
-      id,
       warehouse_id,
       resource_id,
       quantity,

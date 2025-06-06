@@ -12,6 +12,9 @@ class WarehouseResource
   >
   implements WarehouseResourceAttributes
 {
+  static async findById(id: string): Promise<WarehouseResource | null> {
+    return await WarehouseResource.findOne({ where: { id } })
+  }
   public id?: string
   public warehouse_id!: string
   public resource_id!: string

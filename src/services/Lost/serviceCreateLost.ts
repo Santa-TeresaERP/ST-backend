@@ -1,5 +1,4 @@
 import Lost from '@models/lost'
-import Product from '@models/product'
 import Production from '@models/production'
 import { lostAttributes } from '@type/production/lost'
 
@@ -7,7 +6,7 @@ export default async function createLost(
   lostData: Omit<lostAttributes, 'id' | 'created_at'>,
 ) {
   try {
-    const product = await Product.findByPk(lostData.production_id)
+    const product = await Production.findByPk(lostData.production_id)
     if (!product) {
       throw new Error('Producto no encontrado')
     }

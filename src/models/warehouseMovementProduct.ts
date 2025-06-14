@@ -15,7 +15,7 @@ class WarehouseMovementProduct
 {
   public id!: string
   public warehouse_id!: string
-  public store_id!: string
+  public store_id?: string
   public product_id!: string
   public movement_type!: string
   public quantity!: number
@@ -36,7 +36,7 @@ WarehouseMovementProduct.init(
     },
     store_id: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
     },
     product_id: {
       type: DataTypes.UUID,

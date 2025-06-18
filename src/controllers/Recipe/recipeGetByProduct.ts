@@ -11,6 +11,7 @@ const getRecipesByProd = async (req: Request, res: Response) => {
         error: 'No recipes found for this product',
         message: `No recipes found for product with ID ${productId}`,
       })
+      return
     }
 
     res.status(200).json(recipes)

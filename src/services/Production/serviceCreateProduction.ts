@@ -3,8 +3,7 @@ import { productionAttributes } from '@type/production/production'
 import { productionValidation } from 'src/schemas/production/productionSchema'
 import Product from '@models/product'
 import PlantProduction from '@models/plant_production'
-import RecipeProductResource from '@models/recipe_product_resource'
-import RecipeProductConection from '@models/recipe_product_conections'
+import Recipe from '@models/recipe'
 import WarehouseResource from '@models/warehouseResource'
 import Resource from '@models/resource'
 
@@ -29,8 +28,9 @@ const serviceCreateProduction = async (body: productionAttributes) => {
     plant_id,
   })
 
-  const recetas = await RecipeProductResource.findAll({
-    where: { product_id: productId },
+  // Ahora obtenemos las recetas directamente de la tabla Recipe
+  const recetas = await Recipe.findAll({
+    where: { productId },
   })
 
   const resumenRecursos: {
@@ -41,68 +41,60 @@ const serviceCreateProduction = async (body: productionAttributes) => {
   }[] = []
 
   for (const receta of recetas) {
-    const conexiones = await RecipeProductConection.findAll({
-      where: { recipe_id: receta.id },
+    // Cada receta ya tiene resourceId, quantity y unit
+    const cantidadTotal =
+      parseFloat(receta.quantity.toString()) * quantityProduced
+
+    const entradas = await WarehouseResource.findAll({
+      where: { resource_id: receta.resourceId },
+      order: [['entry_date', 'ASC']],
     })
 
-    for (const conexion of conexiones) {
-      const cantidadTotal =
-        parseFloat(receta.quantity_required.toString()) * quantityProduced
+    let cantidadRestante = cantidadTotal
 
-      const entradas = await WarehouseResource.findAll({
-        where: { resource_id: conexion.resource_id },
-        order: [['entry_date', 'ASC']],
-      })
+    for (const entrada of entradas) {
+      const cantidadDisponible = entrada.quantity
+      const cantidadADescontar = Math.min(cantidadDisponible, cantidadRestante)
 
-      let cantidadRestante = cantidadTotal
+      entrada.quantity -= cantidadADescontar
+      await entrada.save()
 
-      for (const entrada of entradas) {
-        const cantidadDisponible = entrada.quantity
-        const cantidadADescontar = Math.min(
-          cantidadDisponible,
-          cantidadRestante,
-        )
+      cantidadRestante -= cantidadADescontar
 
-        entrada.quantity -= cantidadADescontar
-        await entrada.save()
+      if (cantidadRestante <= 0) break
+    }
 
-        cantidadRestante -= cantidadADescontar
+    // Si aún falta descontar, restar lo que falta a la última entrada (puede quedar en negativo)
+    if (cantidadRestante > 0) {
+      const ultimaEntrada = entradas[entradas.length - 1]
 
-        if (cantidadRestante <= 0) break
-      }
-
-      // Si aún falta descontar, restar lo que falta a la última entrada (puede quedar en negativo)
-      if (cantidadRestante > 0) {
-        const ultimaEntrada = entradas[entradas.length - 1]
-
-        if (ultimaEntrada) {
-          ultimaEntrada.quantity -= cantidadRestante
-          await ultimaEntrada.save()
-        } else {
-          // No había entradas — crear una sola con cantidad negativa si se desea
-          await WarehouseResource.create({
-            warehouse_id: plant_id,
-            resource_id: conexion.resource_id,
-            quantity: -cantidadRestante,
-            entry_date: new Date(),
-          })
-        }
-      }
-
-      const recurso = await Resource.findByPk(conexion.resource_id)
-      if (!recurso) continue
-
-      const yaExiste = resumenRecursos.find(
-        (r) => r.recurso_id === conexion.resource_id,
-      )
-      if (!yaExiste) {
-        resumenRecursos.push({
-          recurso_id: conexion.resource_id,
-          nombre: recurso.name,
-          cantidad_total: cantidadTotal,
-          unidad: receta.unit,
+      if (ultimaEntrada) {
+        ultimaEntrada.quantity -= cantidadRestante
+        await ultimaEntrada.save()
+      } else {
+        // No había entradas — crear una sola con cantidad negativa si se desea
+        await WarehouseResource.create({
+          warehouse_id: plant_id,
+          resource_id: receta.resourceId,
+          quantity: -cantidadRestante,
+          entry_date: new Date(),
         })
       }
+    }
+
+    const recurso = await Resource.findByPk(receta.resourceId)
+    if (!recurso) continue
+
+    const yaExiste = resumenRecursos.find(
+      (r) => r.recurso_id === receta.resourceId,
+    )
+    if (!yaExiste) {
+      resumenRecursos.push({
+        recurso_id: receta.resourceId,
+        nombre: recurso.name,
+        cantidad_total: cantidadTotal,
+        unidad: receta.unit,
+      })
     }
   }
 

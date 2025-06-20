@@ -50,14 +50,13 @@ const serviceCreatewarehouseMovementProduct = async (
     // Ahora sí, crear el movimiento
     const newMovement = await WarehouseMovementProduct.create({
       warehouse_id,
-      store_id,
+      store_id: store_id || null, // permite null si no se envía
       product_id,
       movement_type,
       quantity,
       movement_date,
       observations,
     })
-
     return { success: true, movement: newMovement, warehouseProduct }
   } catch (error) {
     return {

@@ -1,44 +1,39 @@
-import RecipeProductConection from '@models/recipe_product_conections'
-import RecipeProductResource from '@models/recipe_product_resource'
-import { RecipeProductResourceAttributes } from '@type/production/recipe_product_resourse'
-import { recipeProductResourceValidation } from 'src/schemas/production/recipe_product_resourse'
+import Resource from '@models/resource'
+import { ResourceAttributes } from '@type/almacen/resource'
+import { resourceValidation } from 'src/schemas/almacen/resourceSchema'
 
-const serviceUpdateRecipeProductResource = async (
-  id: string,
-  body: { resource_id: string } & RecipeProductResourceAttributes,
-) => {
-  const { resource_id, ...RecipeProductResourceData } = body
-
-  const validation = recipeProductResourceValidation(RecipeProductResourceData)
+const serviceUpdateResource = async (id: string, body: ResourceAttributes) => {
+  const validation = resourceValidation(body)
 
   if (!validation.success) {
-    return { error: validation.error.flatten().fieldErrors }
+    return { error: validation.error.errors }
   }
 
-  const { product_id, quantity_required, unit } = validation.data
+  const {
+    name,
+    unit_price,
+    type_unit,
+    total_cost,
+    supplier_id,
+    observation,
+    purchase_date,
+  } = validation.data
 
-  const recipeProduct = await RecipeProductResource.findByPk(id)
-  if (!recipeProduct) throw new Error('RecipeProductResource no encontrado')
-
-  await recipeProduct.update({
-    product_id,
-    quantity_required,
-    unit,
-  })
-
-  // Manejar la relación con el recurso (igual que en create)
-  const existingRelation = await RecipeProductConection.findOne({
-    where: { resource_id, recipe_id: recipeProduct.id },
-  })
-
-  if (!existingRelation) {
-    await RecipeProductConection.create({
-      resource_id,
-      recipe_id: recipeProduct.id,
-    })
+  const resource = await Resource.findByPk(id)
+  if (!resource) {
+    return { error: 'El recurso no existe' }
   }
 
-  return recipeProduct
+  await resource.update({
+    name,
+    unit_price,
+    type_unit,
+    total_cost,
+    supplier_id,
+    observation,
+    purchase_date,
+  })
+  return resource
 }
 
-export default serviceUpdateRecipeProductResource
+export default serviceUpdateResource

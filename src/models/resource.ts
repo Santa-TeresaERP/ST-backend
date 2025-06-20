@@ -10,12 +10,7 @@ class Resource
 {
   public id?: string
   public name!: string
-  public unit_price!: string
-  public type_unit!: string
-  public total_cost!: number
-  public supplier_id?: string
   public observation?: string
-  public purchase_date!: Date
 }
 
 Resource.init(
@@ -29,30 +24,9 @@ Resource.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    unit_price: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    type_unit: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: 'unidades',
-    },
-    total_cost: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    supplier_id: {
-      type: DataTypes.UUID,
-      allowNull: true,
-    },
     observation: {
       type: DataTypes.STRING,
       allowNull: true,
-    },
-    purchase_date: {
-      type: DataTypes.DATE,
-      allowNull: false,
     },
   },
   {

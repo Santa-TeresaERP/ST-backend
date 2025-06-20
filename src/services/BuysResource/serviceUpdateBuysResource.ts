@@ -1,6 +1,6 @@
-import WarehouseResource from '@models/warehouseResource'
-import { warehouseResourceValidation } from 'src/schemas/almacen/warehouseResourceSchema'
-import { WarehouseResourceAttributes } from '@type/almacen/warehouse_resource'
+import WarehouseResource from '@models/buysResource'
+import { warehouseResourceValidation } from 'src/schemas/almacen/BuysResourceSchema'
+import { WarehouseResourceAttributes } from '@type/almacen/buys_resource'
 
 const serviceUpdateWarehouseResource = async (
   id: string,

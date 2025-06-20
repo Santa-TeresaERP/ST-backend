@@ -10,7 +10,7 @@ const serviceCreatePlant = async (body: plant_productionAttributes) => {
     return { error: validation.error.errors }
   }
 
-  const { plant_name, address } = validation.data
+  const { plant_name, address, warehouse_id } = validation.data
 
   // Verificar si ya existe una planta con el mismo nombre
   const existing = await PlantProduction.findOne({ where: { plant_name } })
@@ -22,6 +22,7 @@ const serviceCreatePlant = async (body: plant_productionAttributes) => {
   const newPlant = await PlantProduction.create({
     plant_name,
     address,
+    warehouse_id, // Nuevo campo agregado
   })
 
   return newPlant

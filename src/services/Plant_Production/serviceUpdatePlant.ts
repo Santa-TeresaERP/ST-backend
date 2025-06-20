@@ -13,7 +13,7 @@ const serviceUpdatePlant = async (
     return { error: validation.error.errors }
   }
 
-  const { plant_name, address } = validation.data
+  const { plant_name, address, warehouse_id } = validation.data
 
   // Buscar la planta por ID
   const plant = await PlantProduction.findByPk(id)
@@ -24,7 +24,8 @@ const serviceUpdatePlant = async (
   // Actualizar los campos
   await plant.update({
     plant_name,
-    address, // `address` ya es un string, no necesita conversión
+    address,
+    warehouse_id, // Nuevo campo agregado
   })
 
   return plant

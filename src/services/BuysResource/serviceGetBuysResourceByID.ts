@@ -1,6 +1,6 @@
 import BuysResource from '@models/buysResource'
 
-const GetBuysResourceById = async (id: string) => {
+const serviceGetBuysResourceById = async (id: string) => {
   try {
     const resource = await BuysResource.findById(id) // Suponiendo que usas Mongoose
     if (resource === null || resource === undefined) {
@@ -16,4 +16,4 @@ const GetBuysResourceById = async (id: string) => {
   }
 }
 
-export default GetBuysResourceById
+export default serviceGetBuysResourceById

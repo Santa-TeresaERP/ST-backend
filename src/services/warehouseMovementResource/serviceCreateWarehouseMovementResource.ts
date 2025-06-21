@@ -1,7 +1,7 @@
 import WarehouseMovementResource from '@models/warehouseMovomentResource'
 import { WarehouseMovomentResourceAttributes } from '@type/almacen/warehouse_movoment_resource'
 import { warehouseMovementResourceValidation } from 'src/schemas/almacen/warehouseMovomentResourceSchema'
-import WarehouseResource from '@models/warehouseResource' // Added import
+import BuysResource from '@models/buysResource'
 
 const serviceCreateWarehouseMovementResource = async (
   body: WarehouseMovomentResourceAttributes,
@@ -23,7 +23,7 @@ const serviceCreateWarehouseMovementResource = async (
   } = validation.data
 
   // Find or create WarehouseResource
-  let warehouseResource = await WarehouseResource.findOne({
+  let warehouseResource = await BuysResource.findOne({
     where: { warehouse_id, resource_id },
   })
 
@@ -41,10 +41,14 @@ const serviceCreateWarehouseMovementResource = async (
       warehouseResource.quantity += quantity
       await warehouseResource.save()
     } else {
-      warehouseResource = await WarehouseResource.create({
+      warehouseResource = await BuysResource.create({
         warehouse_id,
         resource_id,
         quantity,
+        type_unit: 'unidad', // Assuming a default unit type
+        unit_price: 0, // Assuming a default unit price
+        total_cost: 0, // Assuming a default total cost
+        supplier_id: '', // Assuming no supplier for this movement
         entry_date: new Date(), // Assuming entry_date should be now
       })
     }

@@ -4,7 +4,7 @@ import { productionValidation } from 'src/schemas/production/productionSchema'
 import Product from '@models/product'
 import PlantProduction from '@models/plant_production'
 import Recipe from '@models/recipe'
-import WarehouseResource from '@models/warehouseResource'
+import BuysResource from '@models/buysResource'
 import Resource from '@models/resource'
 
 const serviceCreateProduction = async (body: productionAttributes) => {
@@ -45,7 +45,7 @@ const serviceCreateProduction = async (body: productionAttributes) => {
     const cantidadTotal =
       parseFloat(receta.quantity.toString()) * quantityProduced
 
-    const entradas = await WarehouseResource.findAll({
+    const entradas = await BuysResource.findAll({
       where: { resource_id: receta.resourceId },
       order: [['entry_date', 'ASC']],
     })
@@ -73,10 +73,14 @@ const serviceCreateProduction = async (body: productionAttributes) => {
         await ultimaEntrada.save()
       } else {
         // No había entradas — crear una sola con cantidad negativa si se desea
-        await WarehouseResource.create({
+        await BuysResource.create({
           warehouse_id: plant_id,
           resource_id: receta.resourceId,
           quantity: -cantidadRestante,
+          type_unit: receta.unit,
+          unit_price: 0, // O el precio que corresponda
+          total_cost: 0, // O el costo que corresponda
+          supplier_id: '', // O el ID del proveedor si se desea
           entry_date: new Date(),
         })
       }

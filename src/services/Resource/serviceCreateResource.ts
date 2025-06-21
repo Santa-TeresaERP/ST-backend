@@ -9,15 +9,7 @@ const serviceCreateResource = async (body: ResourceAttributes) => {
     return { error: validation.error.errors }
   }
 
-  const {
-    name,
-    unit_price,
-    total_cost,
-    type_unit,
-    supplier_id,
-    purchase_date,
-    observation,
-  } = validation.data
+  const { name, observation } = validation.data
 
   const existing = await Resource.findOne({ where: { name } })
   if (existing) {
@@ -26,11 +18,6 @@ const serviceCreateResource = async (body: ResourceAttributes) => {
 
   const newResource = await Resource.create({
     name,
-    unit_price,
-    total_cost,
-    type_unit,
-    supplier_id,
-    purchase_date,
     observation,
   }).catch((error) => {
     return { error: 'Error al crear el recurso', details: error.message }

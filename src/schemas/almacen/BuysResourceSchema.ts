@@ -34,5 +34,5 @@ export const buysResourceSchema = z.object({
   }),
 })
 
-export const warehouseResourceValidation = (data: buysResourceAttributes) =>
+export const buysResourceValidation = (data: buysResourceAttributes) =>
   buysResourceSchema.safeParse(data)

@@ -6,4 +6,5 @@ export interface SuplierAttributes {
   email: string
   phone: number
   address: string
+  status?: boolean // ← Para eliminación lógica
 }

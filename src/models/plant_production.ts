@@ -13,6 +13,7 @@ class PlantProduction
   public id!: string
   public plant_name!: string
   public address!: string
+  public warehouse_id!: string // Nuevo campo agregado
   public createdAt?: Date
   public updatedAt?: Date
 }
@@ -22,21 +23,22 @@ PlantProduction.init(
     id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
     plant_name: { type: DataTypes.STRING, allowNull: false },
     address: { type: DataTypes.STRING, allowNull: false },
+    warehouse_id: { type: DataTypes.UUID, allowNull: false }, // Nuevo campo agregado
     createdAt: {
       type: DataTypes.DATE,
       allowNull: true,
-      defaultValue: DataTypes.NOW, // Fecha de creación por defecto
+      defaultValue: DataTypes.NOW,
     },
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
-      defaultValue: DataTypes.NOW, // Fecha de actualización por defecto
+      defaultValue: DataTypes.NOW,
     },
   },
   {
     sequelize,
     tableName: 'plant_production',
-    timestamps: true, // Sequelize se encargará de createdAt y updatedAt automáticamente
+    timestamps: true,
   },
 )
 

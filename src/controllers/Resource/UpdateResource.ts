@@ -7,6 +7,7 @@ const controllerUpdateResource = async (req: Request, res: Response) => {
 
   if ('error' in result) {
     res.status(400).json({ error: result.error })
+    return
   }
 
   res.json(result)

@@ -4,8 +4,11 @@ import { ResourceAttributes } from '@type/almacen/resource'
 import { v4 as uuid } from 'uuid'
 import Supplier from '@models/suplier'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface ResourceCreationAttributes
+  extends Optional<ResourceAttributes, 'id' | 'status'> {}
 class Resource
-  extends Model<ResourceAttributes, Optional<ResourceAttributes, 'id'>>
+  extends Model<ResourceAttributes, ResourceCreationAttributes>
   implements ResourceAttributes
 {
   public id?: string
@@ -16,6 +19,7 @@ class Resource
   public supplier_id?: string
   public observation?: string
   public purchase_date!: Date
+  public status?: boolean // ← Nuevo campo para eliminación lógica
 }
 
 Resource.init(
@@ -54,6 +58,11 @@ Resource.init(
       type: DataTypes.DATE,
       allowNull: false,
     },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true, // ← Activo por defecto
+    },
   },
   {
     sequelize,
@@ -66,6 +75,7 @@ Resource.belongsTo(Supplier, {
   foreignKey: 'supplier_id',
   as: 'supplier',
 })
+
 Supplier.hasMany(Resource, {
   foreignKey: 'supplier_id',
   as: 'resources',

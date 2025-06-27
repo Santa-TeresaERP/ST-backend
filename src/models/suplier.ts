@@ -3,8 +3,12 @@ import sequelize from '@config/database'
 import { SuplierAttributes } from '@type/almacen/supplier'
 import { v4 as uuid } from 'uuid'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface SupplierCreationAttributes
+  extends Optional<SuplierAttributes, 'id' | 'status'> {}
+
 class Supplier
-  extends Model<SuplierAttributes, Optional<SuplierAttributes, 'id'>>
+  extends Model<SuplierAttributes, SupplierCreationAttributes>
   implements SuplierAttributes
 {
   public id?: string
@@ -14,6 +18,7 @@ class Supplier
   public email!: string
   public phone!: number
   public address!: string
+  public status?: boolean
 }
 
 Supplier.init(
@@ -49,6 +54,11 @@ Supplier.init(
     address: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true, // ← Activo por defecto
     },
   },
   {

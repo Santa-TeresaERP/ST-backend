@@ -12,6 +12,7 @@ class Warehouse
   public location!: string
   public capacity!: number
   public observation?: string
+  public status?: boolean // añadimos status como propiedad del modelo
 }
 
 Warehouse.init(
@@ -25,6 +26,11 @@ Warehouse.init(
     location: { type: DataTypes.STRING, allowNull: false },
     capacity: { type: DataTypes.INTEGER, allowNull: false },
     observation: { type: DataTypes.STRING, allowNull: true },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true, // se marca como activo por defecto
+    },
   },
   {
     sequelize,

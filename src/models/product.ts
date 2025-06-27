@@ -13,7 +13,8 @@ class Product
   public category_id!: string
   public price!: number
   public description!: string
-  public imagen_url?: string
+  public imagen_url!: string
+  public status?: boolean
   public createdAt?: Date
   public updatedAt?: Date
 }
@@ -26,14 +27,19 @@ Product.init(
     price: { type: DataTypes.DECIMAL, allowNull: false },
     description: { type: DataTypes.STRING, allowNull: true },
     imagen_url: { type: DataTypes.STRING(2048), allowNull: true },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true, // ← Por defecto está activo
+    },
     createdAt: {
       type: DataTypes.DATE,
-      allowNull: true, // Si la BD lo maneja automáticamente, puedes ponerlo como true
+      allowNull: true,
       defaultValue: DataTypes.NOW,
     },
     updatedAt: {
       type: DataTypes.DATE,
-      allowNull: true, // Lo mismo aquí
+      allowNull: true,
       defaultValue: DataTypes.NOW,
     },
   },
@@ -47,7 +53,7 @@ Product.init(
 Product.belongsTo(Category, {
   foreignKey: 'category_id',
   targetKey: 'id',
-  as: 'category', // Alias para la relación
+  as: 'category',
 })
 
 Category.hasMany(Product, {

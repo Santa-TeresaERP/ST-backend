@@ -7,4 +7,5 @@ export interface ResourceAttributes {
   supplier_id?: string
   observation?: string
   purchase_date: Date
+  status?: boolean
 }

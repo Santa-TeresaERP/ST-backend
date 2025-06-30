@@ -8,9 +8,7 @@ export const entranceSchema = z.object({
     .string()
     .uuid('El ID del tipo de persona debe ser un UUID válido'),
 
-  reference_id: z.string().uuid('El ID de referencia debe ser un UUID válido'),
-
-  sale_data: z.string().min(1, 'La fecha de venta es obligatoria'),
+  sale_date: z.string().min(1, 'La fecha de venta es obligatoria'),
 
   sale_number: z.string().min(1, 'El número de venta es obligatorio'),
 

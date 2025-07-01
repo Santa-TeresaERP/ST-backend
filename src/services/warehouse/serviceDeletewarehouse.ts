@@ -7,8 +7,11 @@ const serviceDeletewarehouse = async (id: string) => {
     return { error: 'El almacén no existe' }
   }
 
-  await warehouses.destroy()
-  return { message: 'Almacén eliminado correctamente' }
+  // Cambiar el status a false en lugar de eliminar
+  warehouses.status = false
+  await warehouses.save()
+
+  return { message: 'Almacén desactivado correctamente' }
 }
 
 export default serviceDeletewarehouse

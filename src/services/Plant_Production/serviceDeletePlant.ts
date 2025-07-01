@@ -7,8 +7,11 @@ const serviceDeletePlant = async (id: string) => {
     return { error: 'La planta no existe' }
   }
 
-  await plant.destroy()
-  return { message: 'Planta eliminada correctamente' }
+  // Cambiar el status a false en lugar de eliminar
+  plant.status = false
+  await plant.save()
+
+  return { message: 'Planta desactivada correctamente' }
 }
 
 export default serviceDeletePlant

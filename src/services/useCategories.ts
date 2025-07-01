@@ -79,20 +79,22 @@ class useCategories {
         return { error: 'La categoría no existe' }
       }
 
-      // Verifica si la categoría tiene productos asociados
+      // Verifica si la categoría tiene productos asociados activos
       const associatedProducts = await Product.findAll({
-        where: { category_id: id },
+        where: { category_id: id, status: true },
       })
       if (associatedProducts.length > 0) {
         return {
           error:
-            'No se puede eliminar la categoría porque tiene productos asociados.',
+            'No se puede desactivar la categoría porque tiene productos activos asociados.',
         }
       }
 
-      // Elimina la categoría
-      await category.destroy()
-      return { message: 'Categoría eliminada correctamente' }
+      // Cambiar el status a false en lugar de eliminar
+      category.status = false
+      await category.save()
+
+      return { message: 'Categoría desactivada correctamente' }
     } catch (error) {
       console.error('Error en deleteCategory service:', error)
       throw new Error('Error interno del servidor')

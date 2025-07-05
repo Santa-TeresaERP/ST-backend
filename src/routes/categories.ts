@@ -12,6 +12,6 @@ router.get('/:id', authorization, categoriesController.getCategory)
 
 router.patch('/:id', authorization, categoriesController.updateCategory)
 
-router.delete('/:id', authorization, categoriesController.deleteCategory)
+router.put('/:id', authorization, categoriesController.deleteCategory)
 
 export default router

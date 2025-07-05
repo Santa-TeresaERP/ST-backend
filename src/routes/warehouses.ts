@@ -10,6 +10,6 @@ router.get('/', authorization, warehouseController.GetWarehouses)
 
 router.patch('/:id', authorization, warehouseController.UpdateWarehouse)
 
-router.delete('/:id', authorization, warehouseController.DeleteWarehouse)
+router.put('/:id', authorization, warehouseController.DeleteWarehouse)
 
 export default router

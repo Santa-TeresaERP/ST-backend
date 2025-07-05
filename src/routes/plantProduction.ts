@@ -16,6 +16,6 @@ router.get('/:id', PlantController.getPlant)
 router.patch('/:id', PlantController.updatePlant)
 
 // Eliminar una planta
-router.delete('/:id', PlantController.deletePlant)
+router.put('/:id', PlantController.deletePlant)
 
 export default router

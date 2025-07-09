@@ -14,7 +14,6 @@ class Resource
   public id?: string
   public name!: string
   public observation?: string
-  public purchase_date!: Date
   public status?: boolean // ← Nuevo campo para eliminación lógica
 }
 
@@ -32,10 +31,6 @@ Resource.init(
     observation: {
       type: DataTypes.STRING,
       allowNull: true,
-    },
-    purchase_date: {
-      type: DataTypes.DATE,
-      allowNull: false,
     },
     status: {
       type: DataTypes.BOOLEAN,

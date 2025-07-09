@@ -4,4 +4,5 @@ export interface CategoryAttributes {
   description: string
   createdAt?: Date
   updatedAt?: Date
+  status?: boolean
 }

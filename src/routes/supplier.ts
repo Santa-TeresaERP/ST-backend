@@ -16,6 +16,6 @@ router.get('/:id', supplierController.getSupplier)
 router.put('/:id', supplierController.updateSupplier)
 
 // Eliminar un proveedor
-router.delete('/:id', supplierController.deleteSupplier)
+router.patch('/:id', supplierController.deleteSupplier)
 
 export default router

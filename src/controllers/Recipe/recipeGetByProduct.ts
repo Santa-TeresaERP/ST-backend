@@ -1,7 +1,7 @@
 import useRecipe from '@services/Recipe'
 import { Request, Response } from 'express'
 
-const getRecipesByProd = async (req: Request, res: Response) => {
+const getRecipesByProd = async (req: Request, res: Response): Promise<void> => {
   try {
     const productId = req.params.id
     const recipes = await useRecipe.serviceGetRecipesByProd(productId)

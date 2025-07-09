@@ -1,3 +1,4 @@
+import { ProductAttributes } from '@type/production/products'
 import { z } from 'zod'
 
 const productsSchema = z.object({
@@ -19,4 +20,5 @@ const productsSchema = z.object({
   imagen_url: z.string().optional(),
 })
 
-export const productsValidation = (data: any) => productsSchema.safeParse(data)
+export const productsValidation = (data: ProductAttributes) =>
+  productsSchema.safeParse(data)

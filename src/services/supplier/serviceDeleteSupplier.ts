@@ -6,8 +6,11 @@ const serviceDeleteSupplier = async (id: string) => {
     return { error: 'Proveedor no encontrado' }
   }
 
-  await supplier.destroy()
-  return { message: 'Proveedor eliminado exitosamente' }
+  // Cambiar el status a false en lugar de eliminar
+  supplier.status = false
+  await supplier.save()
+
+  return { message: 'Proveedor desactivado exitosamente' }
 }
 
 export default serviceDeleteSupplier

@@ -1,15 +1,15 @@
 import WarehouseResource from '@models/buysResource'
-import { warehouseResourceValidation } from 'src/schemas/almacen/BuysResourceSchema'
-import { WarehouseResourceAttributes } from '@type/almacen/buys_resource'
+import { buysResourceValidation } from 'src/schemas/almacen/BuysResourceSchema'
+import { buysResourceAttributes } from '@type/almacen/buys_resource'
 
 const serviceUpdateWarehouseResource = async (
   id: string,
-  body: Partial<WarehouseResourceAttributes>,
+  body: Partial<buysResourceAttributes>,
 ) => {
-  const validation = warehouseResourceValidation({
+  const validation = buysResourceValidation({
     ...body,
     id,
-  } as WarehouseResourceAttributes)
+  } as buysResourceAttributes)
 
   if (!validation.success) {
     return { error: validation.error.errors }

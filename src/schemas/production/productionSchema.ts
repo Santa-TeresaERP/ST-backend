@@ -22,6 +22,8 @@ const productionSchema = z.object({
 
   plant_id: z.string().uuid('El ID de la planta debe ser un UUID válido'),
 
+  warehouse_id: z.string().uuid('El ID del almacén debe ser un UUID válido'),
+
   createdAt: z.date().optional(),
 
   updatedAt: z.date().optional(),

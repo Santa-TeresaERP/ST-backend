@@ -3,10 +3,13 @@ import { serviceCreateProduction } from '@services/Production'
 
 const createProductionController = async (req: Request, res: Response) => {
   try {
+    console.log('📝 Datos recibidos para crear producción:', req.body)
     const result = await serviceCreateProduction(req.body)
 
     if ('error' in result) {
+      console.log('❌ Error en el service:', result.error)
       res.status(400).json({ error: result.error })
+      return // 🔥 AGREGUÉ ESTE RETURN
     }
 
     console.log('📩 Producción creada correctamente desde el controlador')

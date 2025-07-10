@@ -57,6 +57,11 @@ WarehouseResource.belongsTo(Resource, {
   foreignKey: 'resource_id',
   as: 'resource',
 })
+// Relaciones
+WarehouseResource.belongsTo(Resource, {
+  foreignKey: 'resource_id',
+  as: 'Resource',
+})
 Resource.hasMany(WarehouseResource, {
   foreignKey: 'resource_id',
   as: 'warehouse_resources',

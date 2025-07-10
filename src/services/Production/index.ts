@@ -4,6 +4,7 @@ import serviceGetProductions from './serviceGetProductions'
 import serviceUpdateProduction from './serviceUpdateProduction'
 import serviceDeleteProduction from './serviceDeleteProduction'
 import useProductions from '@services/useProductions'
+import { convertResourcesForProduction } from './resourceConversionService'
 
 export {
   serviceCreateProduction,
@@ -11,6 +12,7 @@ export {
   serviceGetProductions,
   serviceUpdateProduction,
   serviceDeleteProduction,
+  convertResourcesForProduction,
 }
 
 export default useProductions

@@ -3,22 +3,51 @@ import { productionAttributes } from '@type/production/production'
 import { productionValidation } from 'src/schemas/production/productionSchema'
 import Product from '@models/product'
 import PlantProduction from '@models/plant_production'
+import { convertResourcesForProduction } from './resourceConversionService'
 import Recipe from '@models/recipe'
 import WarehouseResource from '@models/warehouseResource'
 import Resource from '@models/resource'
 
 const serviceCreateProduction = async (body: productionAttributes) => {
+  console.log('🔍 Iniciando validación de datos:', body)
   const validation = productionValidation(body)
-  if (!validation.success) return { error: validation.error.errors }
+  if (!validation.success) {
+    console.log('❌ Error de validación:', validation.error.errors)
+    return { error: validation.error.errors }
+  }
 
+  console.log('✅ Validación exitosa')
   const { productId, quantityProduced, productionDate, observation, plant_id } =
     validation.data
 
+  console.log('🔍 Verificando producto:', productId)
   const product = await Product.findByPk(productId)
-  if (!product) return { error: 'El producto no existe' }
+  if (!product) {
+    console.log('❌ Producto no encontrado')
+    return { error: 'El producto no existe' }
+  }
+  console.log('✅ Producto encontrado:', product.name)
 
+  console.log('🔍 Verificando planta:', plant_id)
   const plant = await PlantProduction.findByPk(plant_id)
-  if (!plant) return { error: 'La planta no existe' }
+  if (!plant) {
+    console.log('❌ Planta no encontrada')
+    return { error: 'La planta no existe' }
+  }
+  console.log('✅ Planta encontrada:', plant.plant_name)
+
+  // 🔥 NUEVA LÓGICA: Convertir recursos antes de crear la producción
+  console.log('🔄 Iniciando conversión de recursos...')
+  const conversionResult = await convertResourcesForProduction(
+    productId,
+    quantityProduced,
+  )
+
+  if (!conversionResult.success) {
+    console.log('❌ Error en conversión de recursos:', conversionResult.message)
+    return { error: conversionResult.message }
+  }
+  console.log('✅ Recursos convertidos exitosamente')
 
   const newProduction = await Production.create({
     productId,
@@ -105,7 +134,7 @@ const serviceCreateProduction = async (body: productionAttributes) => {
     fecha_produccion: productionDate,
     observacion: observation,
     planta: plant.plant_name,
-    recursos_usados: resumenRecursos,
+    recursos_utilizados: conversionResult.deductedResources, // 📄 Información de recursos descontados
   }
 
   console.log('📄 Datos finales de la producción:', datosFinales)

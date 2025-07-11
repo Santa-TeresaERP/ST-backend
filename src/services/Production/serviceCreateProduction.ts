@@ -3,6 +3,8 @@ import { productionAttributes } from '@type/production/production'
 import { productionValidation } from 'src/schemas/production/productionSchema'
 import Product from '@models/product'
 import PlantProduction from '@models/plant_production'
+import Recipe from '@models/recipe'
+import BuysResource from '@models/buysResource'
 
 const serviceCreateProduction = async (body: productionAttributes) => {
   const validation = productionValidation(body)
@@ -24,6 +26,44 @@ const serviceCreateProduction = async (body: productionAttributes) => {
     observation: observation ?? '',
     plant_id,
   })
+
+  // Obtener la receta del producto
+  const recipeItems = await Recipe.findAll({ where: { productId } })
+
+  for (const item of recipeItems) {
+    const { resourceId, quantity } = item
+
+    // Calcular la cantidad total requerida para la producción
+    const totalRequired = quantity * quantityProduced
+
+    // Obtener los recursos disponibles en BuysResource
+    const buysResources = await BuysResource.findAll({
+      where: { resource_id: resourceId },
+      order: [['entry_date', 'ASC']], // Usar FIFO para consumir recursos
+    })
+
+    let remainingRequired = totalRequired
+
+    for (const buy of buysResources) {
+      if (remainingRequired <= 0) break
+
+      if (buy.quantity >= remainingRequired) {
+        // Resta directamente del recurso
+        await buy.update({ quantity: buy.quantity - remainingRequired })
+        remainingRequired = 0
+      } else {
+        // Consume todo el recurso y continúa con el siguiente
+        remainingRequired -= buy.quantity
+        await buy.update({ quantity: 0 })
+      }
+    }
+
+    if (remainingRequired > 0) {
+      return {
+        error: `No hay suficiente cantidad del recurso ${resourceId} para la producción.`,
+      }
+    }
+  }
 
   const datosFinales = {
     id: newProduction.id,

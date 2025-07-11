@@ -5,10 +5,10 @@ const createWarehouseMovementResource = async (req: Request, res: Response) => {
   const result = await serviceCreateWarehouseMovementResource(req.body)
 
   if ('error' in result) {
-    res.status(400).json({ error: result.error })
+    return res.status(400).json({ error: result.error })
   }
 
-  res.status(201).json(result)
+  return res.status(201).json(result)
 }
 
 export default createWarehouseMovementResource

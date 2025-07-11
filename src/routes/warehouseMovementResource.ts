@@ -3,25 +3,31 @@ import warehouseMovementResourceController from '@controllers/WarehouseMovementR
 
 const router = Router()
 
+function asyncHandler(fn: any) {
+  return function (req: any, res: any, next: any) {
+    Promise.resolve(fn(req, res, next)).catch(next);
+  };
+}
+
 router.post(
   '/',
-  warehouseMovementResourceController.createWarehouseMovementResource,
+  asyncHandler(warehouseMovementResourceController.createWarehouseMovementResource),
 )
 router.get(
   '/',
-  warehouseMovementResourceController.getWarehouseMovementResources,
+  asyncHandler(warehouseMovementResourceController.getWarehouseMovementResources),
 )
 router.get(
   '/:id',
-  warehouseMovementResourceController.getWarehouseMovementResource,
+  asyncHandler(warehouseMovementResourceController.getWarehouseMovementResource),
 )
 router.patch(
   '/:id',
-  warehouseMovementResourceController.updateWarehouseMovementResource,
+  asyncHandler(warehouseMovementResourceController.updateWarehouseMovementResource),
 )
 router.delete(
   '/:id',
-  warehouseMovementResourceController.deleteWarehouseMovementResource,
+  asyncHandler(warehouseMovementResourceController.deleteWarehouseMovementResource),
 )
 
 export default router

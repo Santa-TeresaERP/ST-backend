@@ -8,7 +8,7 @@ const createProductController = async (req: Request, res: Response) => {
       price: parseFloat(req.body.price),
       imagen_url: req.file
         ? `/uploads/products/${req.file.filename}`
-        : undefined,
+        : req.body.imagen_url || undefined, // <-- Acepta URL enviada
     }
 
     const product = await index.createProduct(productData)

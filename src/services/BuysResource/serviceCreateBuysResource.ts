@@ -5,6 +5,10 @@ import serviceCreateWarehouseMovementResource from '../warehouseMovementResource
 import Supplier from '@models/suplier'
 
 const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
+  // Agregar timestamp único para rastrear llamadas
+  const callId = Date.now().toString(36) + Math.random().toString(36).substr(2)
+  console.log(`🎯 [${callId}] INICIO de serviceCreateBuysResource`)
+
   const validation = buysResourceValidation(body)
 
   if (!validation.success) {
@@ -28,6 +32,19 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
   } = validation.data
 
   try {
+    console.log(
+      `🔍 [${callId}] Iniciando serviceCreateBuysResource con datos:`,
+      {
+        warehouse_id,
+        resource_id,
+        supplier_id,
+        quantity,
+        type_unit,
+        unit_price,
+        total_cost,
+      },
+    )
+
     // Obtener información del proveedor para usar en las observaciones
     const supplier = await Supplier.findByPk(supplier_id)
     const supplierName = supplier ? supplier.suplier_name : `ID: ${supplier_id}`
@@ -41,9 +58,27 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
       },
     })
 
+    console.log(
+      '📦 Registro existente encontrado:',
+      existingResource
+        ? {
+            id: existingResource.id,
+            currentQuantity: existingResource.quantity,
+            currentUnit: existingResource.type_unit,
+          }
+        : 'No existe',
+    )
+
     if (existingResource) {
       // Si existe, actualizar sumando solo la cantidad (sin recalcular el costo total)
-      const newQuantity = existingResource.quantity + quantity
+      const previousQuantity = existingResource.quantity
+      const newQuantity = previousQuantity + quantity
+
+      console.log('🔄 Actualizando registro existente:', {
+        previousQuantity,
+        quantityToAdd: quantity,
+        newQuantity,
+      })
 
       const updatedResource = await existingResource.update({
         type_unit,
@@ -53,32 +88,33 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
         entry_date,
       })
 
-      // Crear movimiento de almacén para la cantidad agregada
-      const movementResult = await serviceCreateWarehouseMovementResource({
-        warehouse_id,
-        resource_id,
-        movement_type: 'entrada',
-        quantity, // Solo la cantidad agregada, no la total
-        movement_date: entry_date,
-        observations: `Compra actualizada - Cantidad agregada: ${quantity}. Proveedor: ${supplierName}`,
+      console.log('✅ Registro actualizado:', {
+        id: updatedResource.id,
+        finalQuantity: updatedResource.quantity,
       })
 
-      if ('error' in movementResult) {
-        console.warn(
-          'Error al crear movimiento de almacén:',
-          movementResult.error,
-        )
-      }
+      // NOTA: No llamamos a serviceCreateWarehouseMovementResource para actualizaciones
+      // porque ya manejamos la cantidad correctamente y evitamos duplicación
+      console.log(
+        `📝 [${callId}] Saltando creación de movimiento para evitar duplicación`,
+      )
+
+      console.log(`🏁 [${callId}] FIN - Registro actualizado correctamente`)
+      console.log(
+        `🔍 [${callId}] CANTIDAD FINAL EN DB: ${updatedResource.quantity}`,
+      )
 
       return {
         resource: updatedResource,
-        movement: movementResult,
+        movement: { message: 'Movimiento omitido para evitar duplicación' },
         action: 'updated',
-        message: `Registro actualizado exitosamente. Cantidad anterior: ${existingResource.quantity}, cantidad agregada: ${quantity}, nueva cantidad total: ${newQuantity}`,
+        message: `Registro actualizado exitosamente. Cantidad anterior: ${previousQuantity}, cantidad agregada: ${quantity}, nueva cantidad total: ${newQuantity}`,
       }
     }
 
     // Si no existe, crear un nuevo registro
+    console.log('➕ Creando nuevo registro con cantidad:', quantity)
+
     const newWarehouseResource = await BuysResource.create({
       warehouse_id,
       resource_id,
@@ -88,6 +124,12 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
       supplier_id,
       quantity,
       entry_date,
+    })
+
+    console.log('✅ Nuevo registro creado:', {
+      id: newWarehouseResource.id,
+      quantity: newWarehouseResource.quantity,
+      type_unit: newWarehouseResource.type_unit,
     })
 
     // Crear movimiento de almacén para la nueva compra
@@ -106,6 +148,8 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
         movementResult.error,
       )
     }
+
+    console.log(`🏁 [${callId}] FIN - Nuevo registro creado correctamente`)
 
     return {
       resource: newWarehouseResource,

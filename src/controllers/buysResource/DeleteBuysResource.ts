@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import useWarehouseResource from '@services/warehouseResource'
+import useBuysResource from '@services/BuysResource'
 
-const DeleteWarehouseResource = async (req: Request, res: Response) => {
+const DeleteBuysResource = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const result = await useWarehouseResource.serviceDeleteWarehouseResource(id)
+    const result = await useBuysResource.serviceDeleteBuysResource(id)
 
     if ('error' in result) {
       res.status(400).json({ error: result.error })
@@ -16,4 +16,4 @@ const DeleteWarehouseResource = async (req: Request, res: Response) => {
   }
 }
 
-export default DeleteWarehouseResource
+export default DeleteBuysResource

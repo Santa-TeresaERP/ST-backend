@@ -5,7 +5,8 @@ import resourceController from '@controllers/Resource'
 const router = express.Router()
 
 router.post('/', authorization, resourceController.CreateResource)
-router.get('/', authorization, resourceController.GetResource)
+router.get('/', authorization, resourceController.GetResources)
+router.get('/:id', authorization, resourceController.GetResource)
 router.patch('/:id', authorization, resourceController.UpdateResource)
 router.delete('/:id', authorization, resourceController.DeleteResource)
 

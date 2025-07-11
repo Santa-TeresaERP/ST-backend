@@ -9,15 +9,7 @@ const serviceUpdateResource = async (id: string, body: ResourceAttributes) => {
     return { error: validation.error.errors }
   }
 
-  const {
-    name,
-    unit_price,
-    type_unit,
-    total_cost,
-    supplier_id,
-    observation,
-    purchase_date,
-  } = validation.data
+  const { name, observation } = validation.data
 
   const resource = await Resource.findByPk(id)
   if (!resource) {
@@ -26,12 +18,7 @@ const serviceUpdateResource = async (id: string, body: ResourceAttributes) => {
 
   await resource.update({
     name,
-    unit_price,
-    type_unit,
-    total_cost,
-    supplier_id,
     observation,
-    purchase_date,
   })
   return resource
 }

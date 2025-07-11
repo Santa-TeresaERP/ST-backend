@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
-import useWarehouseResource from '@services/warehouseResource'
+import useBuysResource from '@services/BuysResource'
 
-const GetWarehouseResources = async (_req: Request, res: Response) => {
+const GetBuysResources = async (_req: Request, res: Response) => {
   try {
-    const result = await useWarehouseResource.serviceGetWarehouseResources()
+    const result = await useBuysResource.serviceGetBuysResources()
 
     if ('error' in result) {
       res.status(400).json({ error: result.error })
@@ -15,4 +15,4 @@ const GetWarehouseResources = async (_req: Request, res: Response) => {
   }
 }
 
-export default GetWarehouseResources
+export default GetBuysResources

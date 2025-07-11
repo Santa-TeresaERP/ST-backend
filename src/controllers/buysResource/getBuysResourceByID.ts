@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import GetWarehouseResourceByIdService from 'src/services/warehouseResource/serviceGetWarehouseResourceByID'
+import serviceGetBuysResourceById from '@services/BuysResource/serviceGetBuysResourceByID'
 
-const GetWarehouseResourceById = async (req: Request, res: Response) => {
+const GetBuysResourceById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const resource = await GetWarehouseResourceByIdService(id)
+    const resource = await serviceGetBuysResourceById(id)
     res.status(200).json(resource)
   } catch (error) {
     const errorMessage =
@@ -13,4 +13,4 @@ const GetWarehouseResourceById = async (req: Request, res: Response) => {
   }
 }
 
-export default GetWarehouseResourceById
+export default GetBuysResourceById

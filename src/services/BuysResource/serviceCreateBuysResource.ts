@@ -42,14 +42,13 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
     })
 
     if (existingResource) {
-      // Si existe, actualizar sumando la cantidad y recalculando el costo total
+      // Si existe, actualizar sumando solo la cantidad (sin recalcular el costo total)
       const newQuantity = existingResource.quantity + quantity
-      const newTotalCost = newQuantity * unit_price
 
       const updatedResource = await existingResource.update({
         type_unit,
         unit_price,
-        total_cost: newTotalCost,
+        total_cost, // Mantener el costo total del input, no recalcular
         quantity: newQuantity,
         entry_date,
       })

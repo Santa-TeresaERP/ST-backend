@@ -1,13 +1,16 @@
 import Lost from '@models/lost'
 import Production from '@models/production'
 import { lostAttributes } from '@type/production/lost'
+import PlantProduction from '@models/plant_production'
+import WarehouseProduct from '@models/warehouseProduct'
+import WarehouseMovementProduct from '@models/warehouseMovementProduct'
 
 export default async function createLost(
   lostData: Omit<lostAttributes, 'id' | 'created_at'>,
 ) {
   try {
-    const product = await Production.findByPk(lostData.production_id)
-    if (!product) {
+    const production = await Production.findByPk(lostData.production_id)
+    if (!production) {
       throw new Error('Producto no encontrado')
     }
     const newLost = await Lost.create({
@@ -18,13 +21,37 @@ export default async function createLost(
       created_at: new Date(),
     })
 
-    const production = await Production.findByPk(lostData.production_id)
-    if (!production) {
-      return { error: 'El registro de producción no existe' }
-    }
-
     await production.update({
       quantityProduced: production.quantityProduced - lostData.quantity,
+    })
+
+    const plantProduction = await PlantProduction.findByPk(production.plant_id)
+    if (!plantProduction) {
+      throw new Error('Planta de producción no encontrada')
+    }
+
+    const warehouseProduct = await WarehouseProduct.findOne({
+      where: {
+        product_id: production.productId,
+        warehouse_id: plantProduction.warehouse_id,
+      },
+    })
+
+    if (!warehouseProduct) {
+      throw new Error('Producto no encontrado en el almacén')
+    }
+
+    await warehouseProduct.update({
+      quantity: warehouseProduct.quantity - lostData.quantity,
+    })
+
+    await WarehouseMovementProduct.create({
+      warehouse_id: plantProduction.warehouse_id,
+      product_id: production.productId,
+      movement_type: 'Salida',
+      quantity: lostData.quantity,
+      movement_date: new Date(),
+      observations: `Pérdida por ${lostData.lost_type}`,
     })
 
     return newLost

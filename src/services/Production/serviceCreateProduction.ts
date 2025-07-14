@@ -8,8 +8,10 @@ import Recipe from '@models/recipe'
 import BuysResource from '@models/buysResource'
 import Warehouse from '@models/warehouse'
 import Supplier from '@models/suplier'
+import Resource from '@models/resource'
 import { convertQuantity, areUnitsCompatible } from './unitConversionService'
 import serviceCreatewarehouseMovementProduct from '../warehouse_movement_product/serviceCreatewarehouse_movement_product'
+import serviceCreatewarehouseMovementResource from '../warehouseMovementResource/serviceCreateWarehouseMovementResource'
 
 const serviceCreateProduction = async (body: productionAttributes) => {
   console.log(
@@ -68,6 +70,13 @@ const serviceCreateProduction = async (body: productionAttributes) => {
       console.log(
         `🔍 Procesando recurso ${resourceId}, cantidad requerida por unidad: ${quantity} ${unit}`,
       )
+
+      // Obtener el nombre del recurso
+      const resource = await Resource.findByPk(resourceId, {
+        attributes: ['name'],
+        transaction: t,
+      })
+      const resourceName = resource?.name || 'Recurso desconocido'
 
       // Calcular la cantidad total requerida para la producción
       const totalRequiredInRecipeUnit = quantity * quantityProduced
@@ -223,6 +232,33 @@ const serviceCreateProduction = async (body: productionAttributes) => {
         }
       }
 
+      // Crear movimiento de recurso en almacén (salida por consumo)
+      console.log('🔍 Creando movimiento de recurso en almacén (salida)...')
+      const movementResult = await serviceCreatewarehouseMovementResource(
+        {
+          warehouse_id: plant.warehouse_id,
+          resource_id: resourceId, // ID del recurso consumido
+          movement_type: 'salida',
+          quantity: totalRequiredInRecipeUnit,
+          movement_date: new Date(),
+          observations: `Consumo de recurso "${resourceName}" para produccion`,
+        },
+        t, // Pasar la transacción
+      )
+
+      if (movementResult.error) {
+        await t.rollback()
+        console.log(
+          '❌ Error creando movimiento de recurso en almacén:',
+          movementResult.error,
+        )
+        return {
+          error: 'Error creando movimiento de recurso en almacén',
+          details: movementResult.error,
+        }
+      }
+
+      console.log(`✅ Movimiento de recurso ${resourceId} creado exitosamente`)
       console.log(`✅ Recurso ${resourceId} procesado exitosamente`)
     }
 
@@ -249,7 +285,7 @@ const serviceCreateProduction = async (body: productionAttributes) => {
         movement_type: 'entrada',
         quantity: newProduction.quantityProduced,
         movement_date: new Date(newProduction.productionDate),
-        observations: `Produccion de "${product.name}"`,
+        observations: `Producción de "${product.name}"`,
       },
       t, // Pasar la transacción
     )

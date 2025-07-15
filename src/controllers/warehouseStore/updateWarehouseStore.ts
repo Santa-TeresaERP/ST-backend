@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import useWarehouseStore from '@services/warehouseStore/index'
 
-const updateWarehouseStore = async (req: Request, res: Response) => {
+const updateWarehouseStoreController = async (req: Request, res: Response) => {
   try {
     const warehouseStore = await useWarehouseStore.serviceUpdateWarehouseStore(
       req.params.id,
@@ -29,4 +29,4 @@ const updateWarehouseStore = async (req: Request, res: Response) => {
   }
 }
 
-export default updateWarehouseStore
+export default updateWarehouseStoreController

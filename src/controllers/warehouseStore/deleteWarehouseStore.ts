@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import useWarehouseStore from '@services/warehouseStore/index'
 
-const deleteWarehouseStore = async (req: Request, res: Response) => {
+const deleteWarehouseStoreController = async (req: Request, res: Response) => {
   try {
     const result = await useWarehouseStore.serviceDeleteWarehouseStore(
       req.params.id,
@@ -28,4 +28,4 @@ const deleteWarehouseStore = async (req: Request, res: Response) => {
   }
 }
 
-export default deleteWarehouseStore
+export default deleteWarehouseStoreController

@@ -7,7 +7,7 @@ export const warehouseMovementProductSchema = z.object({
     .uuid('El ID del almacén debe ser un UUID válido')
     .nonempty('El ID del almacén no puede estar vacío'),
 
-  store_id: z.string().uuid().optional().nullable(),
+  store_id: z.string().optional().nullable(),
   product_id: z
     .string()
     .uuid('El ID del producto debe ser un UUID válido')

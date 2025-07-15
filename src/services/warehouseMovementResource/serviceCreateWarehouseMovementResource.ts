@@ -22,11 +22,12 @@ const serviceCreateWarehouseMovementResource = async (
     observations,
   } = validation.data
 
-  // Buscar el recurso actual en stock
+  // Buscar el recurso actual en stock (buy_resource)
   const warehouseResource = await BuysResource.findOne({
     where: { warehouse_id, resource_id },
   })
 
+  // Si no existe, rechazar entrada/salida (entrada debe pasar por proveedor)
   if (!warehouseResource) {
     return {
       error:
@@ -36,8 +37,7 @@ const serviceCreateWarehouseMovementResource = async (
     }
   }
 
-  // SALIDA: Validar y actualizar stock
-  // SALIDA: Permitir stock negativo y actualizar
+  // SALIDA: Permitir stock negativo y actualizar buy_resource
   if (movement_type === 'salida') {
     const newQuantity = warehouseResource.quantity - quantity
 
@@ -70,9 +70,9 @@ const serviceCreateWarehouseMovementResource = async (
     console.log('✅ Stock actualizado correctamente')
   }
 
-  // ENTRADA: No actualizar stock, solo registrar el movimiento
+  // ENTRADA: No modifica el stock, solo registra el movimiento
 
-  // Crear el movimiento en warehouse_movement_resources
+  // Registrar el movimiento en warehouse_movement_resources
   const newRecord = await WarehouseMovementResource.create({
     warehouse_id,
     resource_id,

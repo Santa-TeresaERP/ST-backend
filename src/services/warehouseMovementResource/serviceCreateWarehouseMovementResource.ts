@@ -15,56 +15,67 @@ const serviceCreateWarehouseMovementResource = async (
   const {
     warehouse_id,
     resource_id,
-    // type, // Removed type
     movement_type,
     quantity,
     movement_date,
     observations,
   } = validation.data
 
-  // Find or create WarehouseResource
-  let warehouseResource = await BuysResource.findOne({
+  // Verificamos existencia del recurso en el almacén
+  const warehouseResource = await BuysResource.findOne({
     where: { warehouse_id, resource_id },
   })
 
+  // Lógica de validación según el tipo de movimiento
   if (movement_type === 'salida') {
-    if (!warehouseResource || warehouseResource.quantity < quantity) {
+    if (!warehouseResource) {
+      console.warn('[SALIDA] ❌ Recurso no encontrado en el almacén.')
       return {
         error:
-          'No hay suficiente cantidad en el almacén para realizar la salida o el recurso no existe en el almacén.',
+          'El recurso no existe en el almacén. No se puede registrar una salida.',
       }
     }
-    warehouseResource.quantity -= quantity
-    await warehouseResource.save()
-  } else if (movement_type === 'entrada') {
-    if (warehouseResource) {
-      warehouseResource.quantity += quantity
-      await warehouseResource.save()
-    } else {
-      warehouseResource = await BuysResource.create({
-        warehouse_id,
-        resource_id,
-        quantity,
-        type_unit: 'unidad', // Assuming a default unit type
-        unit_price: 0, // Assuming a default unit price
-        total_cost: 0, // Assuming a default total cost
-        supplier_id: '', // Assuming no supplier for this movement
-        entry_date: new Date(), // Assuming entry_date should be now
-      })
+    if (warehouseResource.quantity < quantity) {
+      console.warn(
+        `[SALIDA] ❌ Stock insuficiente: solicitado ${quantity}, disponible ${warehouseResource.quantity}`,
+      )
+      return {
+        error: `Stock insuficiente. Solo hay ${warehouseResource.quantity} unidades disponibles.`,
+      }
     }
+
+    console.log(
+      `[SALIDA] ✅ Movimiento válido. Stock actual: ${warehouseResource.quantity}`,
+    )
   }
 
+  if (movement_type === 'entrada') {
+    if (!warehouseResource) {
+      console.warn(
+        '[ENTRADA] ❌ Recurso no registrado previamente. Requiere proveedor.',
+      )
+      return {
+        error:
+          'El recurso aún no ha sido registrado en el almacén. No se puede ingresar sin proveedor.',
+      }
+    }
+
+    console.log(
+      `[ENTRADA] ✅ Recurso encontrado. Permitido registrar entrada sin proveedor.`,
+    )
+  }
+
+  // Si pasó las validaciones, registrar el movimiento
   const newRecord = await WarehouseMovementResource.create({
     warehouse_id,
     resource_id,
-    // type, // Removed type
     movement_type,
     quantity,
     movement_date,
     observations: observations ?? null,
   })
 
-  return { newRecord, warehouseResource } // Return both records
+  return { newRecord }
 }
 
 export default serviceCreateWarehouseMovementResource

@@ -30,10 +30,6 @@ const serviceCreateWarehouseMovementResource = async (
     observations,
   } = validation.data
 
-  // Verificamos existencia del recurso en el almacén
-  const warehouseResource = await BuysResource.findOne({
-    where: { warehouse_id, resource_id },
-  })
   try {
     console.log('🔍 Buscando registros en BuysResource...')
     const buysResources = await BuysResource.findAll({
@@ -42,60 +38,11 @@ const serviceCreateWarehouseMovementResource = async (
       transaction,
     })
 
-  // Lógica de validación según el tipo de movimiento
-  if (movement_type === 'salida') {
-    if (!warehouseResource) {
-      console.warn('[SALIDA] ❌ Recurso no encontrado en el almacén.')
     if (buysResources.length === 0 && movement_type === 'salida') {
       console.log(
         '❌ No hay registros en BuysResource para el recurso especificado.',
       )
       return {
-        error:
-          'El recurso no existe en el almacén. No se puede registrar una salida.',
-      }
-    }
-    if (warehouseResource.quantity < quantity) {
-      console.warn(
-        `[SALIDA] ❌ Stock insuficiente: solicitado ${quantity}, disponible ${warehouseResource.quantity}`,
-      )
-      return {
-        error: `Stock insuficiente. Solo hay ${warehouseResource.quantity} unidades disponibles.`,
-      }
-    }
-
-    console.log(
-      `[SALIDA] ✅ Movimiento válido. Stock actual: ${warehouseResource.quantity}`,
-    )
-  }
-
-  if (movement_type === 'entrada') {
-    if (!warehouseResource) {
-      console.warn(
-        '[ENTRADA] ❌ Recurso no registrado previamente. Requiere proveedor.',
-      )
-      return {
-        error:
-          'El recurso aún no ha sido registrado en el almacén. No se puede ingresar sin proveedor.',
-      }
-    }
-
-    console.log(
-      `[ENTRADA] ✅ Recurso encontrado. Permitido registrar entrada sin proveedor.`,
-    )
-  }
-
-  // Si pasó las validaciones, registrar el movimiento
-  const newRecord = await WarehouseMovementResource.create({
-    warehouse_id,
-    resource_id,
-    movement_type,
-    quantity,
-    movement_date,
-    observations: observations ?? null,
-  })
-
-  return { newRecord }
         error: 'No hay registros en el almacén para el recurso especificado.',
       }
     }

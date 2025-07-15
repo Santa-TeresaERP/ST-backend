@@ -1,11 +1,10 @@
 import { Request, Response } from 'express'
 import useWarehouseStore from '@services/warehouseStore/index'
 
-const updateWarehouseStore = async (req: Request, res: Response) => {
+const getWarehouseStore = async (req: Request, res: Response) => {
   try {
-    const warehouseStore = await useWarehouseStore.serviceUpdateWarehouseStore(
+    const warehouseStore = await useWarehouseStore.serviceGetWarehouseStore(
       req.params.id,
-      req.body,
     )
     if ('error' in warehouseStore) {
       res.status(404).json(warehouseStore)
@@ -13,7 +12,7 @@ const updateWarehouseStore = async (req: Request, res: Response) => {
       res.status(200).json(warehouseStore)
     }
   } catch (error) {
-    console.error('Error updating warehouse store:', error)
+    console.error('Error fetching warehouse store:', error)
 
     if (error instanceof Error) {
       res.status(500).json({
@@ -29,4 +28,4 @@ const updateWarehouseStore = async (req: Request, res: Response) => {
   }
 }
 
-export default updateWarehouseStore
+export default getWarehouseStore

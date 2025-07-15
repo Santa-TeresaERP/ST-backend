@@ -12,4 +12,10 @@ router.patch('/:id', authorization, warehouseController.UpdateWarehouse)
 
 router.put('/:id', authorization, warehouseController.DeleteWarehouse)
 
+router.patch(
+  '/:id/activate',
+  authorization,
+  warehouseController.ActivateWarehouse,
+)
+
 export default router

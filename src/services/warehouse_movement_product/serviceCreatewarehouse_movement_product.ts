@@ -3,6 +3,7 @@ import WarehouseProduct from '@models/warehouseProduct'
 import { WarehouseMovomentProductAttributes } from '@type/almacen/warehouse_movement_product'
 import { warehouseMovementProductValidation } from 'src/schemas/almacen/warehouseMovementProductScheama'
 import { Transaction } from 'sequelize'
+import WarehouseStore from '@models/warehouseStore'
 
 const serviceCreatewarehouseMovementProduct = async (
   data: WarehouseMovomentProductAttributes,
@@ -73,11 +74,11 @@ const serviceCreatewarehouseMovementProduct = async (
     await warehouseProduct.save({ transaction })
     console.log(`✅ Stock actualizado a: ${warehouseProduct.quantity}`)
 
-    // Ahora sí, crear el movimiento
+    // Crear el movimiento
     const newMovement = await WarehouseMovementProduct.create(
       {
         warehouse_id,
-        store_id: store_id || null, // permite null si no se envía
+        store_id: store_id || null,
         product_id,
         movement_type,
         quantity,
@@ -88,6 +89,36 @@ const serviceCreatewarehouseMovementProduct = async (
     )
 
     console.log('✅ Movimiento de almacén creado exitosamente')
+
+    // Si existe store_id, crear/actualizar el inventario de tienda
+    if (store_id) {
+      let warehouseStore = await WarehouseStore.findOne({
+        where: { storeId: store_id, productId: product_id },
+        transaction,
+      })
+
+      if (!warehouseStore) {
+        warehouseStore = await WarehouseStore.create(
+          {
+            storeId: store_id,
+            productId: product_id,
+            quantity: 0,
+            createdAt: new Date(),
+          },
+          { transaction },
+        )
+      }
+
+      // Actualizar cantidad según el tipo de movimiento
+      if (movement_type === 'entrada') {
+        warehouseStore.quantity += quantity
+      } else if (movement_type === 'salida') {
+        warehouseStore.quantity -= quantity
+      }
+      await warehouseStore.save({ transaction })
+      console.log('✅ Inventario de tienda actualizado')
+    }
+
     return { success: true, movement: newMovement, warehouseProduct }
   } catch (error) {
     console.error('❌ Error en serviceCreatewarehouseMovementProduct:', error)

@@ -3,12 +3,16 @@ import index from '@services/Products/index'
 
 const createProductController = async (req: Request, res: Response) => {
   try {
+    // 1. Construir la URL base del backend dinámicamente
+    const baseUrl = `${req.protocol}://${req.get('host')}`
+
     const productData = {
       ...req.body,
       price: parseFloat(req.body.price),
+      // 2. Usar la URL base para crear una URL absoluta para la imagen
       imagen_url: req.file
-        ? `/uploads/products/${req.file.filename}`
-        : req.body.imagen_url || undefined, // <-- Acepta URL enviada
+        ? `${baseUrl}/uploads/products/${req.file.filename}`
+        : req.body.imagen_url || undefined,
     }
 
     const product = await index.createProduct(productData)

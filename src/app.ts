@@ -28,15 +28,18 @@ createUploadsFolder()
 const app = express()
 
 // Middlewares
-app.use(errorHandler)
 app.use(cors())
 app.use(express.json())
+
+// Servir archivos estáticos
+app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')))
+
 
 // Cargar rutas
 routesLoader(app)
 
-// Servir archivos estáticos
-app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')))
+// Middleware de manejo de errores
+app.use(errorHandler)
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)

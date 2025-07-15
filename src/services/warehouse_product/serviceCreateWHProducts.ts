@@ -17,6 +17,23 @@ export default async function createWarehouseProduct(
       throw new Error('Almacén no encontrado')
     }
 
+    // Buscar si ya existe ese producto en ese almacén
+    const existingRecord = await WarehouseProduct.findOne({
+      where: {
+        product_id: data.product_id,
+        warehouse_id: data.warehouse_id,
+      },
+    })
+
+    if (existingRecord) {
+      // Si ya existe, actualizar cantidad y entry_date
+      existingRecord.quantity += data.quantity
+      existingRecord.entry_date = data.entry_date || new Date()
+      await existingRecord.save()
+      return existingRecord
+    }
+
+    // Si no existe, crear nuevo registro
     const newRecord = await WarehouseProduct.create({
       ...data,
       entry_date: data.entry_date || new Date(),
@@ -25,7 +42,7 @@ export default async function createWarehouseProduct(
     return newRecord
   } catch (error) {
     throw new Error(
-      `Error al crear registro en almacén: ${error instanceof Error ? error.message : String(error)}`,
+      `Error al crear o actualizar producto en almacén: ${error instanceof Error ? error.message : String(error)}`,
     )
   }
 }

@@ -4,6 +4,7 @@ import createAdmin from 'src/config/createAdmin'
 import { join } from 'node:path'
 import { readdirSync } from 'node:fs'
 import createModules from './createModules'
+import { createDefaultWarehouseAndPlant } from './warehouse'
 
 class migrate {
   static modelLoader() {
@@ -54,6 +55,7 @@ class migrate {
 
       await createAdmin()
       await createModules()
+      await createDefaultWarehouseAndPlant()
       console.log('Migration succesfully')
     } catch (err) {
       if (err instanceof Error) {

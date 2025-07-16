@@ -4,8 +4,8 @@ import useStore from '@services/Store'
 const createStore = async (req: Request, res: Response) => {
   try {
     const store = await useStore.serviceCreateStore(req.body)
-    if (store?.error) {
-      return res.status(400).json({ error: store.error })
+    if ('error' in store) {
+      res.status(400).json({ error: store.error })
     }
     res.status(201).json(store)
   } catch (error) {

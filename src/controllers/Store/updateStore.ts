@@ -3,12 +3,17 @@ import useStore from '@services/Store'
 
 const updateStore = async (req: Request, res: Response) => {
   try {
-    const updatedStore = await useStore.serviceUpdateStore(req.params.id, req.body)
+    const updatedStore = await useStore.serviceUpdateStore(
+      req.params.id,
+      req.body,
+    )
     if (!updatedStore) {
-      return res.status(404).json({ error: 'Store not found' })
+      res.status(404).json({ error: 'Store not found' })
+      return
     }
-    if (updatedStore?.error) {
-      return res.status(400).json({ error: updatedStore.error })
+    if ('error' in updatedStore) {
+      res.status(400).json({ error: updatedStore.error })
+      return
     }
     res.status(200).json({ message: 'Store updated', store: updatedStore })
   } catch (error) {

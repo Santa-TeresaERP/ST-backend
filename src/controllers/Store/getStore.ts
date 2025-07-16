@@ -5,7 +5,8 @@ const getStore = async (req: Request, res: Response) => {
   try {
     const store = await useStore.serviceGetStore(req.params.id)
     if (!store) {
-      return res.status(404).json({ error: 'Store not found' })
+      res.status(404).json({ error: 'Store not found' })
+      return
     }
     res.status(200).json(store)
   } catch (error) {

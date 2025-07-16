@@ -5,9 +5,11 @@ const deleteStore = async (req: Request, res: Response) => {
   try {
     const result = await useStore.serviceDeleteStore(req.params.id)
     if (!result) {
-      return res.status(404).json({ error: 'Store not found' })
+      res.status(404).json({ error: 'Store not found' })
+      return
     }
     res.status(200).json(result)
+    return
   } catch (error) {
     console.error('Error deleting store:', error)
     res.status(500).json({

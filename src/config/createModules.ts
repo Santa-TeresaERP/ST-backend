@@ -16,6 +16,14 @@ const createModules = async (options = { clean: false }) => {
         name: 'user',
         description: 'Módulo para gestionar la información de los usuarios',
       },
+      {
+        name: 'inventario',
+        description: 'Módulo para gestionar el inventario de productos',
+      },
+      {
+        name: 'Producción',
+        description: 'Módulo para gestionar la producción de productos',
+      },
     ]
 
     if (options.clean) {

@@ -5,7 +5,7 @@ const router = Router()
 
 router.get('/', buysResourceController.GetBuysResources)
 router.post('/', buysResourceController.CreateBuysResource)
-router.put('/:id', buysResourceController.UpdateBuysResource)
+router.patch('/:id', buysResourceController.UpdateBuysResource)
 router.delete('/:id', buysResourceController.DeleteBuysResource)
 router.get('/:id', buysResourceController.GetBuysResourceById) // Nueva ruta
 

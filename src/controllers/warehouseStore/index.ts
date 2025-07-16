@@ -1,13 +1,15 @@
-import createWarehouseStore from './createWarehouseStore'
-import deleteWarehouseStore from './deleteWarehouseStore'
-import getWarehouseStores from './getWarehouseStores'
-import updateWarehouseStore from './updateWarehouseStore'
+import createWarehouseStoreController from './createWarehouseStore'
+import deleteWarehouseStoreController from './deleteWarehouseStore'
+import getWarehouseStoresController from './getWarehouseStores'
+import updateWarehouseStoreController from './updateWarehouseStore'
+import getWarehouseStoreController from './getWarehouseStore'
 
 const warehouseStoreController = {
-  createWarehouseStore,
-  deleteWarehouseStore,
-  getWarehouseStores,
-  updateWarehouseStore,
+  createWarehouseStoreController,
+  deleteWarehouseStoreController,
+  getWarehouseStoresController,
+  getWarehouseStoreController,
+  updateWarehouseStoreController,
 }
 
 export default warehouseStoreController

@@ -1,18 +1,18 @@
 import { Request, Response } from 'express'
 import useWarehouseStore from '@services/warehouseStore/index'
 
-const deleteWarehouseStoreController = async (req: Request, res: Response) => {
+const getWarehouseStoreController = async (req: Request, res: Response) => {
   try {
-    const result = await useWarehouseStore.serviceDeleteWarehouseStore(
+    const warehouseStore = await useWarehouseStore.serviceGetWarehouseStore(
       req.params.id,
     )
-    if (result.error) {
-      res.status(404).json(result)
+    if ('error' in warehouseStore) {
+      res.status(404).json(warehouseStore)
     } else {
-      res.status(200).json(result)
+      res.status(200).json(warehouseStore)
     }
   } catch (error) {
-    console.error('Error deleting warehouse store:', error)
+    console.error('Error fetching warehouse store:', error)
 
     if (error instanceof Error) {
       res.status(500).json({
@@ -28,4 +28,4 @@ const deleteWarehouseStoreController = async (req: Request, res: Response) => {
   }
 }
 
-export default deleteWarehouseStoreController
+export default getWarehouseStoreController

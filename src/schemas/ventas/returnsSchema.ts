@@ -2,7 +2,7 @@ import { returnsAttributes } from '@type/ventas/returns'
 import { z } from 'zod'
 
 export const returnSchema = z.object({
-  id: z.string().uuid('El ID debe ser un UUID válido'),
+  id: z.string().uuid('El ID debe ser un UUID válido').optional(),
 
   productId: z.string().uuid('El ID del producto debe ser un UUID válido'),
 

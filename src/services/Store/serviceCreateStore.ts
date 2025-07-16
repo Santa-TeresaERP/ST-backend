@@ -8,7 +8,6 @@ const serviceCreateStore = async (body: StoreAttributes) => {
   if (!validation.success) {
     return { error: validation.error.errors }
   }
-  
   const { store_name, address, observations } = body
   const store = await Store.create({ store_name, address, observations })
   return store

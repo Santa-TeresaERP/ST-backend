@@ -45,82 +45,73 @@ const serviceCreateWarehouseMovementResource = async (
     }
   }
 
-  // SALIDA: Permitir stock negativo y actualizar buy_resource
-  if (movement_type === 'salida') {
-    const newQuantity = warehouseResource.quantity - quantity
+  try {
+    // SALIDA: Permitir stock negativo y actualizar buy_resource
+    if (movement_type === 'salida') {
+      const newQuantity = warehouseResource.quantity - quantity
 
-    console.log(
-      `📉 Actualizando stock a: ${newQuantity} (Recurso ID: ${warehouseResource.id})`,
-    )
+      console.log(
+        `📉 Actualizando stock a: ${newQuantity} (Recurso ID: ${warehouseResource.id})`,
+      )
 
-    const updateResult = await serviceUpdateWarehouseResource(
-      warehouseResource.id!,
-      {
-        warehouse_id: warehouseResource.warehouse_id,
-        resource_id: warehouseResource.resource_id,
-        type_unit: warehouseResource.type_unit,
-        unit_price: warehouseResource.unit_price,
-        total_cost: warehouseResource.total_cost,
-        supplier_id: warehouseResource.supplier_id,
-        entry_date: warehouseResource.entry_date,
-        quantity: newQuantity, // Puede ser negativo
-      },
-    )
+      const updateResult = await serviceUpdateWarehouseResource(
+        warehouseResource.id!,
+        {
+          quantity: newQuantity, // Puede ser negativo
+        },
+      )
 
-    if ('error' in updateResult) {
-      console.log('❌ Error al actualizar stock:', updateResult.error)
-      return {
-        error: 'Error al actualizar el stock de buy_resource.',
-        details: updateResult.error,
-      }
-
-      let remainingQuantity = quantity
-      for (const buy of buysResources) {
-        if (remainingQuantity <= 0) break
-
-        if (buy.quantity >= remainingQuantity) {
-          buy.quantity -= remainingQuantity
-          await buy.save({ transaction })
-          remainingQuantity = 0
-        } else {
-          remainingQuantity -= buy.quantity
-          buy.quantity = 0
-          await buy.save({ transaction })
+      if ('error' in updateResult) {
+        console.log('❌ Error al actualizar stock:', updateResult.error)
+        return {
+          error: 'Error al actualizar el stock de buy_resource.',
+          details: updateResult.error,
         }
       }
-    } else if (movement_type === 'entrada') {
+
+      console.log('✅ Stock actualizado correctamente')
+    }
+
+    // ENTRADA: Crear nuevo registro en BuysResource
+    if (movement_type === 'entrada') {
       console.log('🔍 Creando registro de entrada en BuysResource...')
       await BuysResource.create(
         {
           warehouse_id,
           resource_id,
           quantity,
-          type_unit: 'unit',
+          type_unit: warehouseResource.type_unit || 'unit',
           unit_price: 0,
           total_cost: 0,
-          supplier_id: 'default-supplier-id',
+          supplier_id: warehouseResource.supplier_id,
           entry_date: movement_date,
         },
         { transaction },
       )
+      console.log('✅ Registro de entrada creado correctamente')
     }
 
-    console.log('✅ Stock actualizado correctamente')
+    // Registrar el movimiento en warehouse_movement_resources
+    const newRecord = await WarehouseMovementResource.create(
+      {
+        warehouse_id,
+        resource_id,
+        movement_type,
+        quantity,
+        movement_date,
+        observations: observations ?? null,
+      },
+      { transaction },
+    )
+
+    return { newRecord }
+  } catch (error) {
+    console.error('❌ Error en serviceCreateWarehouseMovementResource:', error)
+    return {
+      error: 'Error al procesar el movimiento de recursos',
+      details: error instanceof Error ? error.message : 'Error desconocido',
+    }
   }
-
-  // ENTRADA: No modifica el stock, solo registra el movimiento
-
-  // Registrar el movimiento en warehouse_movement_resources
-  const newRecord = await WarehouseMovementResource.create({
-    warehouse_id,
-    resource_id,
-    movement_type,
-    quantity,
-    movement_date,
-    observations: observations ?? null,
-  })
-
-  return { newRecord }
 }
 
 export default serviceCreateWarehouseMovementResource

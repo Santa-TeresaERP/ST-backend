@@ -4,16 +4,13 @@ import Recipe from '@models/recipe'
 
 const serviceGetAllProduct = async () => {
   const products = await Product.findAll({
-    attributes: ['id', 'name', 'description', 'price', 'imagen_url'],
+    attributes: ['id', 'name', 'description', 'price', 'imagen_url', 'category_id'], 
     include: [
       { model: Category, as: 'category' },
-      {
-        model: Recipe,
-        as: 'recipe',
-      },
+      { model: Recipe, as: 'recipe' },
     ],
-  })
-  return products
-}
+  });
+  return products;
+};
 
 export default serviceGetAllProduct

@@ -4,20 +4,20 @@ import useLost from '@services/Lost'
 const updateLost = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
-    const updatedRecord = await useLost.updateLost(id, req.body)
-    res.status(200).json(updatedRecord)
+    const result = await useLost.updateLost(id, req.body)
+
+    if (result.error) {
+      const statusCode = result.error.includes('no encontrado') ? 404 : 500
+      res.status(statusCode).json({ message: result.error })
+      return
+    }
+
+    res.status(200).json(result)
+    return
   } catch (error: unknown) {
     console.error('Error updating lost record:', error)
-    let errorMessage = 'Unknown error occurred'
-    let statusCode = 500
-    if (error instanceof Error) {
-      errorMessage = error.message
-      statusCode = error.message.includes('no encontrado') ? 404 : 500
-    }
-    res.status(statusCode).json({
-      error: statusCode === 404 ? 'Not Found' : 'Internal Server Error',
-      message: errorMessage,
-    })
+    res.status(500).json({ message: 'Error interno del servidor' })
+    return
   }
 }
 

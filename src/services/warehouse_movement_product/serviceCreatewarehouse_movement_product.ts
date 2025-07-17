@@ -49,12 +49,12 @@ const serviceCreatewarehouseMovementProduct = async (
       console.log('✅ WarehouseProduct creado exitosamente')
     }
 
-    // Validar stock suficiente antes de crear el movimiento (solo para salidas)
+    // Validar si habrá stock negativo en salidas (permitir pero avisar)
+    let stockNegativeWarning = null
     if (movement_type === 'salida' && warehouseProduct.quantity < quantity) {
-      return {
-        success: false,
-        error: `Stock insuficiente. Disponible: ${warehouseProduct.quantity}, Solicitado: ${quantity}`,
-      }
+      const stockResultante = warehouseProduct.quantity - quantity
+      stockNegativeWarning = `⚠️ Stock insuficiente. Disponible: ${warehouseProduct.quantity}, Solicitado: ${quantity}. El stock resultante será: ${stockResultante} (negativo)`
+      console.log(stockNegativeWarning)
     }
 
     // Actualizar cantidad según el tipo de movimiento
@@ -68,6 +68,12 @@ const serviceCreatewarehouseMovementProduct = async (
         `📉 Restando ${quantity} del stock actual: ${warehouseProduct.quantity}`,
       )
       warehouseProduct.quantity -= quantity
+
+      if (warehouseProduct.quantity < 0) {
+        console.log(
+          `⚠️ Stock negativo resultante: ${warehouseProduct.quantity}`,
+        )
+      }
     }
 
     // Guardar el WarehouseProduct actualizado
@@ -91,6 +97,7 @@ const serviceCreatewarehouseMovementProduct = async (
     console.log('✅ Movimiento de almacén creado exitosamente')
 
     // Si existe store_id, crear/actualizar el inventario de tienda
+    let storeNegativeWarning = null
     if (store_id) {
       let warehouseStore = await WarehouseStore.findOne({
         where: { storeId: store_id, productId: product_id },
@@ -109,17 +116,53 @@ const serviceCreatewarehouseMovementProduct = async (
         )
       }
 
+      // Verificar si habrá stock negativo en la tienda
+      if (movement_type === 'salida' && warehouseStore.quantity < quantity) {
+        const storeStockResultante = warehouseStore.quantity - quantity
+        storeNegativeWarning = `⚠️ Stock de tienda insuficiente. Disponible: ${warehouseStore.quantity}, Solicitado: ${quantity}. El stock resultante será: ${storeStockResultante} (negativo)`
+        console.log(storeNegativeWarning)
+      }
+
       // Actualizar cantidad según el tipo de movimiento
       if (movement_type === 'entrada') {
         warehouseStore.quantity += quantity
       } else if (movement_type === 'salida') {
         warehouseStore.quantity -= quantity
+
+        if (warehouseStore.quantity < 0) {
+          console.log(
+            `⚠️ Stock de tienda negativo resultante: ${warehouseStore.quantity}`,
+          )
+        }
       }
       await warehouseStore.save({ transaction })
       console.log('✅ Inventario de tienda actualizado')
     }
 
-    return { success: true, movement: newMovement, warehouseProduct }
+    // Preparar respuesta con advertencias si las hay
+    const response = {
+      success: true,
+      movement: newMovement,
+      warehouseProduct,
+      warnings: undefined as string[] | undefined,
+      message: undefined as string | undefined,
+    }
+
+    // Agregar advertencias si existen
+    const warnings = []
+    if (stockNegativeWarning) {
+      warnings.push(stockNegativeWarning)
+    }
+    if (storeNegativeWarning) {
+      warnings.push(storeNegativeWarning)
+    }
+
+    if (warnings.length > 0) {
+      response.warnings = warnings
+      response.message = 'Movimiento realizado con advertencias de stock'
+    }
+
+    return response
   } catch (error) {
     console.error('❌ Error en serviceCreatewarehouseMovementProduct:', error)
     return {

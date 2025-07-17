@@ -292,13 +292,16 @@ const serviceCreateProduction = async (body: productionAttributes) => {
 
     if (!movementResult.success) {
       await t.rollback()
-      console.log(
-        '❌ Error creando movimiento de almacén:',
-        movementResult.error,
-      )
+      const details =
+        'message' in movementResult
+          ? movementResult.message
+          : 'error' in movementResult
+            ? movementResult.error
+            : 'Error desconocido'
+      console.log('❌ Error creando movimiento de almacén:', details)
       return {
         error: 'Error creando movimiento de almacén',
-        details: movementResult.error,
+        details,
       }
     }
     console.log('✅ Movimiento de producto creado exitosamente')

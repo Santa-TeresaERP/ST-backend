@@ -4,7 +4,6 @@ import { WarehouseMovomentProductAttributes } from '@type/almacen/warehouse_move
 import { v4 as uuid } from 'uuid'
 import Warehouse from '@models/warehouse'
 import Product from '@models/product'
-import Store from '@models/store'
 
 class WarehouseMovementProduct
   extends Model<
@@ -35,7 +34,7 @@ WarehouseMovementProduct.init(
       allowNull: false,
     },
     store_id: {
-      type: DataTypes.UUID,
+      type: DataTypes.STRING,
       allowNull: true,
     },
     product_id: {
@@ -83,16 +82,6 @@ WarehouseMovementProduct.belongsTo(Product, {
 
 Product.hasMany(WarehouseMovementProduct, {
   foreignKey: 'product_id',
-  as: 'warehouse_movement_products',
-})
-
-WarehouseMovementProduct.belongsTo(Store, {
-  foreignKey: 'store_id',
-  as: 'store',
-})
-
-Store.hasMany(WarehouseMovementProduct, {
-  foreignKey: 'store_id',
   as: 'warehouse_movement_products',
 })
 

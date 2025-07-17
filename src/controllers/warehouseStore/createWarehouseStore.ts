@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import useWarehouseStore from '@services/warehouseStore/index'
 
-const createWarehouseStore = async (req: Request, res: Response) => {
+const createWarehouseStoreController = async (req: Request, res: Response) => {
   try {
     const warehouseStore = await useWarehouseStore.serviceCreateWarehouseStore(
       req.body,
@@ -24,4 +24,4 @@ const createWarehouseStore = async (req: Request, res: Response) => {
   }
 }
 
-export default createWarehouseStore
+export default createWarehouseStoreController

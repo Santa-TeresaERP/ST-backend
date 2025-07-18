@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { salesChannelAttributes } from '@type/museo/Sales_channel'
+import { salesChannelAttributes } from '@type/museo/sales_channel'
 
 export const salesChannelSchema = z.object({
   name: z

@@ -34,7 +34,6 @@ app.use(express.json())
 // Servir archivos estáticos
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')))
 
-
 // Cargar rutas
 routeLoader(app)
 

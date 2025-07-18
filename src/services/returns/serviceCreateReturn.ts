@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 import Return from '@models/returns'
-import { returnValidation } from 'src/schemas/ventas/returnsSchema'
+import { returnValidation } from '../../schemas/ventas/returnsSchema'
 import { returnsAttributes } from '@type/ventas/returns'
 
 const serviceCreateReturn = async (body: returnsAttributes) => {

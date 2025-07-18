@@ -1,6 +1,6 @@
 import warehouse from '@models/warehouse'
-import { WarehouseAttributes } from 'src/types/almacen/warehouse'
-import { warehouseValidation } from 'src/schemas/almacen/warehouseSchema'
+import { WarehouseAttributes } from '../../types/almacen/warehouse'
+import { warehouseValidation } from '../../schemas/almacen/warehouseSchema'
 
 const serviceCreateWarehouse = async (data: WarehouseAttributes) => {
   // Validar los datos antes de proceder

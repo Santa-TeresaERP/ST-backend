@@ -11,7 +11,7 @@ const routeLoader = (app: Express) => {
     const routesDir = __dirname
     const files = readdirSync(routesDir)
 
-    files.map(file => {
+    files.map((file) => {
       const routeName = file.split('.').shift()
       const routePath = join(routesDir, file)
 

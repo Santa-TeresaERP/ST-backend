@@ -1,6 +1,6 @@
 import WarehouseMovementProduct from '@models/warehouseMovementProduct'
 import { WarehouseMovomentProductAttributes } from '@type/almacen/warehouse_movement_product'
-import { warehouseMovementProductValidation } from 'src/schemas/almacen/warehouseMovementProductScheama'
+import { warehouseMovementProductValidation } from '../../schemas/almacen/warehouseMovementProductScheama'
 
 const serviceUpdatewarehouseMovementProduct = async (
   id: string,

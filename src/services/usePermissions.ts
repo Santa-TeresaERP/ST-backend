@@ -1,6 +1,6 @@
 import Permissions from '@models/permissions'
 import { PermissionsAttributes } from '@type/user/permissions'
-import { permissionsValidation } from 'src/schemas/user/permissionsSchema'
+import { permissionsValidation } from '../schemas/user/permissionsSchema'
 import RolesPermissions from '@models/rolesPermissions'
 
 class usePermissions {

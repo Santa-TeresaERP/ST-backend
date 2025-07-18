@@ -1,6 +1,6 @@
 import Module from '@models/modules'
 import { ModuleAttributes } from '@type/user/modules'
-import { modulesValidation } from 'src/schemas/user/modulesSchema'
+import { modulesValidation } from '../../schemas/user/modulesSchema'
 
 // Actualizar un módulo
 export async function serviceUpdateModule(id: string, body: ModuleAttributes) {

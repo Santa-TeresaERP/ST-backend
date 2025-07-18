@@ -1,6 +1,6 @@
 import WarehouseMovementResource from '@models/warehouseMovomentResource'
 import { WarehouseMovomentResourceAttributes } from '@type/almacen/warehouse_movoment_resource'
-import { warehouseMovementResourceValidation } from 'src/schemas/almacen/warehouseMovomentResourceSchema'
+import { warehouseMovementResourceValidation } from '../../schemas/almacen/warehouseMovomentResourceSchema'
 
 const serviceUpdateWarehouseMovementResource = async (
   id: string,

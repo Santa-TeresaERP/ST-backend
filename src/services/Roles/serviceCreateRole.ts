@@ -1,6 +1,6 @@
 import Roles from '@models/roles'
 import { RolesAttributes } from '@type/user/roles'
-import { rolesValidation } from 'src/schemas/user/rolesSchema'
+import { rolesValidation } from '../../schemas/user/rolesSchema'
 
 const serviceCreateRole = async (body: RolesAttributes) => {
   const validation = rolesValidation(body)

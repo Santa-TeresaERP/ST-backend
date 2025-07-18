@@ -1,7 +1,7 @@
 import WarehouseMovementProduct from '@models/warehouseMovementProduct'
 import WarehouseProduct from '@models/warehouseProduct'
 import { WarehouseMovomentProductAttributes } from '@type/almacen/warehouse_movement_product'
-import { warehouseMovementProductValidation } from 'src/schemas/almacen/warehouseMovementProductScheama'
+import { warehouseMovementProductValidation } from '../../schemas/almacen/warehouseMovementProductScheama'
 import { Transaction } from 'sequelize'
 import WarehouseStore from '@models/warehouseStore'
 

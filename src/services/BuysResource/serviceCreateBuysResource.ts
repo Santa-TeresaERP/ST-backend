@@ -1,5 +1,5 @@
 import BuysResource from '@models/buysResource'
-import { buysResourceValidation } from 'src/schemas/almacen/BuysResourceSchema'
+import { buysResourceValidation } from '../../schemas/almacen/BuysResourceSchema'
 import { buysResourceAttributes } from '@type/almacen/buys_resource'
 import serviceCreateWarehouseMovementResource from '../warehouseMovementResource/serviceCreateWarehouseMovementResource'
 import Supplier from '@models/suplier'

@@ -1,6 +1,6 @@
 import WarehouseStore from '@models/warehouseStore'
 import { warehouseStoreAttributes } from '@type/ventas/warehouseStore'
-import { warehouseStoreValidation } from 'src/schemas/ventas/warehouseStoreSchema'
+import { warehouseStoreValidation } from '../../schemas/ventas/warehouseStoreSchema'
 
 const serviceUpdateWarehouseStore = async (
   id: string,

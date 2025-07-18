@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import routesLoader from '@config/routeLoader'
+import routeLoader from '@routes/routeLoader'
 import errorHandler from '@middlewares/errorMiddleware'
 import { PORT } from '@environments'
 import path from 'path'
@@ -36,7 +36,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')))
 
 
 // Cargar rutas
-routesLoader(app)
+routeLoader(app)
 
 // Middleware de manejo de errores
 app.use(errorHandler)

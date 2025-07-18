@@ -3,20 +3,18 @@ import { z } from 'zod'
 
 const cashSessionSchema = z.object({
   user_id: z
-    .number({
+    .string({
       required_error: 'El ID del usuario es obligatorio',
-      invalid_type_error: 'El ID del usuario debe ser un número',
+      invalid_type_error: 'El ID del usuario debe ser un string UUID',
     })
-    .int()
-    .positive('El ID del usuario debe ser mayor que cero'),
+    .uuid('El ID del usuario debe ser un UUID válido'),
 
   store_id: z
-    .number({
+    .string({
       required_error: 'El ID de la tienda es obligatorio',
-      invalid_type_error: 'El ID de la tienda debe ser un número',
+      invalid_type_error: 'El ID de la tienda debe ser un string UUID',
     })
-    .int()
-    .positive('El ID de la tienda debe ser mayor que cero'),
+    .uuid('El ID de la tienda debe ser un UUID válido'),
 
   start_amount: z
     .number({

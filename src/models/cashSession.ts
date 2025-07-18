@@ -9,8 +9,8 @@ class CashSession
   implements CashSessionAttributes
 {
   public id!: string
-  public user_id!: number
-  public store_id!: number
+  public user_id!: string
+  public store_id!: string
   public start_amount!: number
   public end_amount!: number
   public total_returns!: number
@@ -29,11 +29,11 @@ CashSession.init(
       primaryKey: true,
     },
     user_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     store_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     start_amount: {

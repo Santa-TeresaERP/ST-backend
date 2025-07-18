@@ -1,6 +1,6 @@
 import createSaleController from './createSale'
 import getSaleController from './getSale'
-import getSalesController from './GetSales'
+import getSalesController from './getSales'
 import updateSaleController from './updateSale'
 import deleteSaleController from './deleteSale'
 

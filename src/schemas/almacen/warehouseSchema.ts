@@ -21,7 +21,21 @@ export const warehouseSchema = z.object({
     .string()
     .max(150, 'La observación no debe exceder los 150 caracteres')
     .optional(),
+
+  status: z
+    .boolean()
+    .optional(),
 })
+// Validación de estado activo/inactivo
+export const validateWarehouseStatus = (data: { status?: boolean }) => {
+  if (data.status === false) {
+    return {
+      success: false,
+      error: 'El almacén está inactivo y no se puede usar.',
+    }
+  }
+  return { success: true }
+}
 
 // Validación segura
 export const warehouseValidation = (data: WarehouseAttributes) =>

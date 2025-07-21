@@ -3,6 +3,8 @@ import { buysResourceValidation } from '../../schemas/almacen/BuysResourceSchema
 import { buysResourceAttributes } from '@type/almacen/buys_resource'
 import serviceCreateWarehouseMovementResource from '../warehouseMovementResource/serviceCreateWarehouseMovementResource'
 import Supplier from '@models/suplier'
+import Warehouse from '@models/warehouse'
+import { validateWarehouseStatus } from 'src/schemas/almacen/warehouseSchema'
 
 const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
   // Agregar timestamp único para rastrear llamadas
@@ -48,6 +50,32 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
     // Obtener información del proveedor para usar en las observaciones
     const supplier = await Supplier.findByPk(supplier_id)
     const supplierName = supplier ? supplier.suplier_name : `ID: ${supplier_id}`
+
+// Validar que el almacén exista
+    const warehouse = await Warehouse.findByPk(warehouse_id)
+    if (!warehouse) {
+      return {
+        success: false,
+        error: 'Almacén no encontrado',
+        message: undefined,
+        action: undefined,
+        resource: undefined,
+        movement: undefined,
+      }
+    }
+
+    // Validar estado activo/inactivo del almacén usando la función del schema
+    const warehouseStatusValidation = validateWarehouseStatus({ status: warehouse.status })
+    if (!warehouseStatusValidation.success) {
+      return {
+        success: false,
+        error: warehouseStatusValidation.error,
+        message: undefined,
+        action: undefined,
+        resource: undefined,
+        movement: undefined,
+      }
+    }
 
     // Verificar si ya existe un registro con las mismas relaciones
     const existingResource = await BuysResource.findOne({

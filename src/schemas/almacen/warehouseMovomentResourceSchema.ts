@@ -30,7 +30,22 @@ export const warehouseMovementResourceSchema = z.object({
     .string()
     .max(150, 'Las observaciones no deben exceder los 150 caracteres')
     .optional(),
+
+  status: z
+    .boolean()
+    .optional(),
 })
+
+// Validación de estado activo/inactivo
+export const validateResourceStatus = (data: { status?: boolean }) => {
+  if (data.status === false) {
+    return {
+      success: false,
+      error: 'El recurso está inactivo y no se puede usar para movimientos.',
+    }
+  }
+  return { success: true }
+}
 
 export const warehouseMovementResourceValidation = (
   data: WarehouseMovomentResourceAttributes,

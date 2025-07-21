@@ -3,7 +3,9 @@ import WarehouseMovementResource from '@models/warehouseMovomentResource'
 import { WarehouseMovomentResourceAttributes } from '@type/almacen/warehouse_movoment_resource'
 import { warehouseMovementResourceValidation } from '../../schemas/almacen/warehouseMovomentResourceSchema'
 import BuysResource from '@models/buysResource'
+import Warehouse from '@models/warehouse'
 import serviceUpdateWarehouseResource from '../../services/BuysResource/serviceUpdateBuysResource'
+import { validateWarehouseStatus } from '../../schemas/almacen/warehouseSchema'
 
 const serviceCreateWarehouseMovementResource = async (
   body: WarehouseMovomentResourceAttributes,
@@ -34,6 +36,20 @@ const serviceCreateWarehouseMovementResource = async (
   const warehouseResource = await BuysResource.findOne({
     where: { warehouse_id, resource_id },
   })
+
+  // Validar que el recurso exista en el almacén
+  const warehouse = await Warehouse.findByPk(warehouse_id)
+  if (!warehouse) {
+    return { success: false, error: 'Almacén no encontrado' }
+  }
+
+  // Validar estado activo/inactivo del almacén usando la función del schema
+  const warehouseStatusValidation = validateWarehouseStatus({
+    status: warehouse.status,
+  })
+  if (!warehouseStatusValidation.success) {
+    return warehouseStatusValidation
+  }
 
   // Si no existe, rechazar entrada/salida (entrada debe pasar por proveedor)
   if (!warehouseResource) {

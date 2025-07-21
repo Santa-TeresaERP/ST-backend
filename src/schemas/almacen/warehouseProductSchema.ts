@@ -19,7 +19,22 @@ export const warehouseProductSchema = z.object({
   entry_date: z.coerce.date({
     invalid_type_error: 'La fecha de entrada debe ser válida',
   }),
+
+  status: z
+  .boolean()
+  .optional(),
 })
+
+// Validación de estado activo/inactivo
+export const validateWarehouseProductStatus = (data: { status?: boolean }) => {
+  if (data.status === false) {
+    return {
+      success: false,
+      error: 'El producto en el almacén está inactivo y no se puede usar.',
+    }
+  }
+  return { success: true }
+}
 
 export const warehouseProductValidation = (data: WarehouseProductAttributes) =>
   warehouseProductSchema.safeParse(data)

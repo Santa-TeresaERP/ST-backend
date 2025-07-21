@@ -15,7 +15,14 @@ router.post(
 // Resto de las rutas permanecen igual...
 router.get('/', authorization, productsController.getAllProduct)
 router.get('/:id', authorization, productsController.getProductByID)
-router.patch('/:id', authorization, productsController.updateProduct)
+
+router.patch(
+  '/:id',
+  authorization,
+  uploadProductImage, // <-- Agregado aquí
+  productsController.updateProduct
+)
+
 router.delete('/:id', authorization, productsController.deleteProduct)
 
 export default router

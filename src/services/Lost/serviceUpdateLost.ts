@@ -1,29 +1,39 @@
 import Lost from '@models/lost'
-import Product from '@models/product'
-import { lostAttributes } from '@type/production/lost'
+import Production from '@models/production'
 
-export default async function updateLost(
+const updateLost = async (
   id: string,
-  updateData: Partial<Omit<lostAttributes, 'id' | 'created_at'>>,
-) {
+  lostData: {
+    production_id?: string
+    quantity?: number
+    lost_type?: string
+    observations?: string
+  },
+) => {
   try {
     const lost = await Lost.findByPk(id)
     if (!lost) {
-      throw new Error('Registro de pérdida no encontrado')
+      return { error: 'Registro de pérdida no encontrado' }
     }
 
-    if (updateData.production_id) {
-      const product = await Product.findByPk(updateData.production_id)
-      if (!product) {
-        throw new Error('Producto no encontrado')
+    // Validar que la producción existe si se está actualizando
+    if (lostData.production_id) {
+      const production = await Production.findByPk(lostData.production_id)
+      if (!production) {
+        return { error: 'Producción no encontrada' }
       }
     }
 
-    await lost.update(updateData)
-    return lost
+    await lost.update(lostData)
+
+    return {
+      message: 'Registro de pérdida actualizado exitosamente',
+      lost,
+    }
   } catch (error) {
-    throw new Error(
-      `Error al actualizar registro de pérdida: ${error instanceof Error ? error.message : String(error)}`,
-    )
+    console.error('Error updating lost record:', error)
+    return { error: 'Error interno del servidor' }
   }
 }
+
+export default updateLost

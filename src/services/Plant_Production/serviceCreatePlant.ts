@@ -1,6 +1,6 @@
 import PlantProduction from '@models/plant_production'
 import { plant_productionAttributes } from '@type/production/plant_production'
-import { plantProductionValidation } from 'src/schemas/production/plant_productionSchema'
+import { plantProductionValidation } from '../../schemas/production/plant_productionSchema'
 
 const serviceCreatePlant = async (body: plant_productionAttributes) => {
   // Validar los datos usando el esquema

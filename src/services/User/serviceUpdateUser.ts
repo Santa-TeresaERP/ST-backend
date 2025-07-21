@@ -1,6 +1,6 @@
 import User from '@models/user'
 import { UserAttributes } from '@type/user/auth'
-import { userValidationPartial } from 'src/schemas/user/userSchema'
+import { userValidationPartial } from '../../schemas/user/userSchema'
 
 const serviceUpdateUser = async (id: string, body: Partial<UserAttributes>) => {
   const validation = userValidationPartial(body)

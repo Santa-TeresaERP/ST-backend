@@ -1,6 +1,6 @@
 import sale from '@models/sale'
 import { salesAttributes } from '@type/ventas/sale'
-import { saleValidation } from 'src/schemas/ventas/salesSchema'
+import { saleValidation } from '../../schemas/ventas/salesSchema'
 
 const serviceCreateSale = async (body: salesAttributes) => {
   // Validar los datos del cuerpo usando el esquema de validación

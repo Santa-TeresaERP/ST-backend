@@ -1,6 +1,6 @@
 import saleDetail from '@models/saleDetail'
 import { SaleDetailAttributes } from '@type/ventas/saleDetail'
-import { saleDetailValidation } from 'src/schemas/ventas/saleDetailSchema'
+import { saleDetailValidation } from '../../schemas/ventas/saleDetailSchema'
 
 const serviceCreateSaleDetail = async (body: SaleDetailAttributes) => {
   const validation = saleDetailValidation(body)

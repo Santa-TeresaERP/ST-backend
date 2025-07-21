@@ -1,6 +1,6 @@
 import Supplier from '@models/suplier'
 import { SuplierAttributes } from '@type/almacen/supplier'
-import { supplierValidation } from 'src/schemas/almacen/supplier'
+import { supplierValidation } from '../../schemas/almacen/supplier'
 
 const serviceCreateSupplier = async (body: SuplierAttributes) => {
   const validation = supplierValidation(body)

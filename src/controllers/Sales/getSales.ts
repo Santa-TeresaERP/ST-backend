@@ -1,10 +1,31 @@
 import { Request, Response } from 'express'
 import useSale from '@services/Sale/index'
+import CashSession from '@models/cashSession'
 
-const getSalesController = async (_req: Request, res: Response) => {
+// Extendemos la interfaz para incluir la posible sesión activa
+interface AuthRequest extends Request {
+  activeCashSession?: CashSession
+  user?: {
+    id: string
+  }
+}
+
+const getSalesController = async (req: AuthRequest, res: Response) => {
   try {
-    // Llamar al servicio para obtener todas las ventas
-    const sales = await useSale.serviceGetSales()
+    let storeId: string | undefined
+
+    // Si hay una sesión de caja activa adjunta al request, usamos su tienda
+    if (req.activeCashSession) {
+      storeId = req.activeCashSession.store_id
+    }
+
+    // Si se proporciona un store_id en la query, lo usamos
+    if (req.query.store_id) {
+      storeId = req.query.store_id as string
+    }
+
+    // Llamar al servicio para obtener ventas, posiblemente filtradas por tienda
+    const sales = await useSale.serviceGetSales(storeId)
 
     // Responder con la lista de ventas y un código 200
     res.status(200).json(sales)

@@ -13,6 +13,13 @@ router.get('/', authorization, cashSessionController.getCashSessions)
 // Obtener una sesión de caja por ID
 router.get('/:id', authorization, cashSessionController.getCashSessionById)
 
+// Obtener detalles completos de una sesión de caja (incluye totales de ventas y devoluciones)
+router.get(
+  '/:id/details',
+  authorization,
+  cashSessionController.getCashSessionDetails,
+)
+
 // Actualizar una sesión de caja
 router.patch('/:id', authorization, cashSessionController.updateCashSession)
 

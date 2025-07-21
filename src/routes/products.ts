@@ -20,7 +20,7 @@ router.patch(
   '/:id',
   authorization,
   uploadProductImage, // <-- Agregado aquí
-  productsController.updateProduct
+  productsController.updateProduct,
 )
 
 router.delete('/:id', authorization, productsController.deleteProduct)

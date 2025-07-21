@@ -4,7 +4,10 @@ import { z } from 'zod'
 export const returnSchema = z.object({
   id: z.string().uuid('El ID debe ser un UUID válido').optional(),
 
-  productId: z.string().uuid('El ID del producto debe ser un UUID válido'),
+  productId: z
+    .string()
+    .uuid('El ID del producto debe ser un UUID válido')
+    .optional(), // Ahora opcional
 
   salesId: z.string().uuid('El ID de la venta debe ser un UUID válido'),
 

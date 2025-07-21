@@ -1,6 +1,6 @@
 import Entrance from '@models/entrance'
 import { entranceAttributes } from '@type/museo/entrance'
-import { entranceValidation } from 'src/schemas/museo/entranceSchema'
+import { entranceValidation } from 'src/schemas/museo/entrance'
 
 const serviceCreateEntrance = async (body: entranceAttributes) => {
   const validation = entranceValidation(body)

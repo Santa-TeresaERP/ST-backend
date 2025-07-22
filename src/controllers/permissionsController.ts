@@ -58,8 +58,8 @@ export const updatePermissionController = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { id } = req.params
-    const result = await usePermissions.updatePermission(id, req.body)
+    const { roleId } = req.params
+    const result = await usePermissions.updatePermission(roleId, req.body)
 
     if ('error' in result) {
       res.status(400).json({ error: result.error })

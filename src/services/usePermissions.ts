@@ -125,18 +125,47 @@ class usePermissions {
           const { moduleId, canRead, canWrite, canEdit, canDelete } =
             validation.data
 
-          // Buscar el permiso por moduleId
-          const permission = await Permissions.findOne({ where: { moduleId } })
+          // 🔥 BUSCAR si ya existe un permiso para este ROL + MÓDULO
+          const existingRolePermission = await RolesPermissions.findOne({
+            where: { roleId: id },
+            include: [
+              {
+                model: Permissions,
+                where: { moduleId },
+              },
+            ],
+          })
 
-          if (!permission) {
-            errors.push({
+          let permission
+          if (!existingRolePermission) {
+            // 🔥 CREAR permiso ÚNICO para este ROL + MÓDULO (nunca reutilizar)
+            console.log(
+              `📝 Creando nuevo permiso ÚNICO para rol: ${id}, módulo: ${moduleId}`,
+            )
+            permission = await Permissions.create({
               moduleId,
-              error: 'Permiso no encontrado para este módulo',
+              canRead,
+              canWrite,
+              canEdit,
+              canDelete,
             })
-            continue
-          }
 
-          await permission.update({ canRead, canWrite, canEdit, canDelete })
+            // Crear la relación rol-permiso
+            await RolesPermissions.create({
+              roleId: id,
+              permissionId: permission.id,
+            })
+            console.log(
+              `📝 Relación creada para rol: ${id}, permiso ÚNICO: ${permission.id}`,
+            )
+          } else {
+            // 🔥 ACTUALIZAR permiso específico de este rol
+            permission = (existingRolePermission as any).Permission
+            console.log(
+              `📝 Actualizando permiso existente para rol: ${id}, módulo: ${moduleId}, permiso: ${permission.id}`,
+            )
+            await permission.update({ canRead, canWrite, canEdit, canDelete })
+          }
 
           results.push({
             moduleId,

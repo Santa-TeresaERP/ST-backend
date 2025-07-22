@@ -12,6 +12,7 @@ router.get('/', authorization, rolesController.getRoles)
 
 // Obtener un rol
 router.get('/:id', authorization, rolesController.getRole)
+
 router.patch('/:id', authorization, rolesController.updateRole)
 router.delete('/:id', authorization, rolesController.deleteRole)
 

@@ -19,8 +19,8 @@ router.post('/', authorization, createMultiplePermissionsController)
 // Obtener todos los permisos
 router.get('/', authorization, getPermissionsController)
 
-// Actualizar un permiso
-router.patch('/:id', authorization, updatePermissionController)
+// Actualizar permisos de un rol específico
+router.patch('/role/:roleId', authorization, updatePermissionController)
 
 // Eliminar un permiso
 router.delete('/:id', authorization, deletePermissionController)

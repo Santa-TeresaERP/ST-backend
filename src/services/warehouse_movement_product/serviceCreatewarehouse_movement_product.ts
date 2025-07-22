@@ -5,7 +5,7 @@ import { warehouseMovementProductValidation } from '../../schemas/almacen/wareho
 import { Transaction } from 'sequelize'
 import WarehouseStore from '@models/warehouseStore'
 import Warehouse from '@models/warehouse'
-import { validateWarehouseStatus } from 'src/schemas/almacen/warehouseSchema'
+import { validateWarehouseStatus } from '../../schemas/almacen/warehouseSchema'
 
 const serviceCreatewarehouseMovementProduct = async (
   data: WarehouseMovomentProductAttributes,
@@ -58,10 +58,12 @@ const serviceCreatewarehouseMovementProduct = async (
     }
 
     // Validar estado activo/inactivo del almacén usando la función del schema
-    const warehouseStatusValidation = validateWarehouseStatus({ status: warehouse.status })
-      if (!warehouseStatusValidation.success) {
-        return warehouseStatusValidation
-      }
+    const warehouseStatusValidation = validateWarehouseStatus({
+      status: warehouse.status,
+    })
+    if (!warehouseStatusValidation.success) {
+      return warehouseStatusValidation
+    }
 
     // Validar stock suficiente antes de crear el movimiento (solo para salidas)
     if (movement_type === 'salida' && warehouseProduct.quantity < quantity) {

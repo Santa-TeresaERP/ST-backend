@@ -4,7 +4,7 @@ import { buysResourceAttributes } from '@type/almacen/buys_resource'
 import serviceCreateWarehouseMovementResource from '../warehouseMovementResource/serviceCreateWarehouseMovementResource'
 import Supplier from '@models/suplier'
 import Warehouse from '@models/warehouse'
-import { validateWarehouseStatus } from 'src/schemas/almacen/warehouseSchema'
+import { validateWarehouseStatus } from '../../schemas/almacen/warehouseSchema'
 
 const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
   // Agregar timestamp único para rastrear llamadas
@@ -51,7 +51,7 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
     const supplier = await Supplier.findByPk(supplier_id)
     const supplierName = supplier ? supplier.suplier_name : `ID: ${supplier_id}`
 
-// Validar que el almacén exista
+    // Validar que el almacén exista
     const warehouse = await Warehouse.findByPk(warehouse_id)
     if (!warehouse) {
       return {
@@ -65,7 +65,9 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
     }
 
     // Validar estado activo/inactivo del almacén usando la función del schema
-    const warehouseStatusValidation = validateWarehouseStatus({ status: warehouse.status })
+    const warehouseStatusValidation = validateWarehouseStatus({
+      status: warehouse.status,
+    })
     if (!warehouseStatusValidation.success) {
       return {
         success: false,

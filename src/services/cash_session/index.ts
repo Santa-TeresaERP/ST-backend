@@ -4,6 +4,7 @@ import serviceGetCashSessionById from './serviceGetCashSessionById'
 import serviceUpdateCashSession from './serviceUpdateCashSession'
 import serviceDeleteCashSession from './serviceDeleteCashSession'
 import serviceGetSessionTotals from './serviceGetSessionTotals'
+import serviceCheckStoreActiveSession from './serviceCheckStoreActiveSession'
 
 const useCashSession = {
   serviceCreateCashSession,
@@ -12,6 +13,7 @@ const useCashSession = {
   serviceUpdateCashSession,
   serviceDeleteCashSession,
   serviceGetSessionTotals,
+  serviceCheckStoreActiveSession,
 }
 
 export default useCashSession

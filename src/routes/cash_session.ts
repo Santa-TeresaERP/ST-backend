@@ -10,6 +10,13 @@ router.post('/', authorization, cashSessionController.createCashSession)
 // Obtener todas las sesiones de caja
 router.get('/', authorization, cashSessionController.getCashSessions)
 
+// Verificar si una tienda tiene una sesión de caja activa
+router.get(
+  '/store/:storeId/active',
+  authorization,
+  cashSessionController.checkStoreActiveSession,
+)
+
 // Obtener una sesión de caja por ID
 router.get('/:id', authorization, cashSessionController.getCashSessionById)
 

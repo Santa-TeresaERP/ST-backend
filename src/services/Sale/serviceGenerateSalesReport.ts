@@ -6,7 +6,8 @@ import { Op } from 'sequelize'
 
 interface SalesReportOptions {
   storeId: string
-  month: number 
+  day: number
+  month: number
   year: number
 }
 
@@ -20,19 +21,16 @@ interface SaleWithDetails {
   saleDetails: SaleDetail[]
 }
 
-const serviceGenerateSalesReport = async ({ storeId, month, year }: SalesReportOptions) => {
+const serviceGenerateSalesReport = async ({ storeId, day, month, year }: SalesReportOptions) => {
   // Obtener la tienda
   const store = await Store.findByPk(storeId)
   if (!store) return { error: 'Tienda no encontrada' }
 
-  const startDate = new Date(year, month - 1, 1)
-  const endDate = new Date(year, month, 0, 23, 59, 59)
+  // Rango de fechas para el día seleccionado
+  const startDate = new Date(year, month - 1, day, 0, 0, 0)
+  const endDate = new Date(year, month - 1, day, 23, 59, 59)
 
-  if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
-    return { error: 'Fechas inválidas generadas con los parámetros proporcionados' }
-  }
-
-  // Obtener ventas del mes para la tienda
+  // Obtener ventas del día para la tienda
   const sales = await sale.findAll({
     where: {
       store_id: storeId,
@@ -63,8 +61,8 @@ const serviceGenerateSalesReport = async ({ storeId, month, year }: SalesReportO
   // reporte
   let report = ''
   report += `========================================\n`
-  report += `Tienda: ${store.store_name}\nFecha: ${startDate.toLocaleDateString()}\n`
-  report += `Mes: ${startDate.toLocaleString('default', { month: 'long' })}\n`
+  report += `Tienda: ${store.store_name}\n`
+  report += `Fecha: ${startDate.toLocaleDateString()}\n`
   report += `========================================\n\n`
   report += `Ventas:\n`
   report += `Producto        | Cantidad | Total\n`

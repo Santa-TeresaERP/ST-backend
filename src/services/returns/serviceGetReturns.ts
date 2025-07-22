@@ -1,18 +1,19 @@
 import Return from '@models/returns'
-import Product from '@models/product'
-import Sale from '@models/sale'
 
-const serviceGetReturns = async () => {
-  const returns = await Return.findAll({
-    include: [
-      { model: Product, as: 'product' },
-      { model: Sale, as: 'sale' },
-    ],
-  }).catch((error) => {
-    return { error: 'Error al obtener devoluciones', details: error.message }
-  })
+type ServiceResult =
+  | { success: true; data: Return[] }
+  | { error: string; details?: string }
 
-  return returns
+const serviceGetReturns = async (): Promise<ServiceResult> => {
+  try {
+    const items = await Return.findAll()
+    return { success: true, data: items }
+  } catch (error: unknown) {
+    return {
+      error: 'Error al obtener las devoluciones',
+      details: error instanceof Error ? error.message : 'Error desconocido',
+    }
+  }
 }
 
 export default serviceGetReturns

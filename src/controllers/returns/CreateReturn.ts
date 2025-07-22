@@ -6,11 +6,12 @@ const CreateReturn = async (req: Request, res: Response): Promise<void> => {
     const result = await useReturns.serviceCreateReturn(req.body)
 
     if ('error' in result) {
-      res.status(400).json({ error: result.error })
+      res.status(400).json({ success: false, error: result.error })
       return
     }
 
     res.status(201).json({
+      success: true,
       message: 'Devolución creada exitosamente',
       data: result,
     })

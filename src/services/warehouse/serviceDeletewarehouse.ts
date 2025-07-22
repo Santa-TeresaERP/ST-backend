@@ -11,7 +11,9 @@ const serviceDeletewarehouse = async (id: string, status: boolean) => {
   warehouses.status = status // Alternar el estado
   await warehouses.save()
 
-  console.log(`Estado del almacén "${warehouses.name}" cambiado a: ${warehouses.status ? 'activo' : 'inactivo'}`)
+  console.log(
+    `Estado del almacén "${warehouses.name}" cambiado a: ${warehouses.status ? 'activo' : 'inactivo'}`,
+  )
 
   return { message: 'Almacén desactivado correctamente' }
 }

@@ -26,4 +26,4 @@ const serviceCreateSalesChannel = async (body: salesChannelAttributes) => {
   return newSalesChannel
 }
 
-export default serviceCreateSalesChannel 
+export default serviceCreateSalesChannel

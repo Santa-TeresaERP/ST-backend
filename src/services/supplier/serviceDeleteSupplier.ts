@@ -10,9 +10,11 @@ const serviceDeleteSupplier = async (id: string) => {
     // Cambiar el status a false en lugar de eliminar
     supplier.status = !supplier.status // Alternar el estado
     await supplier.save()
-    
-    console.log(`Estado del proveedor "${supplier.suplier_name}" cambiado a: ${supplier.status ? 'activo' : 'inactivo'}`)
-    
+
+    console.log(
+      `Estado del proveedor "${supplier.suplier_name}" cambiado a: ${supplier.status ? 'activo' : 'inactivo'}`,
+    )
+
     return supplier
   } catch (error) {
     return { error: 'Error al desactivar proveedor' }

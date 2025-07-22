@@ -22,9 +22,7 @@ export const warehouseSchema = z.object({
     .max(150, 'La observación no debe exceder los 150 caracteres')
     .optional(),
 
-  status: z
-    .boolean()
-    .optional(),
+  status: z.boolean().optional(),
 })
 // Validación de estado activo/inactivo
 export const validateWarehouseStatus = (data: { status?: boolean }) => {

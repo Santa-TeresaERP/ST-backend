@@ -12,4 +12,4 @@ const useTypePerson = {
   serviceDeleteTypePerson,
 }
 
-export default useTypePerson 
+export default useTypePerson

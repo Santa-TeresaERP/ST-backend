@@ -9,4 +9,4 @@ const serviceDeleteTypePerson = async (id: string) => {
   return { message: 'Tipo de persona eliminado correctamente' }
 }
 
-export default serviceDeleteTypePerson 
+export default serviceDeleteTypePerson

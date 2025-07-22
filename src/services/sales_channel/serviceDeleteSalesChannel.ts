@@ -9,4 +9,4 @@ const serviceDeleteSalesChannel = async (id: string) => {
   return { message: 'Canal de venta eliminado correctamente' }
 }
 
-export default serviceDeleteSalesChannel 
+export default serviceDeleteSalesChannel

@@ -12,8 +12,10 @@ const DeleteTypePerson = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json(result)
   } catch (error) {
     console.error('Error en DeleteTypePerson:', error)
-    res.status(500).json({ error: 'Error interno al eliminar el tipo de persona' })
+    res
+      .status(500)
+      .json({ error: 'Error interno al eliminar el tipo de persona' })
   }
 }
 
-export default DeleteTypePerson 
+export default DeleteTypePerson

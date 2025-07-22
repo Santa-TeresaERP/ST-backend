@@ -7,8 +7,10 @@ const GetTypePersons = async (_req: Request, res: Response): Promise<void> => {
     res.status(200).json(result)
   } catch (error) {
     console.error('Error en GetTypePersons:', error)
-    res.status(500).json({ error: 'Error interno al obtener los tipos de persona' })
+    res
+      .status(500)
+      .json({ error: 'Error interno al obtener los tipos de persona' })
   }
 }
 
-export default GetTypePersons 
+export default GetTypePersons

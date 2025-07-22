@@ -1,38 +1,54 @@
 import { v4 as uuidv4 } from 'uuid'
 import Return from '@models/returns'
+import Product from '@models/product'
 import { returnValidation } from '../../schemas/ventas/returnsSchema'
 import { returnsAttributes } from '@type/ventas/returns'
 
-const serviceCreateReturn = async (body: returnsAttributes) => {
+const serviceCreateReturn = async (
+  body: returnsAttributes,
+): Promise<Return> => {
   const validation = returnValidation(body)
 
   if (!validation.success) {
-    return { error: validation.error.errors }
+    console.error(validation.error.format())
+    throw new Error('Validación fallida')
   }
 
-  // Genera un UUID si no se envió uno
   const {
     id = uuidv4(),
     productId,
     salesId,
     reason,
     observations,
+    quantity,
   } = validation.data
 
-  const newReturn = await Return.create({
-    id, // Asegura que siempre haya un id
-    productId,
-    salesId,
-    reason: reason ?? '',
-    observations: observations ?? undefined,
-  }).catch((error) => {
-    return {
-      error: 'Error al registrar la devolución',
-      details: error.message,
-    }
-  })
+  const product = await Product.findByPk(productId)
+  if (!product) {
+    throw new Error('Producto no encontrado')
+  }
 
-  return newReturn
+  const unitPrice = product.price
+  const price = unitPrice * quantity
+
+  try {
+    const newReturn = await Return.create({
+      id,
+      productId,
+      salesId,
+      reason: reason ?? '',
+      observations: observations ?? undefined,
+      quantity,
+      price,
+    })
+
+    return newReturn
+  } catch (error: unknown) {
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : 'Error desconocido al registrar devolución',
+    )
+  }
 }
-
 export default serviceCreateReturn

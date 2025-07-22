@@ -1,14 +1,22 @@
 import Return from '@models/returns'
 
-const serviceDeleteReturn = async (id: string) => {
-  const existing = await Return.findByPk(id)
-  if (!existing) return { error: 'Devolución no encontrada' }
+type ServiceResult =
+  | { success: true; message: string }
+  | { error: string; details?: string }
 
-  await existing.destroy().catch((error) => {
-    return { error: 'Error al eliminar la devolución', details: error.message }
-  })
+const serviceDeleteReturn = async (id: string): Promise<ServiceResult> => {
+  try {
+    const item = await Return.findByPk(id)
+    if (!item) return { error: 'Devolución no encontrada' }
 
-  return { message: 'Devolución eliminada correctamente' }
+    await item.destroy()
+    return { success: true, message: 'Devolución eliminada correctamente' }
+  } catch (error: unknown) {
+    return {
+      error: 'Error al eliminar la devolución',
+      details: error instanceof Error ? error.message : 'Error desconocido',
+    }
+  }
 }
 
 export default serviceDeleteReturn

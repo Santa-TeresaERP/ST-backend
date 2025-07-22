@@ -13,27 +13,43 @@ class Return
   public productId!: string
   public salesId!: string
   public reason!: string
-  public observations!: string
-  public createdAt!: Date
-  public updatedAt!: Date
+  public observations?: string
+  public quantity!: number
+  public price!: number
+  public readonly createdAt!: Date
+  public readonly updatedAt!: Date
 }
 
 Return.init(
   {
-    id: { type: DataTypes.UUID, defaultValue: uuid, primaryKey: true },
-    productId: { type: DataTypes.UUID, allowNull: false },
-    salesId: { type: DataTypes.UUID, allowNull: false },
-    reason: { type: DataTypes.STRING, allowNull: false },
-    observations: { type: DataTypes.STRING, allowNull: true },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: uuid,
+      primaryKey: true,
     },
-    updatedAt: {
-      type: DataTypes.DATE,
+    productId: {
+      type: DataTypes.UUID,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
+    },
+    salesId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
+    reason: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    observations: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    price: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
     },
   },
   {

@@ -40,6 +40,13 @@ export const returnSchema = z.object({
       return true
     }, 'Las observaciones contienen caracteres no permitidos o posibles inyecciones'),
 
+  quantity: z
+    .number({
+      required_error: 'La cantidad es obligatoria',
+      invalid_type_error: 'La cantidad debe ser un número',
+    })
+    .min(1, 'La cantidad debe ser al menos 1'),
+
   createdAt: z
     .date()
     .optional()

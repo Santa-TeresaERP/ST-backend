@@ -4,7 +4,10 @@ import { z } from 'zod'
 export const returnSchema = z.object({
   id: z.string().uuid('El ID debe ser un UUID válido').optional(),
 
-  productId: z.string().uuid('El ID del producto debe ser un UUID válido'),
+  productId: z
+    .string()
+    .uuid('El ID del producto debe ser un UUID válido')
+    .optional(), // Ahora opcional
 
   salesId: z.string().uuid('El ID de la venta debe ser un UUID válido'),
 
@@ -39,6 +42,13 @@ export const returnSchema = z.object({
       }
       return true
     }, 'Las observaciones contienen caracteres no permitidos o posibles inyecciones'),
+
+  quantity: z
+    .number({
+      required_error: 'La cantidad es obligatoria',
+      invalid_type_error: 'La cantidad debe ser un número',
+    })
+    .min(1, 'La cantidad debe ser al menos 1'),
 
   createdAt: z
     .date()

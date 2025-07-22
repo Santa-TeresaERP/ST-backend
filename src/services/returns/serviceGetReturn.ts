@@ -1,13 +1,20 @@
 import Return from '@models/returns'
 
-const serviceGetReturn = async (id: string) => {
-  const data = await Return.findByPk(id).catch((error) => {
-    return { error: 'Error al obtener devolución', details: error.message }
-  })
+type ServiceResult =
+  | { success: true; data: Return }
+  | { error: string; details?: string }
 
-  if (!data) return { error: 'Devolución no encontrada' }
-
-  return data
+const serviceGetReturn = async (id: string): Promise<ServiceResult> => {
+  try {
+    const item = await Return.findByPk(id)
+    if (!item) return { error: 'Devolución no encontrada' }
+    return { success: true, data: item }
+  } catch (error: unknown) {
+    return {
+      error: 'Error al obtener la devolución',
+      details: error instanceof Error ? error.message : 'Error desconocido',
+    }
+  }
 }
 
 export default serviceGetReturn

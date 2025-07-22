@@ -1,6 +1,6 @@
 import WarehouseStore from '@models/warehouseStore'
 import { warehouseStoreAttributes } from '@type/ventas/warehouseStore'
-import { warehouseStoreValidation } from 'src/schemas/ventas/warehouseStoreSchema'
+import { warehouseStoreValidation } from '../../schemas/ventas/warehouseStoreSchema'
 
 const serviceCreateWarehouseStore = async (body: warehouseStoreAttributes) => {
   // Validar los datos del cuerpo usando el esquema de validación

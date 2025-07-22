@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'
 import { generateToken } from '@config/jwt'
 import User from '@models/user'
 import { jwtData, UserAttributes } from '@type/user/auth'
-import { userValidationPartial } from 'src/schemas/user/userSchema'
+import { userValidationPartial } from '../../schemas/user/userSchema'
 
 const serviceCheckUser = async (body: UserAttributes) => {
   const validation = userValidationPartial(body)

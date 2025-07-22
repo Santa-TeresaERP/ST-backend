@@ -45,8 +45,17 @@ Entrance.init(
 
 // Relaciones
 Entrance.belongsTo(User, { foreignKey: 'user_id', as: 'user' })
-Entrance.belongsTo(TypePerson, { foreignKey: 'type_person_id', as: 'type_person' })
-Entrance.belongsTo(SalesChannel, { foreignKey: 'sale_channel', as: 'sales_channel' })
-Entrance.belongsTo(PaymentMethod, { foreignKey: 'payment_method', as: 'payment_method_obj' })
+Entrance.belongsTo(TypePerson, {
+  foreignKey: 'type_person_id',
+  as: 'type_person',
+})
+Entrance.belongsTo(SalesChannel, {
+  foreignKey: 'sale_channel',
+  as: 'sales_channel',
+})
+Entrance.belongsTo(PaymentMethod, {
+  foreignKey: 'payment_method',
+  as: 'payment_method_obj',
+})
 
 export default Entrance

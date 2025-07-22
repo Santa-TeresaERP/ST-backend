@@ -1,6 +1,6 @@
 import Recipe from '@models/recipe'
 import { recipeAttributes } from '@type/production/recipes'
-import { recipeValidation } from 'src/schemas/production/recipeSchema'
+import { recipeValidation } from '../../schemas/production/recipeSchema'
 
 const serviceUpdateRecipe = async (id: string, body: recipeAttributes) => {
   const validation = recipeValidation(body)

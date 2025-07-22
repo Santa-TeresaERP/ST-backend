@@ -1,6 +1,6 @@
 import Production from '@models/production'
 import { productionAttributes } from '@type/production/production'
-import { productionValidation } from 'src/schemas/production/productionSchema'
+import { productionValidation } from '../../schemas/production/productionSchema'
 import Product from '@models/product'
 import PlantProduction from '@models/plant_production'
 import sequelize from '@config/database' // Importar sequelize para transacciones

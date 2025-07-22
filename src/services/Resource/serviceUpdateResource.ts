@@ -1,6 +1,6 @@
 import Resource from '@models/resource'
 import { ResourceAttributes } from '@type/almacen/resource'
-import { resourceValidation } from 'src/schemas/almacen/resourceSchema'
+import { resourceValidation } from '../../schemas/almacen/resourceSchema'
 
 const serviceUpdateResource = async (id: string, body: ResourceAttributes) => {
   const validation = resourceValidation(body)

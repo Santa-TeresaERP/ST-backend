@@ -31,7 +31,22 @@ export const warehouseMovementProductSchema = z.object({
     .string()
     .max(150, 'Las observaciones no deben exceder los 150 caracteres')
     .optional(),
+
+  status: z
+    .boolean()
+    .optional(),
 })
+
+// Validación de estado activo/inactivo
+export const validateProductStatus = (data: { status?: boolean }) => {
+  if (data.status === false) {
+    return {
+      success: false,
+      error: 'El producto está inactivo y no se puede usar para movimientos.',
+    }
+  }
+  return { success: true }
+}
 
 export const warehouseMovementProductValidation = (
   data: WarehouseMovomentProductAttributes,

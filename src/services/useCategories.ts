@@ -1,7 +1,7 @@
 import Category from '@models/categories'
 import Product from '@models/product' // Importa el modelo de productos
 import { CategoryAttributes } from '@type/production/categories'
-import { categoryValidation } from 'src/schemas/production/categoriesSchema'
+import { categoryValidation } from '../schemas/production/categoriesSchema'
 
 class useCategories {
   // Crear una categoría

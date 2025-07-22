@@ -1,11 +1,11 @@
-import serviceChangePassword from 'src/services/User/serviceChangePassword'
-import serviceCheckUser from 'src/services/User/serviceCheckUser'
-import serviceCreateUser from 'src/services/User/serviceCreateUser'
-import serviceDeleteUser from 'src/services/User/serviceDeleteUser'
-import serviceGetUsersAll from 'src/services/User/serviceGetUserAll'
-import serviceGetUser from 'src/services/User/serviceGetUser'
-import serviceGetUsers from 'src/services/User/serviceGetUsers'
-import serviceUpdateUser from 'src/services/User/serviceUpdateUser'
+import serviceChangePassword from '../../services/User/serviceChangePassword'
+import serviceCheckUser from '../../services/User/serviceCheckUser'
+import serviceCreateUser from '../../services/User/serviceCreateUser'
+import serviceDeleteUser from '../../services/User/serviceDeleteUser'
+import serviceGetUsersAll from '../../services/User/serviceGetUserAll'
+import serviceGetUser from '../../services/User/serviceGetUser'
+import serviceGetUsers from '../../services/User/serviceGetUsers'
+import serviceUpdateUser from '../../services/User/serviceUpdateUser'
 
 const useUser = {
   serviceChangePassword,

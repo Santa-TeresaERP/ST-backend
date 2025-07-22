@@ -4,7 +4,7 @@ import { RentalAttributes } from '@type/alquiler/rentals'
 import { v4 as uuid } from 'uuid'
 import Customer from '@models/customers'
 import Place from '@models/places'
-import User from '@models/users' // Asegúrate que exista este modelo
+import User from '@models/user' // Asegúrate que exista este modelo
 
 class Rental
   extends Model<RentalAttributes, Optional<RentalAttributes, 'id'>>
@@ -53,7 +53,7 @@ Rental.init(
     sequelize,
     tableName: 'rentals',
     timestamps: true,
-  }
+  },
 )
 
 // Relaciones

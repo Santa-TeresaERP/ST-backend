@@ -55,8 +55,8 @@ class migrate {
       `)
 
       await createAdmin()
-      await createRoles()
       await createModules()
+      await createRoles()
       await createDefaultWarehouseAndPlant()
       console.log('Migration succesfully')
     } catch (err) {

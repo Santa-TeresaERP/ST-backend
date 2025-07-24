@@ -11,9 +11,9 @@ const serviceDeletePermission = async (id: string) => {
     }
 
     await permission.destroy()
-    
+
     console.log(`✅ Permiso ${id} eliminado correctamente`)
-    
+
     return { message: 'Permiso eliminado correctamente' }
   } catch (error) {
     console.error('❌ Error al eliminar permiso:', error)

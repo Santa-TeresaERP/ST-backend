@@ -20,4 +20,4 @@ const CreateTypePerson = async (req: Request, res: Response): Promise<void> => {
   }
 }
 
-export default CreateTypePerson 
+export default CreateTypePerson

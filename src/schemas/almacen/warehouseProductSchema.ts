@@ -20,9 +20,7 @@ export const warehouseProductSchema = z.object({
     invalid_type_error: 'La fecha de entrada debe ser válida',
   }),
 
-  status: z
-  .boolean()
-  .optional(),
+  status: z.boolean().optional(),
 })
 
 // Validación de estado activo/inactivo

@@ -12,4 +12,4 @@ const SalesChannelController = {
   DeleteSalesChannel,
 }
 
-export default SalesChannelController 
+export default SalesChannelController

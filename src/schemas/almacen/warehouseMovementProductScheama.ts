@@ -32,9 +32,7 @@ export const warehouseMovementProductSchema = z.object({
     .max(150, 'Las observaciones no deben exceder los 150 caracteres')
     .optional(),
 
-  status: z
-    .boolean()
-    .optional(),
+  status: z.boolean().optional(),
 })
 
 // Validación de estado activo/inactivo

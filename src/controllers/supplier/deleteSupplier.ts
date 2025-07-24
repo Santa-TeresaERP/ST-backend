@@ -8,7 +8,7 @@ const deleteSupplier = async (req: Request, res: Response) => {
   if ('error' in result) {
     res.status(404).json({ error: result.error })
   }
-  
+
   res.status(200).json({ message: 'Proveedor eliminado correctamente' })
 }
 

@@ -28,4 +28,4 @@ const serviceCreateTypePerson = async (body: typePersonAttributes) => {
   return newTypePerson
 }
 
-export default serviceCreateTypePerson 
+export default serviceCreateTypePerson

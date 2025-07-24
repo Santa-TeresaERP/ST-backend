@@ -10,4 +10,4 @@ router.get('/:id', authorization, SalesChannelController.GetSalesChannel)
 router.patch('/:id', authorization, SalesChannelController.UpdateSalesChannel)
 router.delete('/:id', authorization, SalesChannelController.DeleteSalesChannel)
 
-export default router 
+export default router

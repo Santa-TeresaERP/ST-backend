@@ -8,4 +8,4 @@ const serviceGetTypePerson = async (id: string) => {
   return typePerson
 }
 
-export default serviceGetTypePerson 
+export default serviceGetTypePerson

@@ -12,4 +12,4 @@ const useSalesChannel = {
   serviceDeleteSalesChannel,
 }
 
-export default useSalesChannel 
+export default useSalesChannel

@@ -12,4 +12,4 @@ const TypePersonController = {
   DeleteTypePerson,
 }
 
-export default TypePersonController 
+export default TypePersonController

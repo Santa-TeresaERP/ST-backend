@@ -1,7 +1,10 @@
 import { Request, Response } from 'express'
 import serviceCreateSalesChannel from '@services/sales_channel/serviceCreateSalesChannel'
 
-const CreateSalesChannel = async (req: Request, res: Response): Promise<void> => {
+const CreateSalesChannel = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const result = await serviceCreateSalesChannel(req.body)
 
@@ -20,4 +23,4 @@ const CreateSalesChannel = async (req: Request, res: Response): Promise<void> =>
   }
 }
 
-export default CreateSalesChannel 
+export default CreateSalesChannel

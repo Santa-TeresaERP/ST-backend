@@ -1,6 +1,7 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
 import permissionController from '@controllers/permission/index'
+import roleAuthorization from '@middlewares/roleAuthorization'
 
 const router = express.Router()
 
@@ -8,6 +9,7 @@ const router = express.Router()
 router.post(
   '/individual',
   authorization,
+  roleAuthorization('canWrite', 'roles'),
   permissionController.createPermissionController,
 )
 
@@ -15,16 +17,23 @@ router.post(
 router.post(
   '/',
   authorization,
+  roleAuthorization('canWrite', 'roles'),
   permissionController.createMultiplePermissionsController,
 )
 
 // Obtener todos los permisos
-router.get('/', authorization, permissionController.getPermissionsController)
+router.get(
+  '/',
+  authorization,
+  roleAuthorization('canRead', 'roles'),
+  permissionController.getPermissionsController,
+)
 
 // Actualizar un permiso
 router.patch(
   '/:id',
   authorization,
+  roleAuthorization('canEdit', 'roles'),
   permissionController.updatePermissionController,
 )
 
@@ -32,6 +41,7 @@ router.patch(
 router.delete(
   '/:id',
   authorization,
+  roleAuthorization('canDelete', 'roles'),
   permissionController.deletePermissionController,
 )
 

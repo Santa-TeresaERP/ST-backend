@@ -1,6 +1,6 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
-import permissionControllers from '@controllers/permission/index'
+import permissionController from '@controllers/permission/index'
 
 const router = express.Router()
 
@@ -8,31 +8,31 @@ const router = express.Router()
 router.post(
   '/individual',
   authorization,
-  permissionControllers.createPermissionController,
+  permissionController.createPermissionController,
 )
 
 // Crear múltiples permisos para un rol
 router.post(
   '/',
   authorization,
-  permissionControllers.createMultiplePermissionsController,
+  permissionController.createMultiplePermissionsController,
 )
 
 // Obtener todos los permisos
-router.get('/', authorization, permissionControllers.getPermissionsController)
+router.get('/', authorization, permissionController.getPermissionsController)
 
 // Actualizar un permiso
 router.patch(
   '/:id',
   authorization,
-  permissionControllers.updatePermissionController,
+  permissionController.updatePermissionController,
 )
 
 // Eliminar un permiso
 router.delete(
   '/:id',
   authorization,
-  permissionControllers.deletePermissionController,
+  permissionController.deletePermissionController,
 )
 
 export default router

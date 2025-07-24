@@ -8,4 +8,4 @@ const serviceGetSalesChannel = async (id: string) => {
   return salesChannel
 }
 
-export default serviceGetSalesChannel 
+export default serviceGetSalesChannel

@@ -1,12 +1,17 @@
 import useWarehouse from '@services/warehouse/index'
 import { Request, Response } from 'express'
 
-const deleteWarehouseController = async (req: Request, res: Response): Promise<void> => {
+const deleteWarehouseController = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   const { id } = req.params
   const { status } = req.body
 
   if (typeof status !== 'boolean') {
-    res.status(400).json({ error: 'El campo "status" es requerido y debe ser booleano' })
+    res
+      .status(400)
+      .json({ error: 'El campo "status" es requerido y debe ser booleano' })
     return
   }
 

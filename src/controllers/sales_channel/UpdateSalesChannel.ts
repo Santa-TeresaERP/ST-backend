@@ -1,7 +1,10 @@
 import { Request, Response } from 'express'
 import useSalesChannel from '@services/sales_channel'
 
-const UpdateSalesChannel = async (req: Request, res: Response): Promise<void> => {
+const UpdateSalesChannel = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const { id } = req.params
     const result = await useSalesChannel.serviceUpdateSalesChannel(id, req.body)
@@ -15,8 +18,10 @@ const UpdateSalesChannel = async (req: Request, res: Response): Promise<void> =>
     })
   } catch (error) {
     console.error('Error en UpdateSalesChannel:', error)
-    res.status(500).json({ error: 'Error interno al actualizar el canal de venta' })
+    res
+      .status(500)
+      .json({ error: 'Error interno al actualizar el canal de venta' })
   }
 }
 
-export default UpdateSalesChannel 
+export default UpdateSalesChannel

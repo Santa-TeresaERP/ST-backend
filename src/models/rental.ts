@@ -4,7 +4,7 @@ import { RentalAttributes } from '@type/alquiler/rentals'
 import { v4 as uuid } from 'uuid'
 import Customer from '@models/customers'
 import Place from '@models/places'
-import User from '@models/user' // Asegúrate que exista este modelo
+import User from '@models/user'
 
 class Rental
   extends Model<RentalAttributes, Optional<RentalAttributes, 'id'>>
@@ -16,6 +16,7 @@ class Rental
   public user_id!: string
   public start_date!: Date
   public end_date!: Date
+  public amount!: number
 
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
@@ -48,6 +49,10 @@ Rental.init(
       type: DataTypes.DATE,
       allowNull: false,
     },
+    amount: {
+      type: DataTypes.DECIMAL(10, 2), // Using DECIMAL for monetary values
+      allowNull: false,
+    },
   },
   {
     sequelize,
@@ -59,6 +64,6 @@ Rental.init(
 // Relaciones
 Rental.belongsTo(Customer, { foreignKey: 'customer_id' })
 Rental.belongsTo(Place, { foreignKey: 'place_id' })
-Rental.belongsTo(User, { foreignKey: 'user_id' }) // Relación con usuario
+Rental.belongsTo(User, { foreignKey: 'user_id' })
 
 export default Rental

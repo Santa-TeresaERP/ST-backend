@@ -15,8 +15,10 @@ const UpdateTypePerson = async (req: Request, res: Response): Promise<void> => {
     })
   } catch (error) {
     console.error('Error en UpdateTypePerson:', error)
-    res.status(500).json({ error: 'Error interno al actualizar el tipo de persona' })
+    res
+      .status(500)
+      .json({ error: 'Error interno al actualizar el tipo de persona' })
   }
 }
 
-export default UpdateTypePerson 
+export default UpdateTypePerson

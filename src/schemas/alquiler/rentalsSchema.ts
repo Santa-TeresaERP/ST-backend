@@ -21,6 +21,14 @@ const RentalSchema = z.object({
   end_date: z.date({
     invalid_type_error: 'La fecha de fin debe ser una fecha válida',
   }),
+
+  amount: z
+    .number({
+      invalid_type_error: 'El monto debe ser un número válido',
+    })
+    .positive({
+      message: 'El monto debe ser un valor positivo',
+    }),
 })
 
 export const rentalValidation = (data: RentalAttributes) =>

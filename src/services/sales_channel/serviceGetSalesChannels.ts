@@ -4,4 +4,4 @@ const serviceGetSalesChannels = async () => {
   return await SalesChannel.findAll()
 }
 
-export default serviceGetSalesChannels 
+export default serviceGetSalesChannels

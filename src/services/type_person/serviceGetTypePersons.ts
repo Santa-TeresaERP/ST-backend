@@ -4,4 +4,4 @@ const serviceGetTypePersons = async () => {
   return await TypePerson.findAll()
 }
 
-export default serviceGetTypePersons 
+export default serviceGetTypePersons

@@ -2,7 +2,10 @@ import TypePerson from '@models/type_person'
 import { typePersonValidation } from 'src/schemas/museo/type_person'
 import { typePersonAttributes } from '@type/museo/type_person'
 
-const serviceUpdateTypePerson = async (id: string, body: typePersonAttributes) => {
+const serviceUpdateTypePerson = async (
+  id: string,
+  body: typePersonAttributes,
+) => {
   const validation = typePersonValidation(body)
   if (!validation.success) {
     return { error: validation.error.errors }
@@ -18,4 +21,4 @@ const serviceUpdateTypePerson = async (id: string, body: typePersonAttributes) =
   return typePerson
 }
 
-export default serviceUpdateTypePerson 
+export default serviceUpdateTypePerson

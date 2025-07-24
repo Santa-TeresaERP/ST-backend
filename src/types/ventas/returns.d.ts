@@ -1,11 +1,11 @@
 export interface returnsAttributes {
   id?: string
-  productId?: string // Ahora opcional
-  salesId: string
+  productId?: stringal
+  salesId?: string
   reason: string
   observations?: string
-  quantity: number // nuevo campo ingresado manualmente
-  price: number // nuevo campo calculado según productId
+  quantity: number
+  price: number
   createdAt?: Date
   updatedAt?: Date
 }

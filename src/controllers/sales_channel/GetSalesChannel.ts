@@ -12,8 +12,10 @@ const GetSalesChannel = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json(result)
   } catch (error) {
     console.error('Error en GetSalesChannel:', error)
-    res.status(500).json({ error: 'Error interno al obtener el canal de venta' })
+    res
+      .status(500)
+      .json({ error: 'Error interno al obtener el canal de venta' })
   }
 }
 
-export default GetSalesChannel 
+export default GetSalesChannel

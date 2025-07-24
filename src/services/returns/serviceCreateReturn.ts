@@ -23,6 +23,10 @@ const serviceCreateReturn = async (
     quantity,
   } = validation.data
 
+  if (!productId) {
+    throw new Error('El ID del producto es obligatorio')
+  }
+
   const product = await Product.findByPk(productId)
   if (!product) {
     throw new Error('Producto no encontrado')
@@ -34,8 +38,8 @@ const serviceCreateReturn = async (
   try {
     const newReturn = await Return.create({
       id,
-      productId,
-      salesId,
+      productId: productId ?? null,
+      salesId: salesId ?? null,
       reason: reason ?? '',
       observations: observations ?? undefined,
       quantity,
@@ -51,4 +55,5 @@ const serviceCreateReturn = async (
     )
   }
 }
+
 export default serviceCreateReturn

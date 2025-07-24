@@ -4,7 +4,7 @@ import getPermissionsController from './getPermissionsController'
 import updatePermissionController from './updatePermissionController'
 import deletePermissionController from './deletePermissionController'
 
-const permissionControllers = {
+const permissionController = {
   createPermissionController,
   createMultiplePermissionsController,
   getPermissionsController,
@@ -12,4 +12,4 @@ const permissionControllers = {
   deletePermissionController,
 }
 
-export default permissionControllers
+export default permissionController

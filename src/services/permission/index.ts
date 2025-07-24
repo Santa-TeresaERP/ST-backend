@@ -1,15 +1,15 @@
 import serviceCreatePermission from './serviceCreatePermission'
+import serviceCreateMultiplePermissions from './serviceCreateMultiplePermissions'
+import serviceDeletePermission from './serviceDeletePermission'
 import serviceGetPermissions from './serviceGetPermissions'
 import serviceUpdatePermission from './serviceUpdatePermission'
-import serviceDeletePermission from './serviceDeletePermission'
-import serviceCreateMultiplePermissions from './serviceCreateMultiplePermissions'
 
 const usePermissions = {
   serviceCreatePermission,
+  serviceCreateMultiplePermissions,
+  serviceDeletePermission,
   serviceGetPermissions,
   serviceUpdatePermission,
-  serviceDeletePermission,
-  serviceCreateMultiplePermissions,
 }
 
 export default usePermissions

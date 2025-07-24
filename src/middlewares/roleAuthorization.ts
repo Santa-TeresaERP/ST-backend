@@ -22,7 +22,14 @@ const authorizePermissions = (permission: string, moduleName: string) => {
       const moduleId = module?.id
 
       if (!moduleId) {
-        throw new Error(`Module '${moduleName}' not found.`)
+        console.error(
+          `❌ Module '${moduleName}' not found in database. Available modules should be checked.`,
+        )
+        res.status(500).json({
+          message: 'Module configuration error',
+          details: `Module '${moduleName}' not found`,
+        })
+        return
       }
 
       const rolePermissions = await RolesPermissions.findOne({

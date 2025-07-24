@@ -4,6 +4,10 @@ import { RentalAttributes } from '@type/alquiler/rentals'
 import { v4 as uuid } from 'uuid'
 import Customer from '@models/customers'
 import Place from '@models/places'
+<<<<<<< Updated upstream
+=======
+import User from '@models/user' // Asegúrate que exista este modelo
+>>>>>>> Stashed changes
 
 class Rental
   extends Model<RentalAttributes, Optional<RentalAttributes, 'id'>>

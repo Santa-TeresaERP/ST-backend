@@ -22,7 +22,11 @@ router.post(
 router.get('/', authorization, permissionControllers.getPermissionsController)
 
 // Actualizar permisos de un rol específico
-router.patch('/role/:roleId', authorization, updatePermissionController)
+router.patch(
+  '/role/:roleId',
+  authorization,
+  permissionControllers.updatePermissionController,
+)
 
 // Eliminar un permiso
 router.delete(

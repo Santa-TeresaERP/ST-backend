@@ -24,7 +24,7 @@ const serviceUpdateReturn = async (
 
   let finalPrice = existing.price
 
-  // Si se actualiza el producto o la cantidad, recalcula el precio total
+  // Recalcular el precio solo si cambia el producto o la cantidad
   if (
     (productId && productId !== existing.productId) ||
     quantity !== undefined
@@ -34,17 +34,16 @@ const serviceUpdateReturn = async (
 
     const unitPrice = product.price
     const usedQuantity = quantity ?? existing.quantity
-
     finalPrice = unitPrice * usedQuantity
   }
 
   try {
     await existing.update({
-      productId,
-      salesId,
-      reason: reason ?? undefined,
-      observations: observations ?? undefined,
-      quantity,
+      productId: productId ?? existing.productId,
+      salesId: salesId ?? existing.salesId,
+      reason: reason ?? existing.reason,
+      observations: observations ?? existing.observations,
+      quantity: quantity ?? existing.quantity,
       price: finalPrice,
     })
 

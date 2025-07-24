@@ -22,21 +22,29 @@ const serviceUpdateReturn = async (
 
   const { productId, salesId, reason, observations, quantity } = validation.data
 
-  let price = existing.price
-  if (productId && productId !== existing.productId) {
-    const product = await Product.findByPk(productId)
+  let finalPrice = existing.price
+
+  // Recalcular el precio solo si cambia el producto o la cantidad
+  if (
+    (productId && productId !== existing.productId) ||
+    quantity !== undefined
+  ) {
+    const product = await Product.findByPk(productId || existing.productId)
     if (!product) return { error: 'Producto no encontrado' }
-    price = product.price
+
+    const unitPrice = product.price
+    const usedQuantity = quantity ?? existing.quantity
+    finalPrice = unitPrice * usedQuantity
   }
 
   try {
     await existing.update({
-      productId,
-      salesId,
-      reason: reason ?? undefined,
-      observations: observations ?? undefined,
-      quantity,
-      price,
+      productId: productId ?? existing.productId,
+      salesId: salesId ?? existing.salesId,
+      reason: reason ?? existing.reason,
+      observations: observations ?? existing.observations,
+      quantity: quantity ?? existing.quantity,
+      price: finalPrice,
     })
 
     return { success: true, data: existing }

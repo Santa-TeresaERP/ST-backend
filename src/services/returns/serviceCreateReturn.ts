@@ -3,9 +3,6 @@ import Return from '@models/returns'
 import Product from '@models/product'
 import { returnValidation } from '../../schemas/ventas/returnsSchema'
 import { returnsAttributes } from '@type/ventas/returns'
-import saleDetail from '@models/saleDetail'
-import sale from '@models/sale'
-import WarehouseStore from '@models/warehouseStore'
 
 const serviceCreateReturn = async (
   body: returnsAttributes,

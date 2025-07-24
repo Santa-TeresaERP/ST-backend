@@ -10,4 +10,4 @@ router.get('/:id', authorization, TypePersonController.GetTypePerson)
 router.patch('/:id', authorization, TypePersonController.UpdateTypePerson)
 router.delete('/:id', authorization, TypePersonController.DeleteTypePerson)
 
-export default router 
+export default router

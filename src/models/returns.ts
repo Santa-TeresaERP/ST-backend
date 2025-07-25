@@ -29,11 +29,11 @@ Return.init(
     },
     productId: {
       type: DataTypes.UUID,
-      allowNull: true, // ✅ ahora opcional
+      allowNull: true,
     },
     salesId: {
       type: DataTypes.UUID,
-      allowNull: true, // ✅ ahora opcional
+      allowNull: true,
     },
     reason: {
       type: DataTypes.STRING,

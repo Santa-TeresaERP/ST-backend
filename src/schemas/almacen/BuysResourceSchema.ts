@@ -36,3 +36,10 @@ export const buysResourceSchema = z.object({
 
 export const buysResourceValidation = (data: buysResourceAttributes) =>
   buysResourceSchema.safeParse(data)
+
+// Schema para actualizaciones parciales
+export const buysResourceUpdateSchema = buysResourceSchema.partial()
+
+export const buysResourceUpdateValidation = (
+  data: Partial<buysResourceAttributes>,
+) => buysResourceUpdateSchema.safeParse(data)

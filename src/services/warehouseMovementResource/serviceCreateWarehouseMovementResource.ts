@@ -4,6 +4,7 @@ import { WarehouseMovomentResourceAttributes } from '@type/almacen/warehouse_mov
 import { warehouseMovementResourceValidation } from '../../schemas/almacen/warehouseMovomentResourceSchema'
 import BuysResource from '@models/buysResource'
 import Warehouse from '@models/warehouse'
+import Supplier from '@models/suplier'
 import serviceUpdateWarehouseResource from '../../services/BuysResource/serviceUpdateBuysResource'
 import { validateWarehouseStatus } from '../../schemas/almacen/warehouseSchema'
 
@@ -33,9 +34,51 @@ const serviceCreateWarehouseMovementResource = async (
   } = validation.data
 
   // Buscar el recurso actual en stock (buy_resource)
-  const warehouseResource = await BuysResource.findOne({
+  // Para movimientos de salida por producción, buscar cualquier registro del recurso
+  let warehouseResource = await BuysResource.findOne({
     where: { warehouse_id, resource_id },
+    transaction,
   })
+
+  // Si no existe un registro específico para este almacén, buscar cualquier registro del recurso
+  if (!warehouseResource && movement_type === 'salida') {
+    warehouseResource = await BuysResource.findOne({
+      where: { resource_id },
+      order: [['entry_date', 'DESC']], // Obtener el más reciente
+      transaction,
+    })
+
+    // Si aún no existe, crear un registro negativo
+    if (!warehouseResource) {
+      console.log(
+        `🔍 No hay registros existentes para el recurso ${resource_id}, creando registro base`,
+      )
+
+      // Buscar un supplier por defecto
+      const defaultSupplier = await Supplier.findOne({ transaction })
+      if (!defaultSupplier) {
+        return {
+          error: 'No se encontró supplier por defecto para crear el registro',
+        }
+      }
+
+      warehouseResource = await BuysResource.create(
+        {
+          warehouse_id,
+          resource_id,
+          quantity: 0,
+          type_unit: 'unit', // Unidad por defecto
+          unit_price: 0,
+          total_cost: 0,
+          supplier_id: defaultSupplier.id!,
+          entry_date: new Date(),
+        },
+        { transaction },
+      )
+
+      console.log(`✅ Registro base creado para el recurso ${resource_id}`)
+    }
+  }
 
   // Validar que el recurso exista en el almacén
   const warehouse = await Warehouse.findByPk(warehouse_id)
@@ -62,8 +105,9 @@ const serviceCreateWarehouseMovementResource = async (
   }
 
   try {
-    // SALIDA: Permitir stock negativo y actualizar buy_resource
-    if (movement_type === 'salida') {
+    // SALIDA: Solo actualizar stock si NO es un movimiento de producción
+    // Los movimientos de producción ya actualizaron el stock previamente
+    if (movement_type === 'salida' && !observations?.includes('produccion')) {
       const newQuantity = warehouseResource.quantity - quantity
 
       console.log(
@@ -86,25 +130,13 @@ const serviceCreateWarehouseMovementResource = async (
       }
 
       console.log('✅ Stock actualizado correctamente')
-    }
-
-    // ENTRADA: Crear nuevo registro en BuysResource
-    if (movement_type === 'entrada') {
-      console.log('🔍 Creando registro de entrada en BuysResource...')
-      await BuysResource.create(
-        {
-          warehouse_id,
-          resource_id,
-          quantity,
-          type_unit: warehouseResource.type_unit || 'unit',
-          unit_price: 0,
-          total_cost: 0,
-          supplier_id: warehouseResource.supplier_id,
-          entry_date: movement_date,
-        },
-        { transaction },
+    } else if (
+      movement_type === 'salida' &&
+      observations?.includes('produccion')
+    ) {
+      console.log(
+        '📝 Movimiento de producción - stock ya actualizado previamente',
       )
-      console.log('✅ Registro de entrada creado correctamente')
     }
 
     // Registrar el movimiento en warehouse_movement_resources

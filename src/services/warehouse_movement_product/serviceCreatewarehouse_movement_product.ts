@@ -1,17 +1,16 @@
 import WarehouseMovementProduct from '@models/warehouseMovementProduct'
 import WarehouseProduct from '@models/warehouseProduct'
 import { WarehouseMovomentProductAttributes } from '@type/almacen/warehouse_movement_product'
-import { warehouseMovementProductValidation } from '../../schemas/almacen/warehouseMovementProductScheama'
+import { warehouseMovementProductValidation } from 'src/schemas/almacen/warehouseMovementProductScheama'
 import { Transaction } from 'sequelize'
 import WarehouseStore from '@models/warehouseStore'
-import Warehouse from '@models/warehouse'
-import { validateWarehouseStatus } from '../../schemas/almacen/warehouseSchema'
+import Warehouse from '@models/warehouse' // Necesario para la validación
+import { validateWarehouseStatus } from 'src/schemas/almacen/warehouseSchema' // Necesario para la validación
 
 const serviceCreatewarehouseMovementProduct = async (
   data: WarehouseMovomentProductAttributes,
   transaction?: Transaction,
 ) => {
-  // Validar los datos antes de proceder
   const validation = warehouseMovementProductValidation(data)
   if (!validation.success) {
     return { success: false, error: validation.error.issues }
@@ -28,17 +27,15 @@ const serviceCreatewarehouseMovementProduct = async (
   } = validation.data
 
   try {
-    // Buscar el WarehouseProduct antes de crear el movimiento
     let warehouseProduct = await WarehouseProduct.findOne({
       where: { warehouse_id, product_id },
       transaction,
     })
 
-    // Si no existe el WarehouseProduct, crearlo con cantidad inicial 0
-    if (!warehouseProduct) {
-      console.log(
-        `📦 WarehouseProduct no encontrado para warehouse ${warehouse_id} y producto ${product_id}, creando nuevo registro`,
-      )
+    const isNewProduct = !warehouseProduct
+
+    if (isNewProduct) {
+      console.log(`📦 WarehouseProduct no encontrado, creando nuevo registro`)
       warehouseProduct = await WarehouseProduct.create(
         {
           warehouse_id,
@@ -51,13 +48,12 @@ const serviceCreatewarehouseMovementProduct = async (
       console.log('✅ WarehouseProduct creado exitosamente')
     }
 
-    // Validar que el almacén exista
-    const warehouse = await Warehouse.findByPk(warehouse_id)
+    // --- Lógica de la Versión 2 (La correcta) ---
+    const warehouse = await Warehouse.findByPk(warehouse_id, { transaction })
     if (!warehouse) {
       return { success: false, error: 'Almacén no encontrado' }
     }
 
-    // Validar estado activo/inactivo del almacén usando la función del schema
     const warehouseStatusValidation = validateWarehouseStatus({
       status: warehouse.status,
     })
@@ -65,32 +61,34 @@ const serviceCreatewarehouseMovementProduct = async (
       return warehouseStatusValidation
     }
 
-    // Validar stock suficiente antes de crear el movimiento (solo para salidas)
-    if (movement_type === 'salida' && warehouseProduct.quantity < quantity) {
+    // La validación de stock inteligente que no se aplica si el producto es nuevo.
+    if (
+      !isNewProduct &&
+      movement_type === 'salida' &&
+      warehouseProduct!.quantity < quantity
+    ) {
       return {
         success: false,
-        error: `Stock insuficiente. Disponible: ${warehouseProduct.quantity}, Solicitado: ${quantity}`,
+        error: `Stock insuficiente. Disponible: ${warehouseProduct!.quantity}, Solicitado: ${quantity}`,
       }
     }
+    // --- Fin de la lógica en conflicto ---
 
-    // Actualizar cantidad según el tipo de movimiento
     if (movement_type === 'entrada') {
       console.log(
-        `📈 Sumando ${quantity} al stock actual: ${warehouseProduct.quantity}`,
+        `📈 Sumando ${quantity} al stock actual: ${warehouseProduct!.quantity}`,
       )
-      warehouseProduct.quantity += quantity
+      warehouseProduct!.quantity += quantity
     } else if (movement_type === 'salida') {
       console.log(
-        `📉 Restando ${quantity} del stock actual: ${warehouseProduct.quantity}`,
+        `📉 Restando ${quantity} del stock actual: ${warehouseProduct!.quantity}`,
       )
-      warehouseProduct.quantity -= quantity
+      warehouseProduct!.quantity -= quantity
     }
 
-    // Guardar el WarehouseProduct actualizado
-    await warehouseProduct.save({ transaction })
-    console.log(`✅ Stock actualizado a: ${warehouseProduct.quantity}`)
+    await warehouseProduct!.save({ transaction })
+    console.log(`✅ Stock actualizado a: ${warehouseProduct!.quantity}`)
 
-    // Crear el movimiento
     const newMovement = await WarehouseMovementProduct.create(
       {
         warehouse_id,
@@ -103,10 +101,8 @@ const serviceCreatewarehouseMovementProduct = async (
       },
       { transaction },
     )
-
     console.log('✅ Movimiento de almacén creado exitosamente')
 
-    // Si existe store_id, crear/actualizar el inventario de tienda
     if (store_id) {
       let warehouseStore = await WarehouseStore.findOne({
         where: { storeId: store_id, productId: product_id },
@@ -119,18 +115,20 @@ const serviceCreatewarehouseMovementProduct = async (
             storeId: store_id,
             productId: product_id,
             quantity: 0,
-            createdAt: new Date(),
           },
           { transaction },
         )
       }
 
-      // Actualizar cantidad según el tipo de movimiento
-      if (movement_type === 'entrada') {
+      // La lógica de actualización de la tienda es importante:
+      // Una 'salida' del almacén es una 'entrada' para la tienda.
+      // Una 'entrada' al almacén (devolución) es una 'salida' de la tienda.
+      if (movement_type === 'salida') {
         warehouseStore.quantity += quantity
-      } else if (movement_type === 'salida') {
+      } else if (movement_type === 'entrada') {
         warehouseStore.quantity -= quantity
       }
+
       await warehouseStore.save({ transaction })
       console.log('✅ Inventario de tienda actualizado')
     }

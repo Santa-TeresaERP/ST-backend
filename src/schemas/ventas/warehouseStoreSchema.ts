@@ -29,10 +29,9 @@ const updateWarehouseStoreSchema = z.object({
  * Función para validar los datos al CREAR un registro.
  * Usa el schema de creación.
  */
-export const warehouseStoreValidation = (data: unknown) => {
+export const createWarehouseStoreValidation = (data: unknown) => {
   return createWarehouseStoreSchema.safeParse(data)
 }
-
 /**
  * Función para validar los datos al ACTUALIZAR un registro.
  * Usa el schema de actualización.

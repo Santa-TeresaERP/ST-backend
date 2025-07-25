@@ -21,9 +21,8 @@ router.post(
 // Obtener todos los permisos
 router.get('/', authorization, permissionController.getPermissionsController)
 
-// Actualizar un permiso
 router.patch(
-  '/:id',
+  '/role/:roleId',
   authorization,
   permissionController.updatePermissionController,
 )

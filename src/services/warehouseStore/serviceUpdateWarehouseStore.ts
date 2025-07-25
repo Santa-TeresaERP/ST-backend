@@ -1,17 +1,13 @@
 // --- 1. IMPORTACIONES NECESARIAS ---
 import WarehouseStore from '@models/warehouseStore';
 import { warehouseStoreAttributes } from '@type/ventas/warehouseStore';
-import sequelize from '@config/database'; // Importación por defecto
-
-// Se importa la función de validación desde el schema de actualización.
-// Asegúrate de que el schema de actualización solo valide 'quantity'.
+import sequelize from '@config/database';
 import { updateWarehouseStoreValidation } from '../../schemas/ventas/warehouseStoreSchema'; 
-
-// Se importa el servicio de creación de movimientos.
 import serviceCreatewarehouseMovementProduct from '../warehouse_movement_product/serviceCreatewarehouse_movement_product';
+import Product from '@models/product'; // Importación necesaria para la relación
 
 const serviceUpdateWarehouseStore = async (
-  id: string, // ID del registro en WarehouseStore (el inventario de la tienda)
+  id: string,
   body: warehouseStoreAttributes,
 ) => {
   // --- 2. VALIDAR LA ENTRADA ---
@@ -25,13 +21,26 @@ const serviceUpdateWarehouseStore = async (
   const transaction = await sequelize.transaction();
 
   try {
-    // --- 4. OBTENER EL ESTADO ACTUAL ---
-    const warehouseStore = await WarehouseStore.findByPk(id, { transaction });
+    // --- 4. OBTENER EL ESTADO ACTUAL (CON DATOS DEL PRODUCTO) ---
+    // [CORREGIDO] Añadimos 'include' para traer el objeto 'product' relacionado.
+    const warehouseStore = await WarehouseStore.findByPk(id, { 
+      include: [{
+        model: Product,
+        as: 'product', // 'as' debe coincidir con la definición de tu asociación en el modelo.
+        attributes: ['name'] // Opcional: solo traemos el campo 'name' para eficiencia.
+      }],
+      transaction 
+    });
+
     if (!warehouseStore) {
       await transaction.rollback();
       return { error: 'El registro de inventario a editar no existe.' };
     }
+
+    // [CORREGIDO] Ahora podemos acceder al nombre del producto de forma segura.
+    // Usamos 'as any' como una solución práctica si TypeScript no infiere el tipo de la relación.
     const oldQuantity = warehouseStore.quantity;
+    const productName = (warehouseStore as any).product.name;
 
     // --- 5. CALCULAR LA DIFERENCIA (EL "DELTA") ---
     const difference = newQuantity - oldQuantity;
@@ -52,7 +61,8 @@ const serviceUpdateWarehouseStore = async (
         movement_type: 'salida',
         quantity: difference,
         movement_date: new Date(),
-        observations: `Ajuste de stock. Cantidad aumentada de ${oldQuantity} a ${newQuantity}.`
+        // Usamos la variable 'productName' para la observación.
+        observations: `Ajuste de stock para '${productName}'. Cantidad aumentada de ${oldQuantity} a ${newQuantity}.`
       };
     } else { 
       // CASO: REDUCIR STOCK EN TIENDA (entrada al almacén)
@@ -64,7 +74,8 @@ const serviceUpdateWarehouseStore = async (
         movement_type: 'entrada',
         quantity: quantityToReturn,
         movement_date: new Date(),
-        observations: `Ajuste de stock. Cantidad reducida de ${oldQuantity} a ${newQuantity}.`
+        // Usamos la variable 'productName' para la observación.
+        observations: `Ajuste de stock para '${productName}'. Cantidad reducida de ${oldQuantity} a ${newQuantity}.`
       };
     }
 

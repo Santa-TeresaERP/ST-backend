@@ -1,17 +1,48 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
+import roleAuthorization from '@middlewares/roleAuthorization'
 import categoriesController from '@controllers/categoriesController'
 
 const router = express.Router()
 
-router.post('/', authorization, categoriesController.createCategory)
+// Crear categoría
+router.post(
+  '/',
+  authorization,
+  roleAuthorization('canWrite', 'Produccion'),
+  categoriesController.createCategory,
+)
 
-router.get('/', authorization, categoriesController.getCategories)
+// Obtener todas las categorías
+router.get(
+  '/',
+  authorization,
+  roleAuthorization('canRead', 'Produccion'),
+  categoriesController.getCategories,
+)
 
-router.get('/:id', authorization, categoriesController.getCategory)
+// Obtener una categoría por ID
+router.get(
+  '/:id',
+  authorization,
+  roleAuthorization('canRead', 'Produccion'),
+  categoriesController.getCategory,
+)
 
-router.patch('/:id', authorization, categoriesController.updateCategory)
+// Actualizar una categoría
+router.patch(
+  '/:id',
+  authorization,
+  roleAuthorization('canEdit', 'Produccion'),
+  categoriesController.updateCategory,
+)
 
-router.put('/:id', authorization, categoriesController.deleteCategory)
+// Eliminar una categoría
+router.put(
+  '/:id',
+  authorization,
+  roleAuthorization('canDelete', 'Produccion'),
+  categoriesController.deleteCategory,
+)
 
 export default router

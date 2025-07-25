@@ -21,7 +21,12 @@ interface SaleWithDetails {
   saleDetails: SaleDetail[]
 }
 
-const serviceGenerateSalesReport = async ({ storeId, day, month, year }: SalesReportOptions) => {
+const serviceGenerateSalesReport = async ({
+  storeId,
+  day,
+  month,
+  year,
+}: SalesReportOptions) => {
   // Obtener la tienda
   const store = await Store.findByPk(storeId)
   if (!store) return { error: 'Tienda no encontrada' }
@@ -52,7 +57,7 @@ const serviceGenerateSalesReport = async ({ storeId, day, month, year }: SalesRe
     ],
   })
 
-  // Simulación de pérdidas 
+  // Simulación de pérdidas
   const simulatedReturns = [
     { product: 'Pan', total: 5 },
     { product: 'Vino', total: 15 },
@@ -68,7 +73,7 @@ const serviceGenerateSalesReport = async ({ storeId, day, month, year }: SalesRe
   report += `Producto        | Cantidad | Total\n`
 
   let totalVentas = 0
-  for (const s of (sales as unknown as SaleWithDetails[])) {
+  for (const s of sales as unknown as SaleWithDetails[]) {
     for (const d of s.saleDetails) {
       const nombre = d.product.name.padEnd(15)
       const cantidad = d.quantity.toString().padStart(8)
@@ -95,7 +100,6 @@ const serviceGenerateSalesReport = async ({ storeId, day, month, year }: SalesRe
   report += `Total perdidas: S/${totalPerdidas}\n`
   report += `Total general:  S/${totalVentas - totalPerdidas}\n`
   report += `========================================\n`
-
 
   return { report }
 }

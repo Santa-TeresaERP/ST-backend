@@ -4,6 +4,7 @@ import sequelize from '@config/database'
 import { updateWarehouseStoreValidation } from '../../schemas/ventas/warehouseStoreSchema'
 import serviceCreatewarehouseMovementProduct from '../warehouse_movement_product/serviceCreatewarehouse_movement_product'
 import Product from '@models/product'
+import Warehouse from '@models/warehouse'
 
 const serviceUpdateWarehouseStore = async (
   id: string,
@@ -16,11 +17,22 @@ const serviceUpdateWarehouseStore = async (
   }
   const newQuantity = validation.data.quantity
 
-  // --- 3. INICIAR TRANSACCIÓN ---
+  // --- 3. OBTENER EL ALMACÉN PRINCIPAL (Almacen monasterio) ---
+  const defaultWarehouse = await Warehouse.findOne({
+    where: { name: 'Almacen monasterio' },
+  })
+
+  if (!defaultWarehouse) {
+    return {
+      error: 'El almacén principal "Almacen monasterio" no está disponible.',
+    }
+  }
+
+  // --- 4. INICIAR TRANSACCIÓN ---
   const transaction = await sequelize.transaction()
 
   try {
-    // --- 4. OBTENER EL ESTADO ACTUAL CON DATOS DEL PRODUCTO ---
+    // --- 5. OBTENER EL ESTADO ACTUAL CON DATOS DEL PRODUCTO ---
     const warehouseStore = await WarehouseStore.findByPk(id, {
       include: [
         {
@@ -44,7 +56,7 @@ const serviceUpdateWarehouseStore = async (
       }
     ).product.name
 
-    // --- 5. CALCULAR LA DIFERENCIA (EL "DELTA") ---
+    // --- 6. CALCULAR LA DIFERENCIA (EL "DELTA") ---
     const difference = newQuantity - oldQuantity
 
     if (difference === 0) {
@@ -52,12 +64,12 @@ const serviceUpdateWarehouseStore = async (
       return warehouseStore
     }
 
-    // --- 6. PREPARAR Y EJECUTAR EL MOVIMIENTO DE AJUSTE ---
+    // --- 7. PREPARAR Y EJECUTAR EL MOVIMIENTO DE AJUSTE ---
     let movementPayload
     if (difference > 0) {
       // CASO: AUMENTAR STOCK EN TIENDA (salida del almacén)
       movementPayload = {
-        warehouse_id: '700971b1-e025-413d-bce0-7ece97d1ca9c',
+        warehouse_id: defaultWarehouse.id,
         store_id: warehouseStore.storeId,
         product_id: warehouseStore.productId,
         movement_type: 'salida',
@@ -69,7 +81,7 @@ const serviceUpdateWarehouseStore = async (
       // CASO: REDUCIR STOCK EN TIENDA (entrada al almacén)
       const quantityToReturn = Math.abs(difference)
       movementPayload = {
-        warehouse_id: '700971b1-e025-413d-bce0-7ece97d1ca9c',
+        warehouse_id: defaultWarehouse.id,
         store_id: warehouseStore.storeId,
         product_id: warehouseStore.productId,
         movement_type: 'entrada',
@@ -93,16 +105,16 @@ const serviceUpdateWarehouseStore = async (
       }
     }
 
-    // --- 7. ACTUALIZAR LA CANTIDAD EN LA TIENDA ---
+    // --- 8. ACTUALIZAR LA CANTIDAD EN LA TIENDA ---
     warehouseStore.quantity = newQuantity
     await warehouseStore.save({ transaction })
 
-    // --- 8. CONFIRMAR LA TRANSACCIÓN ---
+    // --- 9. CONFIRMAR LA TRANSACCIÓN ---
     await transaction.commit()
 
     return warehouseStore
   } catch (error) {
-    // --- 9. REVERTIR EN CASO DE ERROR INESPERADO ---
+    // --- 10. REVERTIR EN CASO DE ERROR INESPERADO ---
     await transaction.rollback()
     console.error(
       'Error en la transacción de actualización de inventario:',

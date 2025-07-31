@@ -5,6 +5,7 @@ import serviceCreatewarehouseMovementProduct from '../warehouse_movement_product
 import WarehouseStore from '@models/warehouseStore'
 import Product from '@models/product'
 import Store from '@models/store'
+import Warehouse from '@models/warehouse'
 
 const serviceCreateWarehouseStore = async (body: warehouseStoreAttributes) => {
   // 1. VALIDACIÓN INICIAL
@@ -27,13 +28,24 @@ const serviceCreateWarehouseStore = async (body: warehouseStoreAttributes) => {
     return { error: `La tienda con ID ${storeId} no fue encontrada.` }
   }
 
-  // 3. INICIAR TRANSACCIÓN
+  // 3. OBTENER EL ALMACÉN PRINCIPAL (Almacen monasterio)
+  const defaultWarehouse = await Warehouse.findOne({
+    where: { name: 'Almacen monasterio' },
+  })
+
+  if (!defaultWarehouse) {
+    return {
+      error: 'El almacén principal "Almacen monasterio" no está disponible.',
+    }
+  }
+
+  // 4. INICIAR TRANSACCIÓN
   const transaction = await sequelize.transaction()
 
   try {
-    // 4. PREPARAR PAYLOAD DEL MOVIMIENTO CON OBSERVACIÓN LEGIBLE
+    // 5. PREPARAR PAYLOAD DEL MOVIMIENTO CON OBSERVACIÓN LEGIBLE
     const movementPayload = {
-      warehouse_id: '700971b1-e025-413d-bce0-7ece97d1ca9c',
+      warehouse_id: defaultWarehouse.id,
       store_id: storeId,
       product_id: productId,
       movement_type: 'salida',
@@ -42,7 +54,7 @@ const serviceCreateWarehouseStore = async (body: warehouseStoreAttributes) => {
       observations: `Registro inicial de ${quantity} unidad(es) de '${product.name}' en la tienda '${store.store_name}'.`,
     }
 
-    // 5. DELEGAR LA TAREA AL SERVICIO DE MOVIMIENTOS
+    // 6. DELEGAR LA TAREA AL SERVICIO DE MOVIMIENTOS
     const movementResult = await serviceCreatewarehouseMovementProduct(
       movementPayload,
       transaction,
@@ -56,10 +68,10 @@ const serviceCreateWarehouseStore = async (body: warehouseStoreAttributes) => {
       }
     }
 
-    // 6. CONFIRMAR LA TRANSACCIÓN
+    // 7. CONFIRMAR LA TRANSACCIÓN
     await transaction.commit()
 
-    // 7. RETORNAR EL RESULTADO FINAL CON RELACIONES
+    // 8. RETORNAR EL RESULTADO FINAL CON RELACIONES
     const finalWarehouseStore = await WarehouseStore.findOne({
       where: { storeId, productId },
       include: [
@@ -70,7 +82,7 @@ const serviceCreateWarehouseStore = async (body: warehouseStoreAttributes) => {
 
     return finalWarehouseStore
   } catch (error) {
-    // 8. MANEJO DE ERRORES Y REVERSIÓN
+    // 9. MANEJO DE ERRORES Y REVERSIÓN
     await transaction.rollback()
     console.error(
       'Error catastrófico en la transacción de serviceCreateWarehouseStore:',

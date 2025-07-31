@@ -20,11 +20,11 @@ router.get('/', authorization, salesController.getSalesController)
 // Generar reporte de ventas
 router.get('/report', authorization, async (req, res, next) => {
   try {
-	await generateSalesReportController(req, res);
+    await generateSalesReportController(req, res)
   } catch (err) {
-	next(err);
+    next(err)
   }
-});
+})
 
 // Obtener una venta específica por ID
 router.get('/:id', authorization, salesController.getSaleController)

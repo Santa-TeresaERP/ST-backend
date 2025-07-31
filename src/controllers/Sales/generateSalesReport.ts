@@ -6,7 +6,9 @@ const generateSalesReportController = async (req: Request, res: Response) => {
 
   // Validar parámetros
   if (!storeId || !month || !year) {
-    return res.status(400).json({ error: 'Faltan parámetros: storeId, month, year' })
+    return res
+      .status(400)
+      .json({ error: 'Faltan parámetros: storeId, month, year' })
   }
   const monthNum = Number(month)
   const yearNum = Number(year)
@@ -22,7 +24,9 @@ const generateSalesReportController = async (req: Request, res: Response) => {
     dayNum < 1 ||
     dayNum > 31
   ) {
-    return res.status(400).json({ error: 'Parámetros inválidos: day, month, year' })
+    return res
+      .status(400)
+      .json({ error: 'Parámetros inválidos: day, month, year' })
   }
 
   const result = await serviceGenerateSalesReport({

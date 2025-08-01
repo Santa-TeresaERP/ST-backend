@@ -8,14 +8,14 @@ const updateFinancialReportController = async (req: Request, res: Response) => {
 
     if (result && 'error' in result) {
       // Usamos 404 si el error es 'no encontrado', 400 para otros errores de negocio
-      return res.status(result.error.includes('encontrado') ? 404 : 400).json({ message: result.error });
+      res.status(result.error.includes('encontrado') ? 404 : 400).json({ message: result.error });
     }
     
-    return res.status(200).json(result);
+    res.status(200).json(result);
 
   } catch (error) {
     console.error('Error en el controlador de actualización de reporte:', error);
-    return res.status(500).json({ message: 'Error interno del servidor.' });
+    res.status(500).json({ message: 'Error interno del servidor.' });
   }
 };
 

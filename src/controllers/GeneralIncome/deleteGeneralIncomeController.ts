@@ -12,14 +12,14 @@ const deleteGeneralIncomeController = async (req: Request, res: Response) => {
       
       const statusCode = errorMessage.includes('encontrado') ? 404 : 400;
       
-      return res.status(statusCode).json({ message: errorMessage });
+      res.status(statusCode).json({ message: errorMessage });
     }
     
-    return res.status(200).json(result);
+    res.status(200).json(result);
 
   } catch (error) {
     console.error('Error en el controlador de eliminación de ingreso:', error);
-    return res.status(500).json({ message: 'Error interno del servidor.' });
+    res.status(500).json({ message: 'Error interno del servidor.' });
   }
 };
 

@@ -6,14 +6,14 @@ const createGeneralExpenseController = async (req: Request, res: Response) => {
     const result = await useGeneralExpense.create(req.body);
 
     if (result && 'error' in result) {
-      return res.status(400).json({ message: result.error });
+      res.status(400).json({ message: result.error });
     }
     
-    return res.status(201).json(result);
+    res.status(201).json(result);
 
   } catch (error) {
     console.error('Error en el controlador de creación de gasto:', error);
-    return res.status(500).json({ message: 'Error interno del servidor.' });
+    res.status(500).json({ message: 'Error interno del servidor.' });
   }
 };
 

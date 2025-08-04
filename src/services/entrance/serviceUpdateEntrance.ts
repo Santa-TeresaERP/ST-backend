@@ -1,8 +1,12 @@
 import Entrance from '@models/entrance'
 import { entranceAttributes } from '@type/museo/entrance'
-import { entranceValidation } from 'src/schemas/museo/entrance'
-const serviceUpdateEntrance = async (id: string, body: entranceAttributes) => {
-  const validation = entranceValidation(body)
+import { entranceValidationPartial } from 'src/schemas/museo/entrance'
+
+const serviceUpdateEntrance = async (
+  id: string,
+  body: Partial<entranceAttributes>,
+) => {
+  const validation = entranceValidationPartial(body)
 
   if (!validation.success) {
     return { error: validation.error.errors }

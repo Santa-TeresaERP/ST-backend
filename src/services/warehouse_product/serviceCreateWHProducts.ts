@@ -2,6 +2,7 @@ import WarehouseProduct from '@models/warehouseProduct'
 import Product from '@models/product'
 import Warehouse from '@models/warehouse'
 import { WarehouseProductAttributes } from '@type/almacen/warehouse_product.d'
+import { validateWarehouseStatus } from 'src/schemas/almacen/warehouseSchema'
 
 export default async function createWarehouseProduct(
   data: Omit<WarehouseProductAttributes, 'createdAt' | 'updatedAt'>,
@@ -38,6 +39,14 @@ export default async function createWarehouseProduct(
       ...data,
       entry_date: data.entry_date || new Date(),
     })
+
+    // Validar estado activo/inactivo del almacén usando la función del schema
+    const warehouseStatusValidation = validateWarehouseStatus({
+      status: warehouse.status,
+    })
+    if (!warehouseStatusValidation.success) {
+      return warehouseStatusValidation
+    }
 
     return newRecord
   } catch (error) {

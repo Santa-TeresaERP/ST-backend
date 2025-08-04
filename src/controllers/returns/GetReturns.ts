@@ -1,14 +1,39 @@
 import { Request, Response } from 'express'
 import useReturns from '@services/returns'
+import CashSession from '@models/cashSession'
 
-const GetReturns = async (_req: Request, res: Response) => {
+// Extendemos la interfaz para incluir la posible sesión activa
+interface AuthRequest extends Request {
+  activeCashSession?: CashSession
+  user?: {
+    id: string
+  }
+}
+
+const GetReturns = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const result = await useReturns.serviceGetReturns()
-    if ('error' in result) {
-      res.status(400).json({ error: result.error })
+    let storeId: string | undefined
+
+    // Si hay una sesión de caja activa adjunta al request, usamos su tienda
+    if (req.activeCashSession) {
+      storeId = req.activeCashSession.store_id
     }
+
+    // Si se proporciona un store_id en la query, lo usamos
+    if (req.query.store_id) {
+      storeId = req.query.store_id as string
+    }
+
+    const result = await useReturns.serviceGetReturns(storeId)
+
+    if (result && 'error' in result) {
+      res.status(400).json({ error: result.error })
+      return
+    }
+
     res.status(200).json(result)
-  } catch {
+  } catch (error) {
+    console.error('Error fetching returns:', error)
     res.status(500).json({ error: 'Error al obtener devoluciones' })
   }
 }

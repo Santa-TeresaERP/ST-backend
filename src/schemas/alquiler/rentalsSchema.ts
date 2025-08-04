@@ -10,6 +10,10 @@ const RentalSchema = z.object({
     message: 'El ID del lugar debe ser un UUID válido',
   }),
 
+  user_id: z.string().uuid({
+    message: 'El ID del usuario debe ser un UUID válido',
+  }),
+
   start_date: z.date({
     invalid_type_error: 'La fecha de inicio debe ser una fecha válida',
   }),
@@ -18,17 +22,13 @@ const RentalSchema = z.object({
     invalid_type_error: 'La fecha de fin debe ser una fecha válida',
   }),
 
-  income_id: z
-    .string()
-    .uuid({ message: 'El ID de ingreso debe ser un UUID válido' })
-    .optional(),
-
-  status: z.string().min(1, 'El estado es obligatorio'),
-
-  expense_id: z
-    .string()
-    .uuid({ message: 'El ID de gasto debe ser un UUID válido' })
-    .optional(),
+  amount: z
+    .number({
+      invalid_type_error: 'El monto debe ser un número válido',
+    })
+    .positive({
+      message: 'El monto debe ser un valor positivo',
+    }),
 })
 
 export const rentalValidation = (data: RentalAttributes) =>

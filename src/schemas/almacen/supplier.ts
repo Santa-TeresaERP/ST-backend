@@ -31,6 +31,8 @@ export const supplierSchema = z.object({
     .string()
     .min(1, 'La dirección es obligatoria')
     .max(200, 'La dirección no debe exceder los 200 caracteres'),
+
+  status: z.boolean().optional(),
 })
 
 export const supplierValidation = (data: SuplierAttributes) =>

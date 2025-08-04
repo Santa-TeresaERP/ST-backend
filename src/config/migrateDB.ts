@@ -4,6 +4,7 @@ import createAdmin from 'src/config/createAdmin'
 import { join } from 'node:path'
 import { readdirSync } from 'node:fs'
 import createModules from './createModules'
+import createRoles from './createRoles'
 import { createDefaultWarehouseAndPlant } from './warehouse'
 
 class migrate {
@@ -55,6 +56,7 @@ class migrate {
 
       await createAdmin()
       await createModules()
+      await createRoles()
       await createDefaultWarehouseAndPlant()
       console.log('Migration succesfully')
     } catch (err) {

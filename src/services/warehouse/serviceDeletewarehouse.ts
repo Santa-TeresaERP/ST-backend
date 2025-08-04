@@ -1,6 +1,6 @@
 import warehouse from '@models/warehouse'
 
-const serviceDeletewarehouse = async (id: string) => {
+const serviceDeletewarehouse = async (id: string, status: boolean) => {
   const warehouses = await warehouse.findByPk(id)
 
   if (!warehouses) {
@@ -8,8 +8,12 @@ const serviceDeletewarehouse = async (id: string) => {
   }
 
   // Cambiar el status a false en lugar de eliminar
-  warehouses.status = false
+  warehouses.status = status // Alternar el estado
   await warehouses.save()
+
+  console.log(
+    `Estado del almacén "${warehouses.name}" cambiado a: ${warehouses.status ? 'activo' : 'inactivo'}`,
+  )
 
   return { message: 'Almacén desactivado correctamente' }
 }

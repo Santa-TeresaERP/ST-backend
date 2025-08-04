@@ -8,6 +8,7 @@ const updateEntranceController = async (req: Request, res: Response) => {
 
     if ('error' in result) {
       res.status(400).json(result)
+      return
     }
 
     res.status(200).json(result)

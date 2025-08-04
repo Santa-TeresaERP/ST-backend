@@ -8,14 +8,8 @@ router.post('/', authorization, warehouseController.CreateWarehouse)
 
 router.get('/', authorization, warehouseController.GetWarehouses)
 
-router.patch('/:id', authorization, warehouseController.UpdateWarehouse)
+router.put('/:id', authorization, warehouseController.UpdateWarehouse)
 
-router.put('/:id', authorization, warehouseController.DeleteWarehouse)
-
-router.patch(
-  '/:id/activate',
-  authorization,
-  warehouseController.ActivateWarehouse,
-)
+router.patch('/:id', authorization, warehouseController.DeleteWarehouse)
 
 export default router

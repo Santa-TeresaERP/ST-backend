@@ -3,7 +3,6 @@ import sequelize from '@config/database'
 import { CashSessionAttributes } from '@type/ventas/cashSession'
 import { v4 as uuid } from 'uuid'
 
-// Definimos los atributos opcionales (en este caso solo el ID)
 class CashSession
   extends Model<CashSessionAttributes, Optional<CashSessionAttributes, 'id'>>
   implements CashSessionAttributes
@@ -12,11 +11,13 @@ class CashSession
   public user_id!: string
   public store_id!: string
   public start_amount!: number
-  public end_amount!: number
-  public total_returns!: number
-  public ended_at!: Date
+  public end_amount?: number
+  public total_sales?: number
+  public total_returns?: number
+  public started_at!: Date
+  public ended_at?: Date
+  public status!: 'open' | 'closed'
 
-  // timestamps automáticos si los necesitas (createdAt, updatedAt)
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }
@@ -42,21 +43,34 @@ CashSession.init(
     },
     end_amount: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
+      allowNull: true,
+    },
+    total_sales: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: true,
     },
     total_returns: {
       type: DataTypes.DECIMAL(10, 2),
+      allowNull: true,
+    },
+    started_at: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
     ended_at: {
       type: DataTypes.DATE,
+      allowNull: true,
+    },
+    status: {
+      type: DataTypes.ENUM('open', 'closed'),
       allowNull: false,
+      defaultValue: 'open',
     },
   },
   {
     sequelize,
     tableName: 'cash_sessions',
-    timestamps: true, // Esto crea automáticamente createdAt y updatedAt
+    timestamps: true,
   },
 )
 

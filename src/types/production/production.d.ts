@@ -4,6 +4,7 @@ export interface productionAttributes {
   quantityProduced: number
   productionDate: string
   observation: string
+  isActive?: boolean
   plant_id: string
   createdAt?: Date
   updatedAt?: Date

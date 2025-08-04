@@ -3,7 +3,6 @@ import sequelize from '@config/database';
 import { GeneralIncomeAttributes } from '@type/finanzas/generalIncome';
 
 // Importa los modelos para las relaciones
-import FinancialReport from './financialReport';
 import Module from './modules'; // Asumiendo que tu modelo de Módulo se llama así
 
 type GeneralIncomeCreationAttributes = Optional<GeneralIncomeAttributes, 'id'>;
@@ -64,15 +63,15 @@ GeneralIncome.init(
 );
 
 // --- RELACIONES ---
-GeneralIncome.belongsTo(FinancialReport, {
-  foreignKey: 'report_id',
-  as: 'report',
-});
 
 GeneralIncome.belongsTo(Module, {
   foreignKey: 'module_id',
-  targetKey: 'module_id', // ¡Importante! Porque la PK de Module es 'module_id'
   as: 'module',
+});
+
+Module.hasMany(GeneralIncome, {
+  foreignKey: 'module_id',
+  as: 'incomes',
 });
 
 export default GeneralIncome;

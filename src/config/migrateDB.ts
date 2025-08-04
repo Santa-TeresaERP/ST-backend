@@ -8,13 +8,16 @@ import createRoles from './createRoles'
 import { createDefaultWarehouseAndPlant } from './warehouse'
 
 class migrate {
-  static modelLoader() {
+  static async modelLoader() {
     const modelPath = join(process.cwd(), 'src', 'models')
     const files = readdirSync(modelPath)
-    files.forEach(async (file) => {
-      const model = join(modelPath, file)
-      await import(model)
-    })
+
+    for (const file of files) {
+      if (file.endsWith('.ts') || file.endsWith('.js')) {
+        const model = join(modelPath, file)
+        await import(model)
+      }
+    }
   }
 
   static async init() {

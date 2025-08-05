@@ -1,7 +1,10 @@
 import { Request, Response } from 'express'
 import useGeneralExpense from '@services/GeneralExpense'
 
-const getAllGeneralExpensesController = async (_req: Request, res: Response) => {
+const getAllGeneralExpensesController = async (
+  _req: Request,
+  res: Response,
+) => {
   try {
     const result = await useGeneralExpense.getAll()
 

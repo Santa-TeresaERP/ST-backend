@@ -3,7 +3,6 @@ import sequelize from '@config/database';
 import { GeneralExpenseAttributes } from '@type/finanzas/generalExpense';
 
 // Importa los modelos para las relaciones
-import FinancialReport from './financialReport';
 import Module from './modules';
 
 type GeneralExpenseCreationAttributes = Optional<GeneralExpenseAttributes, 'id'>;
@@ -64,12 +63,12 @@ GeneralExpense.init(
 );
 
 // --- RELACIONES ---
-GeneralExpense.belongsTo(FinancialReport, {
+GeneralExpense.belongsTo(Module, {
   foreignKey: 'report_id',
   as: 'report',
 });
 
-GeneralExpense.belongsTo(Module, {
+Module.belongsTo(GeneralExpense, {
   foreignKey: 'module_id',
   targetKey: 'module_id', // La PK en Module es 'module_id'
   as: 'module',

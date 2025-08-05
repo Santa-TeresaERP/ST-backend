@@ -17,6 +17,7 @@ class Production
   public plant_id!: string
   public createdAt?: Date
   public updatedAt?: Date
+  public isActive?: boolean
 }
 
 Production.init(
@@ -53,6 +54,11 @@ Production.init(
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: true,
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
     },
   },
   {

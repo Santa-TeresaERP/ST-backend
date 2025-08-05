@@ -132,15 +132,21 @@ class useProductions {
   }
 
   // Eliminar un registro de producción
-  static async deleteProduction(id: string) {
+  static async toggleProductionStatus(id: string) {
     const production = await Production.findByPk(id)
-
     if (!production) {
       return { error: 'El registro de producción no existe' }
     }
 
-    await production.destroy()
-    return { message: 'Registro de producción eliminado correctamente' }
+    production.isActive = !production.isActive
+    await production.save()
+
+    console.log(`Estado de producción con ID ${id} cambiado a ${production.isActive ? 'activo' : 'inactivo'}`)
+
+    return {
+      message: `Registro marcado como ${production.isActive ? 'activo' : 'inactivo'}`,
+      production,
+    }
   }
 
   // Obtener producción por producto

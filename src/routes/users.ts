@@ -1,20 +1,64 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
+// import authorizePermissions from '@middlewares/roleAuthorization'
 import userController from '@controllers/User/index'
+
 const router = express.Router()
 
-router.post('/', authorization, userController.createUser)
+// Crear usuario - requiere permiso de escritura en módulo 'users'
+router.post(
+  '/',
+  authorization,
+  // authorizePermissions('canWrite', 'users'),
+  userController.createUser,
+)
 
-router.get('/', authorization, userController.getUsers) // Ruta para obtener usuarios activos
+// Obtener usuarios activos - requiere permiso de lectura en módulo 'users'
+router.get(
+  '/',
+  authorization,
+  // authorizePermissions('canRead', 'users'),
+  userController.getUsers,
+)
 
-router.get('/all', authorization, userController.getUsersAll) // Ruta para obtener todos los usuarios (activos e inactivos)
+// Obtener todos los usuarios - requiere permiso de lectura en módulo 'users'
+router.get(
+  '/all',
+  authorization,
+  // authorizePermissions('canRead', 'users'),
+  userController.getUsersAll,
+)
 
-router.get('/:id', authorization, userController.getUser)
+// Obtener un usuario - requiere permiso de lectura en módulo 'users'
+router.get(
+  '/:id',
+  authorization,
+  // authorizePermissions('canRead', 'users'),
+  userController.getUser,
+)
 
-router.put('/:id', authorization, userController.deleteUser)
+// Eliminar usuario (soft delete) - requiere permiso de eliminación en módulo 'users'
+router.put(
+  '/:id',
+  authorization,
+  // authorizePermissions('canDelete', 'users'),
+  userController.deleteUser,
+)
 
-router.patch('/:id', authorization, userController.updateUser)
+// Actualizar usuario - requiere permiso de edición en módulo 'users'
+router.patch(
+  '/:id',
+  authorization,
+  // authorizePermissions('canEdit', 'users'),
+  userController.updateUser,
+)
 
-router.patch('/changes/:id', authorization, userController.changePassword)
+// Cambiar contraseña - requiere permiso de edición en módulo 'users'
+router.patch(
+  '/changes/:id',
+  authorization,
+  // authorizePermissions('canEdit', 'users'),
+  userController.changePassword,
+)
 
 export default router

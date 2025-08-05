@@ -1,15 +1,18 @@
 import { Request, Response } from 'express'
 import warehouseProductService from '@services/warehouse_product'
 
-export default async function deleteWarehouseProduct(
+export default async function toggleWarehouseProductStatus(
   req: Request,
   res: Response,
 ) {
   try {
-    await warehouseProductService.deleteWarehouseProduct(req.params.id)
-    res.json({ message: 'Registro eliminado correctamente' })
+    const product = await warehouseProductService.deleteWarehouseProduct(req.params.id)
+    res.json({ 
+      message: `Estado del producto actualizado a ${product.status ? 'activo' : 'inactivo'}`,
+      product
+    })
   } catch (error: unknown) {
-    console.error('Error deleting warehouse product:', error)
+    console.error('Error updating warehouse product status:', error)
     let statusCode = 500
     let errorMessage = 'Unknown error occurred'
 

@@ -1,6 +1,6 @@
-import FinancialReport from '@models/financialReport';
-import GeneralIncome from '@models/generalIncome';
-import GeneralExpense from '@models/generalExpense';
+import FinancialReport from '@models/financialReport'
+import GeneralIncome from '@models/generalIncome'
+import GeneralExpense from '@models/generalExpense'
 
 /**
  * Obtiene un reporte financiero específico por su ID.
@@ -13,17 +13,17 @@ const serviceGetFinancialReportById = async (id: string) => {
         { model: GeneralIncome, as: 'incomes' },
         { model: GeneralExpense, as: 'expenses' },
       ],
-    });
+    })
 
     if (!report) {
-      return { error: 'Reporte financiero no encontrado.' };
+      return { error: 'Reporte financiero no encontrado.' }
     }
 
-    return report;
+    return report
   } catch (error) {
-    console.error(`Error al obtener el reporte financiero con ID ${id}:`, error);
-    return { error: 'Ocurrió un error inesperado al obtener el reporte.' };
+    console.error(`Error al obtener el reporte financiero con ID ${id}:`, error)
+    return { error: 'Ocurrió un error inesperado al obtener el reporte.' }
   }
-};
+}
 
-export default serviceGetFinancialReportById;
+export default serviceGetFinancialReportById

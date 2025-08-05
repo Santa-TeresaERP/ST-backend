@@ -1,8 +1,8 @@
-import serviceCreateGeneralExpense from './serviceCreateGeneralExpense';
-import serviceGetAllGeneralExpenses from './serviceGetAllGeneralExpenses';
-import serviceGetGeneralExpenseById from './serviceGetGeneralExpenseById';
-import serviceUpdateGeneralExpense from './serviceUpdateGeneralExpense';
-import serviceDeleteGeneralExpense from './serviceDeleteGeneralExpense';
+import serviceCreateGeneralExpense from './serviceCreateGeneralExpense'
+import serviceGetAllGeneralExpenses from './serviceGetAllGeneralExpenses'
+import serviceGetGeneralExpenseById from './serviceGetGeneralExpenseById'
+import serviceUpdateGeneralExpense from './serviceUpdateGeneralExpense'
+import serviceDeleteGeneralExpense from './serviceDeleteGeneralExpense'
 
 const useGeneralExpense = {
   create: serviceCreateGeneralExpense,
@@ -10,6 +10,6 @@ const useGeneralExpense = {
   getById: serviceGetGeneralExpenseById,
   update: serviceUpdateGeneralExpense,
   delete: serviceDeleteGeneralExpense,
-};
+}
 
-export default useGeneralExpense;
+export default useGeneralExpense

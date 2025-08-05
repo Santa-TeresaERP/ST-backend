@@ -1,8 +1,8 @@
-import serviceCreateFinancialReport from './serviceCreateFinancialReport';
-import serviceGetAllFinancialReports from './serviceGetAllFinancialReports';
-import serviceGetFinancialReportById from './serviceGetFinancialReportById';
-import serviceUpdateFinancialReport from './serviceUpdateFinancialReport';
-import serviceDeleteFinancialReport from './serviceDeleteFinancialReport';
+import serviceCreateFinancialReport from './serviceCreateFinancialReport'
+import serviceGetAllFinancialReports from './serviceGetAllFinancialReports'
+import serviceGetFinancialReportById from './serviceGetFinancialReportById'
+import serviceUpdateFinancialReport from './serviceUpdateFinancialReport'
+import serviceDeleteFinancialReport from './serviceDeleteFinancialReport'
 
 const useFinancialReport = {
   create: serviceCreateFinancialReport,
@@ -10,6 +10,6 @@ const useFinancialReport = {
   getById: serviceGetFinancialReportById,
   update: serviceUpdateFinancialReport,
   delete: serviceDeleteFinancialReport,
-};
+}
 
-export default useFinancialReport;
+export default useFinancialReport

@@ -1,6 +1,6 @@
-import FinancialReport from '@models/financialReport';
-import GeneralIncome from '@models/generalIncome';
-import GeneralExpense from '@models/generalExpense';
+import FinancialReport from '@models/financialReport'
+import GeneralIncome from '@models/generalIncome'
+import GeneralExpense from '@models/generalExpense'
 
 /**
  * Obtiene todos los reportes financieros.
@@ -15,12 +15,12 @@ const serviceGetAllFinancialReports = async () => {
         { model: GeneralExpense, as: 'expenses' },
       ],
       order: [['start_date', 'DESC']],
-    });
-    return reports;
+    })
+    return reports
   } catch (error) {
-    console.error('Error al obtener los reportes financieros:', error);
-    return { error: 'Ocurrió un error inesperado al obtener los reportes.' };
+    console.error('Error al obtener los reportes financieros:', error)
+    return { error: 'Ocurrió un error inesperado al obtener los reportes.' }
   }
-};
+}
 
-export default serviceGetAllFinancialReports;
+export default serviceGetAllFinancialReports

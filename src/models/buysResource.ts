@@ -22,6 +22,7 @@ class BuysResource
   public supplier_id!: string
   public quantity!: number
   public entry_date!: Date
+  public status ?: boolean
 }
 
 BuysResource.init(
@@ -62,6 +63,11 @@ BuysResource.init(
     entry_date: {
       type: DataTypes.DATE,
       allowNull: false,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: true, // Default value for status
     },
   },
   {

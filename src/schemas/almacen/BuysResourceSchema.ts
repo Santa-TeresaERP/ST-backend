@@ -32,6 +32,7 @@ export const buysResourceSchema = z.object({
   entry_date: z.coerce.date({
     invalid_type_error: 'La fecha de entrada debe ser válida',
   }),
+  status: z.boolean().optional().default(true), // Optional, default is true
 })
 
 export const buysResourceValidation = (data: buysResourceAttributes) =>

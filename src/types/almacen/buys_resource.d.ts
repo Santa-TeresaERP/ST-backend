@@ -8,4 +8,5 @@ export interface buysResourceAttributes {
   total_cost: number
   supplier_id: string
   entry_date: Date
+  status?: boolean// Optional, default is true
 }

@@ -1,25 +1,19 @@
 import BuysResource from '@models/buysResource'
 
 const serviceDeleteBuysResource = async (id: string) => {
-  try {
-    const deleted = await BuysResource.destroy({
-      where: { id },
-    })
+  const buysResource = await BuysResource.findByPk(id)
 
-    if (!deleted) {
-      return { error: 'Dato de compra no encontrado o ya eliminado' }
-    }
-
-    return { message: 'Dato de compra eliminado correctamente' }
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      return {
-        error: 'Error al eliminar Dato de compra',
-        details: error.message,
-      }
-    }
-    return { error: 'Error desconocido al eliminar el Dato de compra' }
+  if (!buysResource) {
+    return { error: 'El recurso de compra no existe' }
   }
+
+  // Alternar estado
+  buysResource.status = !buysResource.status
+  await buysResource.save()
+
+  console.log(`Estado del recurso de compra con ID ${id} cambiado a ${buysResource.status ? 'activo' : 'inactivo'}`)
+  
+  return buysResource
 }
 
 export default serviceDeleteBuysResource

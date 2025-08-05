@@ -24,3 +24,5 @@ router.put('/:id', authorization, financialReportController.update);
 
 // DELETE /api/finanzas/reports/:id -> Eliminar un reporte
 router.delete('/:id', authorization, financialReportController.delete);
+
+export default router;

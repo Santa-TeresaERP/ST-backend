@@ -1,28 +1,27 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '@config/database';
-import { FinancialReportAttributes } from '@type/finanzas/financialReport';
-
-// Importa los otros modelos para definir las relaciones
-import GeneralIncome from '@models/generalIncome';
-import GeneralExpense from '@models/generalExpense';
+import { DataTypes, Model, Optional } from 'sequelize'
+import sequelize from '@config/database'
+import { FinancialReportAttributes } from '@type/finanzas/financialReport'
 
 // Definición de los atributos de creación, donde 'id' es opcional
-type FinancialReportCreationAttributes = Optional<FinancialReportAttributes, 'id'>;
+type FinancialReportCreationAttributes = Optional<
+  FinancialReportAttributes,
+  'id'
+>
 
 class FinancialReport
   extends Model<FinancialReportAttributes, FinancialReportCreationAttributes>
   implements FinancialReportAttributes
 {
-  public id!: string;
-  public start_date!: Date;
-  public end_date!: Date;
-  public total_income!: number;
-  public total_expenses!: number;
-  public net_profit!: number;
-  public observations?: string | null;
+  public id!: string
+  public start_date!: Date
+  public end_date!: Date
+  public total_income!: number
+  public total_expenses!: number
+  public net_profit!: number
+  public observations?: string | null
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly createdAt!: Date
+  public readonly updatedAt!: Date
 }
 
 FinancialReport.init(
@@ -61,21 +60,7 @@ FinancialReport.init(
     sequelize,
     tableName: 'financial_reports',
     timestamps: true,
-  }
-);
+  },
+)
 
-// --- RELACIONES ---
-FinancialReport.hasMany(GeneralIncome, {
-  foreignKey: 'report_id',
-  as: 'incomes',
-});
-
-FinancialReport.hasMany(GeneralExpense, {
-  foreignKey: 'report_id',
-  as: 'expenses',
-});
-
-// Cuando exista el modelo ResourceUsage, la relación se añadiría aquí:
-// FinancialReport.hasMany(ResourceUsage, { foreignKey: 'report_id', as: 'resourceUsages' });
-
-export default FinancialReport;
+export default FinancialReport

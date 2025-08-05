@@ -1,23 +1,22 @@
-import { Request, Response } from 'express';
-import useFinancialReport from '@services/FinancialReport';
+import { Request, Response } from 'express'
+import useFinancialReport from '@services/FinancialReport'
 
 const createFinancialReportController = async (req: Request, res: Response) => {
   try {
     // Llama al servicio 'create' pasándole el cuerpo de la petición
-    const result = await useFinancialReport.create(req.body);
+    const result = await useFinancialReport.create(req.body)
 
     // Si el servicio devuelve un error de negocio, responde con un 400
     if (result && 'error' in result) {
-       res.status(400).json({ message: result.error });
+      res.status(400).json({ message: result.error })
     }
-    
+
     // Si la creación es exitosa, responde con 201 Created y el nuevo reporte
-     res.status(201).json(result);
-
+    res.status(201).json(result)
   } catch (error) {
-    console.error('Error en el controlador de creación de reporte:', error);
-     res.status(500).json({ message: 'Error interno del servidor.' });
+    console.error('Error en el controlador de creación de reporte:', error)
+    res.status(500).json({ message: 'Error interno del servidor.' })
   }
-};
+}
 
-export default createFinancialReportController;
+export default createFinancialReportController

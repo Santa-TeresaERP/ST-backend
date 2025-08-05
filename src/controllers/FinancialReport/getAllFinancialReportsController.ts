@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import useFinancialReport from '@services/FinancialReport';
 
-const getAllFinancialReportsController = async (req: Request, res: Response) => {
+const getAllFinancialReportsController = async (_req: Request, res: Response) => {
   try {
     const result = await useFinancialReport.getAll();
 

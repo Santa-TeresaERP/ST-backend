@@ -6,7 +6,11 @@ const serviceDeleteWarehouseMovementResource = async (id: string) => {
     return { error: 'Recurso de movimiento de almacén no encontrado' }
   }
 
-  await record.destroy()
+  // Alternar estado
+  record.status = !record.status
+  await record.save()
+  console.log(`Estado del recurso de movimiento de almacén con ID ${id} cambiado a ${record.status ? 'activo' : 'inactivo'}`)
+
   return { message: 'Recurso eliminado correctamente' }
 }
 

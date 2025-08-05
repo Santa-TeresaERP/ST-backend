@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import useGeneralIncome from '@services/GeneralIncome';
 
-const getAllGeneralIncomesController = async (req: Request, res: Response) => {
+const getAllGeneralIncomesController = async (_req: Request, res: Response) => {
   try {
     const result = await useGeneralIncome.getAll();
 

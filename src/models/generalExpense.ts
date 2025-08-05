@@ -1,26 +1,27 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '@config/database';
-import { GeneralExpenseAttributes } from '@type/finanzas/generalExpense';
+import { DataTypes, Model, Optional } from 'sequelize'
+import sequelize from '@config/database'
+import { GeneralExpenseAttributes } from '@type/finanzas/generalExpense'
 
 // Importa los modelos para las relaciones
-import Module from './modules';
+import Module from './modules'
+import FinancialReport from './financialReport'
 
-type GeneralExpenseCreationAttributes = Optional<GeneralExpenseAttributes, 'id'>;
+type GeneralExpenseCreationAttributes = Optional<GeneralExpenseAttributes, 'id'>
 
 class GeneralExpense
   extends Model<GeneralExpenseAttributes, GeneralExpenseCreationAttributes>
   implements GeneralExpenseAttributes
 {
-  public id!: string;
-  public module_id!: string;
-  public expense_type!: string;
-  public amount!: number;
-  public date!: Date;
-  public description?: string | null;
-  public report_id?: string | null;
+  public id!: string
+  public module_id!: string
+  public expense_type!: string
+  public amount!: number
+  public date!: Date
+  public description?: string | null
+  public report_id?: string | null
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  public readonly createdAt!: Date
+  public readonly updatedAt!: Date
 }
 
 GeneralExpense.init(
@@ -59,22 +60,25 @@ GeneralExpense.init(
     sequelize,
     tableName: 'general_expenses',
     timestamps: true,
-  }
-);
+  },
+)
 
 // --- RELACIONES ---
 GeneralExpense.belongsTo(Module, {
   foreignKey: 'report_id',
-  as: 'report',
-});
+})
 
-Module.belongsTo(GeneralExpense, {
+Module.hasMany(GeneralExpense, {
   foreignKey: 'module_id',
-  targetKey: 'module_id', // La PK en Module es 'module_id'
-  as: 'module',
-});
+})
 
-// Cuando exista el modelo ResourceUsage, la relación se añadiría aquí:
-// GeneralExpense.hasMany(ResourceUsage, { foreignKey: 'expense_id', as: 'resourceUsages' });
+// Relación con FinancialReport
+GeneralExpense.belongsTo(FinancialReport, {
+  foreignKey: 'report_id',
+})
 
-export default GeneralExpense;
+FinancialReport.hasMany(GeneralExpense, {
+  foreignKey: 'report_id',
+})
+
+export default GeneralExpense

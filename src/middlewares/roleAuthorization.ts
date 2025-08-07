@@ -14,6 +14,9 @@ const authorizePermissions = (permission: string, moduleName: string) => {
       const user = req.authUser
 
       if (!user?.rolId) {
+        console.warn(
+          `❌ Unauthorized access attempt - Role ID missing for user`,
+        )
         res.status(403).json({ message: 'Unauthorized. Role ID is missing.' })
         return
       }
@@ -32,6 +35,7 @@ const authorizePermissions = (permission: string, moduleName: string) => {
         return
       }
 
+      // Buscar si el rol del usuario tiene el permiso específico para este módulo
       const rolePermissions = await RolesPermissions.findOne({
         where: {
           roleId: user.rolId,
@@ -48,12 +52,19 @@ const authorizePermissions = (permission: string, moduleName: string) => {
       })
 
       if (!rolePermissions) {
-        res
-          .status(403)
-          .json({ message: 'You do not have permission for this action.' })
+        console.warn(
+          `❌ Permission denied - User role ${user.rolId} lacks '${permission}' permission for module '${moduleName}'`,
+        )
+        res.status(403).json({
+          message: 'You do not have permission for this action.',
+          details: `Missing '${permission}' permission for '${moduleName}' module`,
+        })
         return
       }
 
+      console.log(
+        `✅ Permission granted - User role ${user.rolId} has '${permission}' permission for module '${moduleName}'`,
+      )
       next()
     } catch (error) {
       console.error('Error in permission authorization middleware:', error)

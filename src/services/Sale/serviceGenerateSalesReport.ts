@@ -3,6 +3,8 @@ import saleDetail from '@models/saleDetail'
 import Product from '@models/product'
 import Store from '@models/store'
 import { Op } from 'sequelize'
+import PDFDocument from 'pdfkit'
+import { PassThrough } from 'stream'
 
 interface SalesReportOptions {
   storeId: string
@@ -27,15 +29,12 @@ const serviceGenerateSalesReport = async ({
   month,
   year,
 }: SalesReportOptions) => {
-  // Obtener la tienda
   const store = await Store.findByPk(storeId)
   if (!store) return { error: 'Tienda no encontrada' }
 
-  // Rango de fechas para el día seleccionado
   const startDate = new Date(year, month - 1, day, 0, 0, 0)
   const endDate = new Date(year, month - 1, day, 23, 59, 59)
 
-  // Obtener ventas del día para la tienda
   const sales = await sale.findAll({
     where: {
       store_id: storeId,
@@ -57,20 +56,27 @@ const serviceGenerateSalesReport = async ({
     ],
   })
 
-  // Simulación de pérdidas
   const simulatedReturns = [
     { product: 'Pan', total: 5 },
     { product: 'Vino', total: 15 },
   ]
 
-  // reporte
-  let report = ''
-  report += `========================================\n`
-  report += `Tienda: ${store.store_name}\n`
-  report += `Fecha: ${startDate.toLocaleDateString()}\n`
-  report += `========================================\n\n`
-  report += `Ventas:\n`
-  report += `Producto        | Cantidad | Total\n`
+  const doc = new PDFDocument({ margin: 50 })
+  const stream = new PassThrough()
+  doc.pipe(stream)
+
+  // Cabecera
+  doc.fontSize(20).text(`Reporte de Ventas`, { align: 'center' })
+  doc.moveDown()
+  doc.fontSize(12).text(`Tienda: ${store.store_name}`)
+  doc.text(`Fecha: ${startDate.toLocaleDateString()}`)
+  doc.moveDown()
+
+  // Ventas
+  doc.fontSize(14).text(`Ventas:`, { underline: true })
+  doc.moveDown(0.5)
+  doc.fontSize(12).text(`Producto        | Cantidad | Total`)
+  doc.moveTo(doc.x, doc.y).lineTo(500, doc.y).stroke()
 
   let totalVentas = 0
   for (const s of sales as unknown as SaleWithDetails[]) {
@@ -78,30 +84,40 @@ const serviceGenerateSalesReport = async ({
       const nombre = d.product.name.padEnd(15)
       const cantidad = d.quantity.toString().padStart(8)
       const total = `S/${d.mount}`.padStart(8)
-      report += `${nombre} | ${cantidad} | ${total}\n`
+      doc.text(`${nombre} | ${cantidad} | ${total}`)
       totalVentas += d.mount
     }
   }
 
-  report += `----------------------------------------\n\n`
-  report += `Perdidas:\n`
-  report += `Producto        | Total\n`
+  doc.moveDown()
+
+  // Perdidas
+  doc.fontSize(14).text(`Pérdidas:`, { underline: true })
+  doc.moveDown(0.5)
+  doc.fontSize(12).text(`Producto        | Total`)
+  doc.moveTo(doc.x, doc.y).lineTo(500, doc.y).stroke()
 
   let totalPerdidas = 0
   for (const r of simulatedReturns) {
     const nombre = r.product.padEnd(15)
     const total = `S/${r.total}`.padStart(8)
-    report += `${nombre} | ${total}\n`
+    doc.text(`${nombre} | ${total}`)
     totalPerdidas += r.total
   }
 
-  report += `\n========================================\n`
-  report += `Total ventas:   S/${totalVentas}\n`
-  report += `Total perdidas: S/${totalPerdidas}\n`
-  report += `Total general:  S/${totalVentas - totalPerdidas}\n`
-  report += `========================================\n`
+  doc.moveDown()
 
-  return { report }
+  // Totales
+  doc.fontSize(12).text(`Total ventas:   S/${totalVentas}`)
+  doc.text(`Total pérdidas: S/${totalPerdidas}`)
+  doc.text(`Total general:  S/${totalVentas - totalPerdidas}`)
+
+  doc.end()
+
+  return {
+    stream,
+    filename: `reporte-${store.store_name}-${day}-${month}-${year}.pdf`,
+  }
 }
 
 export default serviceGenerateSalesReport

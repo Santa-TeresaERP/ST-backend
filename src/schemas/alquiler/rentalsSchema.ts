@@ -14,11 +14,11 @@ const RentalSchema = z.object({
     message: 'El ID del usuario debe ser un UUID válido',
   }),
 
-  start_date: z.date({
+  start_date: z.coerce.date({
     invalid_type_error: 'La fecha de inicio debe ser una fecha válida',
   }),
 
-  end_date: z.date({
+  end_date: z.coerce.date({
     invalid_type_error: 'La fecha de fin debe ser una fecha válida',
   }),
 

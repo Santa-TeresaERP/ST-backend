@@ -25,7 +25,7 @@ router.patch(
   authorization,
   warehouseProductController.updateWarehouseProduct,
 )
-router.delete(
+router.put(
   '/:id',
   authorization,
   warehouseProductController.deleteWarehouseProduct,

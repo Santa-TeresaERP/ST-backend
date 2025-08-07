@@ -8,9 +8,12 @@ const serviceDeletewarehouseMovementProduct = async (id: string) => {
     return { error: 'El movimiento de producto no existe' }
   }
 
-  // Eliminar el movimiento de producto
-  await movement.destroy()
-  return { message: 'Movimiento de producto eliminado correctamente' }
+  // Alternar estado
+  movement.status = !movement.status
+  await movement.save()
+  console.log(`Estado del movimiento de producto con ID ${id} cambiado a ${movement.status ? 'activo' : 'inactivo'}`)
+
+  return { message: 'Estado del movimiento de producto actualizado correctamente' }
 }
 
 export default serviceDeletewarehouseMovementProduct

@@ -34,7 +34,7 @@ router.patch(
     warehouseMovementResourceController.updateWarehouseMovementResource,
   ),
 )
-router.delete(
+router.put(
   '/:id',
   asyncHandler(
     warehouseMovementResourceController.deleteWarehouseMovementResource,

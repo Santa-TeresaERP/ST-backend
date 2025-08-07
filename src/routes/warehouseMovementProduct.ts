@@ -14,6 +14,6 @@ router.get('/', authorization, index.GetWarehouseMovementProducts)
 router.patch('/:id', authorization, index.UpdateWarehouseMovementProduct)
 
 // Eliminar un movimiento de producto por ID
-router.delete('/:id', authorization, index.DeleteWarehouseMovementProduct)
+router.put('/:id', authorization, index.DeleteWarehouseMovementProduct)
 
 export default router

@@ -1,4 +1,4 @@
-import GeneralExpense from '@models/generalExpense';
+import GeneralExpense from '@models/generalExpense'
 
 /**
  * Elimina un registro de gasto.
@@ -6,22 +6,24 @@ import GeneralExpense from '@models/generalExpense';
  */
 const serviceDeleteGeneralExpense = async (id: string) => {
   try {
-    const expense = await GeneralExpense.findByPk(id);
+    const expense = await GeneralExpense.findByPk(id)
     if (!expense) {
-      return { error: 'Gasto no encontrado.' };
+      return { error: 'Gasto no encontrado.' }
     }
 
     if (expense.report_id) {
-      return { error: 'Este gasto ya ha sido incluido en un reporte financiero y no puede ser eliminado.' };
+      return {
+        error:
+          'Este gasto ya ha sido incluido en un reporte financiero y no puede ser eliminado.',
+      }
     }
 
-    await expense.destroy();
-    return { message: 'Gasto eliminado correctamente.' };
-
+    await expense.destroy()
+    return { message: 'Gasto eliminado correctamente.' }
   } catch (error) {
-    console.error(`Error al eliminar el gasto con ID ${id}:`, error);
-    return { error: 'Ocurrió un error inesperado al eliminar el gasto.' };
+    console.error(`Error al eliminar el gasto con ID ${id}:`, error)
+    return { error: 'Ocurrió un error inesperado al eliminar el gasto.' }
   }
-};
+}
 
-export default serviceDeleteGeneralExpense;
+export default serviceDeleteGeneralExpense

@@ -18,6 +18,7 @@ class FinancialReport
   public total_income!: number
   public total_expenses!: number
   public net_profit!: number
+  public status!: 'activo' | 'inactivo'
   public observations?: string | null
 
   public readonly createdAt!: Date
@@ -50,6 +51,11 @@ FinancialReport.init(
     net_profit: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+    },
+    status: {
+      type: DataTypes.ENUM('activo', 'inactivo'),
+      allowNull: false,
+      defaultValue: 'activo',
     },
     observations: {
       type: DataTypes.TEXT,

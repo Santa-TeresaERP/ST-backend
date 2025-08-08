@@ -52,19 +52,12 @@ const authorizePermissions = (permission: string, moduleName: string) => {
       })
 
       if (!rolePermissions) {
-        console.warn(
-          `❌ Permission denied - User role ${user.rolId} lacks '${permission}' permission for module '${moduleName}'`,
-        )
         res.status(403).json({
           message: 'You do not have permission for this action.',
           details: `Missing '${permission}' permission for '${moduleName}' module`,
         })
         return
       }
-
-      console.log(
-        `✅ Permission granted - User role ${user.rolId} has '${permission}' permission for module '${moduleName}'`,
-      )
       next()
     } catch (error) {
       console.error('Error in permission authorization middleware:', error)

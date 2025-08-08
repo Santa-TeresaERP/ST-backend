@@ -38,6 +38,14 @@ router.patch(
   permissionController.updatePermissionController,
 )
 
+// Actualizar permisos de un rol específico
+router.patch(
+  '/role/:roleId',
+  authorization,
+  roleAuthorization('canEdit', 'roles'),
+  permissionController.updatePermissionController,
+)
+
 // Eliminar un permiso - requiere permiso de eliminación en módulo 'permissions'
 router.delete(
   '/:id',

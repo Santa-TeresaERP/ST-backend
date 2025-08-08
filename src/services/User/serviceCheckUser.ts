@@ -33,7 +33,22 @@ const serviceCheckUser = async (body: UserAttributes) => {
   }
 
   const token = generateToken(tokenData)
-  return { user: name, token }
+
+  // Retornar el objeto completo del usuario en lugar de solo el nombre
+  return {
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      dni: user.dni,
+      phonenumber: user.phonenumber,
+      roleId: user.roleId,
+      status: user.status,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    },
+    token,
+  }
 }
 
 export default serviceCheckUser

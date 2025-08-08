@@ -38,16 +38,17 @@ router.patch(
 )
 
 // Eliminar recurso comprado
-router.delete(
+router.put(
   '/:id',
   authorization,
   roleAuthorization('canDelete', 'inventario'),
   buysResourceController.DeleteBuysResource,
 )
-router.get('/', buysResourceController.GetBuysResources)
-router.post('/', buysResourceController.CreateBuysResource)
-router.patch('/:id', buysResourceController.UpdateBuysResource)
-router.put('/:id', buysResourceController.DeleteBuysResource)
-router.get('/:id', buysResourceController.GetBuysResourceById) // Nueva ruta
+router.get(
+  '/:id',
+  authorization,
+  roleAuthorization('canRead', 'inventario'),
+  buysResourceController.GetBuysResourceById,
+) // Nueva ruta
 
 export default router

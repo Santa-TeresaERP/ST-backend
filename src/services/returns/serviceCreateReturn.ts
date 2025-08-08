@@ -1,66 +1,169 @@
-import serviceCreateGeneralExpense from '@services/GeneralExpense/serviceCreateGeneralExpense'
-import Module from '@models/modules'
-import FinancialReport from '@models/financialReport'
+import { v4 as uuidv4 } from 'uuid'
+import Return from '@models/returns'
 import Product from '@models/product'
+import Sale from '@models/sale'
+import SaleDetail from '@models/saleDetail'
+import { returnValidation } from '../../schemas/ventas/returnsSchema'
 import { returnsAttributes } from '@type/ventas/returns'
+import useWarehouseStore from '@services/warehouseStore'
 
-/**
- * Crea un gasto general relacionado a una devolución de venta
- */
-const createReturnExpense = async (returnData: returnsAttributes) => {
+// ✅ Import agregado: registrar gasto por devolución
+import createReturnExpense from '@services/GeneralExpense/CollectionFunc/sales/ReturnsExpense'
+
+const serviceCreateReturn = async (
+  body: returnsAttributes,
+): Promise<Return> => {
+  const validation = returnValidation(body)
+
+  if (!validation.success) {
+    console.error(validation.error.format())
+    throw new Error('Validación fallida')
+  }
+
+  const {
+    id = uuidv4(),
+    productId,
+    salesId,
+    reason,
+    observations,
+    quantity,
+  } = validation.data
+
+  if (!productId) {
+    throw new Error('El ID del producto es obligatorio')
+  }
+
+  const product = await Product.findByPk(productId)
+  if (!product) {
+    throw new Error('Producto no encontrado')
+  }
+
+  const unitPrice = product.price
+  const price = unitPrice * quantity
+
+  // 📦 Buscar la venta para obtener el storeId
+  const sale = await Sale.findByPk(salesId)
+  if (!sale) {
+    throw new Error('Venta no encontrada')
+  }
+
+  const storeId = sale.store_id
+
+  // 🔍 Si es una devolución, validar que no se devuelva más de lo que se vendió
+  if (reason === 'devuelto') {
+    const saleDetail = await SaleDetail.findOne({
+      where: { saleId: salesId, productId },
+    })
+
+    if (!saleDetail) {
+      console.error(
+        `❌ No se encontró el producto ${productId} en la venta ${salesId}`,
+      )
+      throw new Error('Este producto no fue vendido en esta venta')
+    }
+
+    const existingReturns = await Return.findAll({
+      where: { salesId, productId, reason: 'devuelto' },
+    })
+
+    const totalReturned = existingReturns.reduce(
+      (sum, returnItem) => sum + returnItem.quantity,
+      0,
+    )
+
+    const availableToReturn = saleDetail.quantity - totalReturned
+
+    console.log(
+      `📊 Validación de devolución - Producto: ${productId}, Venta: ${salesId}`,
+    )
+    console.log(`📦 Cantidad original vendida: ${saleDetail.quantity}`)
+    console.log(`🔄 Cantidad ya devuelta: ${totalReturned}`)
+    console.log(`✅ Cantidad disponible para devolver: ${availableToReturn}`)
+    console.log(`🎯 Cantidad a devolver ahora: ${quantity}`)
+
+    if (quantity > availableToReturn) {
+      console.error(
+        `❌ ERROR: Se intenta devolver ${quantity} unidades, pero solo se pueden devolver ${availableToReturn} unidades. (Vendido: ${saleDetail.quantity}, Ya devuelto: ${totalReturned})`,
+      )
+      throw new Error(
+        `No se puede devolver ${quantity} unidades. Solo se pueden devolver ${availableToReturn} unidades de este producto en esta venta.`,
+      )
+    }
+
+    console.log('✅ Validación de devolución exitosa')
+  }
+
+  // 🔍 Buscar el inventario
+  const warehouseStore =
+    await useWarehouseStore.serviceGetWarehouseStoreByStoreAndProduct({
+      storeId,
+      productId,
+    })
+
+  if (!warehouseStore) {
+    throw new Error('Producto no encontrado en el inventario de esta tienda')
+  }
+
+  // ↕️ Lógica condicional según la razón
+  let updatedQuantity = warehouseStore.quantity
+  if (reason === 'devuelto') {
+    updatedQuantity += quantity
+  }
+
+  // 💾 Actualizar el inventario
+  await useWarehouseStore.serviceUpdateWarehouseStore(warehouseStore.id, {
+    quantity: updatedQuantity,
+  })
+
+  // 📝 Actualizar observaciones de la venta
+  if (reason === 'devuelto') {
+    const returnInfo = `Devolución: ${quantity} unidad(es) de "${product.name}"`
+    const currentObservations = sale.observations || ''
+    const updatedObservations =
+      currentObservations.trim() !== ''
+        ? `${currentObservations}. ${returnInfo}`
+        : returnInfo
+
+    await sale.update({ observations: updatedObservations })
+    console.log(
+      `✅ Observaciones de la venta actualizadas: ${updatedObservations}`,
+    )
+  }
+
+  // 📝 Crear la devolución
   try {
-    // 1. Buscar el módulo "Ventas"
-    const salesModule = await Module.findOne({
-      where: { name: 'Ventas' },
+    const newReturn = await Return.create({
+      id,
+      productId: productId ?? null,
+      salesId: salesId ?? null,
+      reason: reason ?? '',
+      observations: observations ?? undefined,
+      quantity,
+      price,
     })
 
-    if (!salesModule) {
-      console.error('❌ Módulo "Ventas" no encontrado')
-      throw new Error('Módulo "Ventas" no encontrado')
+    console.log(
+      `✅ Devolución creada exitosamente para ${quantity} unidad(es) de "${product.name}"`,
+    )
+
+    // 💸 Registrar gasto por devolución (no romper la creación si falla el asiento)
+    try {
+      await createReturnExpense(newReturn.id)
+    } catch (expenseErr) {
+      console.error(
+        '⚠️ No se pudo registrar el gasto por devolución:',
+        expenseErr,
+      )
     }
 
-    // 2. Buscar el reporte financiero activo
-    const activeReport = await FinancialReport.findOne({
-      where: { status: 'activo' },
-      order: [['createdAt', 'DESC']],
-    })
-
-    // 3. Buscar el producto relacionado
-    const product = await Product.findByPk(returnData.productId)
-    if (!product) {
-      console.error('❌ Producto no relacionado a la devolución')
-      throw new Error('Producto no relacionado a la devolución')
-    }
-
-    // 4. Calcular el monto total de la devolución
-    const totalAmount = product.price * returnData.quantity
-
-    // 5. Generar descripción automática del gasto
-    const description = `Devolución de producto: ${product.name} - Motivo: ${returnData.reason} - Cantidad: ${returnData.quantity} - Precio unitario: $${product.price}${
-      returnData.observations
-        ? ` - Observaciones: ${returnData.observations}`
-        : ''
-    }`
-
-    const expenseData = {
-      module_id: salesModule.id,
-      expense_type: 'Devolución de Venta',
-      amount: totalAmount,
-      date: new Date(),
-      description,
-      report_id: activeReport?.id || null,
-    }
-
-    console.log('🧾 Creando gasto por devolución de venta:', expenseData)
-
-    const newExpense = await serviceCreateGeneralExpense(expenseData)
-
-    console.log('✅ Gasto registrado correctamente')
-    return newExpense
-  } catch (error) {
-    console.error('❌ Error al crear gasto por devolución:', error)
-    throw error
+    return newReturn
+  } catch (error: unknown) {
+    throw new Error(
+      error instanceof Error
+        ? error.message
+        : 'Error desconocido al registrar devolución',
+    )
   }
 }
 
-export default createReturnExpense
+export default serviceCreateReturn

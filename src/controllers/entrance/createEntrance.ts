@@ -7,6 +7,7 @@ const createEntranceController = async (req: Request, res: Response) => {
 
     if ('error' in result) {
       res.status(400).json(result)
+      return
     }
 
     res.status(201).json(result)

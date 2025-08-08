@@ -1,11 +1,12 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
+// import authorizePermissions from '@middlewares/roleAuthorization'
 import permissionController from '@controllers/permission/index'
 import roleAuthorization from '@middlewares/roleAuthorization'
 
 const router = express.Router()
 
-// Crear un permiso individual
+// Crear un permiso individual - requiere permiso de escritura en módulo 'permissions'
 router.post(
   '/individual',
   authorization,
@@ -13,7 +14,7 @@ router.post(
   permissionController.createPermissionController,
 )
 
-// Crear múltiples permisos para un rol
+// Crear múltiples permisos para un rol - requiere permiso de escritura en módulo 'permissions'
 router.post(
   '/',
   authorization,
@@ -37,7 +38,7 @@ router.patch(
   permissionController.updatePermissionController,
 )
 
-// Eliminar un permiso
+// Eliminar un permiso - requiere permiso de eliminación en módulo 'permissions'
 router.delete(
   '/:id',
   authorization,

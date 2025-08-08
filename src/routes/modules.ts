@@ -27,7 +27,7 @@ router.get(
 router.patch(
   '/:id',
   authorization,
-  roleAuthorization('canEdit', 'modulos'),
+  authorizePermissions('canEdit', 'modulos'),
   updateModule,
 )
 

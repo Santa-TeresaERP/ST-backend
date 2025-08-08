@@ -25,3 +25,6 @@ export const entranceSchema = z.object({
 
 export const entranceValidation = (data: entranceAttributes) =>
   entranceSchema.safeParse(data)
+
+export const entranceValidationPartial = (data: Partial<entranceAttributes>) =>
+  entranceSchema.partial().safeParse(data)

@@ -26,12 +26,14 @@ export const warehouseSchema = z.object({
 })
 // Validación de estado activo/inactivo
 export const validateWarehouseStatus = (data: { status?: boolean }) => {
+  // Comprobamos explícitamente si el estado es 'false'.
   if (data.status === false) {
     return {
       success: false,
-      error: 'El almacén está inactivo y no se puede usar.',
+      error: 'El almacén está inactivo y no se pueden realizar movimientos.',
     }
   }
+  // Si el estado es 'true' o no está definido, consideramos que es válido.
   return { success: true }
 }
 

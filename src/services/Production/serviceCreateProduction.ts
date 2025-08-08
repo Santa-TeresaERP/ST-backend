@@ -6,8 +6,6 @@ import PlantProduction from '@models/plant_production'
 import sequelize from '@config/database' // Importar sequelize para transacciones
 import Recipe from '@models/recipe'
 import BuysResource from '@models/buysResource'
-import Warehouse from '@models/warehouse'
-import Supplier from '@models/suplier'
 import Resource from '@models/resource'
 import { convertQuantity, areUnitsCompatible } from './unitConversionService'
 import serviceCreatewarehouseMovementProduct from '../warehouse_movement_product/serviceCreatewarehouse_movement_product'
@@ -139,97 +137,75 @@ const serviceCreateProduction = async (body: productionAttributes) => {
 
       let remainingRequiredInRecipeUnit = totalRequiredInRecipeUnit
 
-      // Obtener el primer warehouse y supplier para registros negativos
-      const defaultWarehouse = await Warehouse.findOne({ transaction: t })
-      const defaultSupplier = await Supplier.findOne({ transaction: t })
+      // Procesar registros existentes con conversión de unidades
+      for (const processedBuy of processedBuys) {
+        if (remainingRequiredInRecipeUnit <= 0) break
 
-      if (!defaultWarehouse || !defaultSupplier) {
-        await t.rollback()
-        console.log('❌ No se encontró warehouse o supplier por defecto')
-        return {
-          error:
-            'No se encontró warehouse o supplier por defecto para crear registros negativos',
+        const { buy, convertedQuantity } = processedBuy
+        console.log(
+          `🔄 Procesando compra ID: ${buy.id}, cantidad disponible: ${convertedQuantity} ${unit} (original: ${buy.quantity} ${buy.type_unit})`,
+        )
+
+        if (convertedQuantity >= remainingRequiredInRecipeUnit) {
+          // Calcular cuánto descontar en la unidad original de compra
+          const quantityToDeductInOriginalUnit = convertQuantity(
+            remainingRequiredInRecipeUnit,
+            unit,
+            buy.type_unit,
+          )
+
+          if (quantityToDeductInOriginalUnit !== null) {
+            console.log(
+              `✅ Descontando ${remainingRequiredInRecipeUnit} ${unit} = ${quantityToDeductInOriginalUnit} ${buy.type_unit} de la compra ${buy.id}`,
+            )
+            await buy.update(
+              {
+                quantity: buy.quantity - quantityToDeductInOriginalUnit,
+              },
+              { transaction: t },
+            )
+            remainingRequiredInRecipeUnit = 0
+          }
+        } else {
+          // Consume todo el recurso y continúa con el siguiente
+          console.log(
+            `✅ Consumiendo completamente la compra ${buy.id} (${convertedQuantity} ${unit})`,
+          )
+          remainingRequiredInRecipeUnit -= convertedQuantity
+          await buy.update({ quantity: 0 }, { transaction: t })
         }
       }
 
-      // Si no hay registros de compra compatibles, crear uno negativo
-      if (processedBuys.length === 0) {
-        console.log(
-          `⚠️ No hay registros de compra compatibles para el recurso ${resourceId}, creando registro negativo`,
+      // Si aún queda cantidad requerida y hay al menos un registro de compra, usar el último para permitir valores negativos
+      if (remainingRequiredInRecipeUnit > 0 && processedBuys.length > 0) {
+        const lastBuy = processedBuys[processedBuys.length - 1].buy
+
+        // Convertir la cantidad restante a la unidad del último registro
+        const quantityToDeductInOriginalUnit = convertQuantity(
+          remainingRequiredInRecipeUnit,
+          unit,
+          lastBuy.type_unit,
         )
-        await BuysResource.create(
-          {
-            resource_id: resourceId,
-            supplier_id: defaultSupplier.id!,
-            quantity: -totalRequiredInRecipeUnit,
-            unit_price: 0,
-            total_cost: 0,
-            type_unit: unit, // Usar la unidad de la receta
-            entry_date: new Date(),
-            warehouse_id: defaultWarehouse.id,
-          },
-          { transaction: t },
-        )
-        remainingRequiredInRecipeUnit = 0
-      } else {
-        // Procesar registros existentes con conversión de unidades
-        for (const processedBuy of processedBuys) {
-          if (remainingRequiredInRecipeUnit <= 0) break
 
-          const { buy, convertedQuantity } = processedBuy
+        if (quantityToDeductInOriginalUnit !== null) {
           console.log(
-            `🔄 Procesando compra ID: ${buy.id}, cantidad disponible: ${convertedQuantity} ${unit} (original: ${buy.quantity} ${buy.type_unit})`,
+            `⚠️ Restando cantidad faltante ${remainingRequiredInRecipeUnit} ${unit} = ${quantityToDeductInOriginalUnit} ${lastBuy.type_unit} del último registro (ID: ${lastBuy.id}). Permitiendo valor negativo.`,
           )
-
-          if (convertedQuantity >= remainingRequiredInRecipeUnit) {
-            // Calcular cuánto descontar en la unidad original de compra
-            const quantityToDeductInOriginalUnit = convertQuantity(
-              remainingRequiredInRecipeUnit,
-              unit,
-              buy.type_unit,
-            )
-
-            if (quantityToDeductInOriginalUnit !== null) {
-              console.log(
-                `✅ Descontando ${remainingRequiredInRecipeUnit} ${unit} = ${quantityToDeductInOriginalUnit} ${buy.type_unit} de la compra ${buy.id}`,
-              )
-              await buy.update(
-                {
-                  quantity: buy.quantity - quantityToDeductInOriginalUnit,
-                },
-                { transaction: t },
-              )
-              remainingRequiredInRecipeUnit = 0
-            }
-          } else {
-            // Consume todo el recurso y continúa con el siguiente
-            console.log(
-              `✅ Consumiendo completamente la compra ${buy.id} (${convertedQuantity} ${unit})`,
-            )
-            remainingRequiredInRecipeUnit -= convertedQuantity
-            await buy.update({ quantity: 0 }, { transaction: t })
-          }
-        }
-
-        // Si aún queda cantidad requerida después de procesar todos los registros
-        if (remainingRequiredInRecipeUnit > 0) {
-          console.log(
-            `⚠️ Cantidad restante: ${remainingRequiredInRecipeUnit} ${unit}, creando registro negativo`,
-          )
-          await BuysResource.create(
+          await lastBuy.update(
             {
-              resource_id: resourceId,
-              supplier_id: defaultSupplier.id!,
-              quantity: -remainingRequiredInRecipeUnit,
-              unit_price: 0,
-              total_cost: 0,
-              type_unit: unit, // Usar la unidad de la receta
-              entry_date: new Date(),
-              warehouse_id: defaultWarehouse.id,
+              quantity: lastBuy.quantity - quantityToDeductInOriginalUnit,
             },
             { transaction: t },
           )
+          remainingRequiredInRecipeUnit = 0
         }
+      }
+
+      // Si aún queda cantidad y no hay registros de compra, mostrar advertencia
+      if (remainingRequiredInRecipeUnit > 0) {
+        console.log(
+          `⚠️ No hay registros de compra para el recurso ${resourceId}. Cantidad faltante: ${remainingRequiredInRecipeUnit} ${unit}`,
+        )
       }
 
       // Crear movimiento de recurso en almacén (salida por consumo)

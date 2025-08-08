@@ -44,5 +44,10 @@ router.delete(
   roleAuthorization('canDelete', 'inventario'),
   buysResourceController.DeleteBuysResource,
 )
+router.get('/', buysResourceController.GetBuysResources)
+router.post('/', buysResourceController.CreateBuysResource)
+router.patch('/:id', buysResourceController.UpdateBuysResource)
+router.put('/:id', buysResourceController.DeleteBuysResource)
+router.get('/:id', buysResourceController.GetBuysResourceById) // Nueva ruta
 
 export default router

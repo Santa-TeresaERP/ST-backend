@@ -17,6 +17,7 @@ class WarehouseProduct
   public product_id!: string
   public quantity!: number
   public entry_date!: Date
+  public status ?: boolean
 }
 
 WarehouseProduct.init(
@@ -41,6 +42,11 @@ WarehouseProduct.init(
     entry_date: {
       type: DataTypes.DATE,
       allowNull: false,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: true, // Default value for status
     },
   },
   {

@@ -51,9 +51,7 @@ router.patch(
     warehouseMovementResourceController.updateWarehouseMovementResource,
   ),
 )
-
-// Eliminar movimiento
-router.delete(
+router.put(
   '/:id',
   authorization,
   roleAuthorization('canDelete', 'inventario'),

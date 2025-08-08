@@ -1,24 +1,38 @@
 import CashSession from '@models/cashSession'
 
-const serviceDeleteCashSession = async (id: string) => {
+// Función para eliminar todas las sesiones de caja de una tienda específica
+const serviceDeleteCashSession = async (storeId: string) => {
   try {
-    const cashSession = await CashSession.findByPk(id)
+    // Buscar todas las sesiones de caja de la tienda especificada
+    const cashSessions = await CashSession.findAll({
+      where: { store_id: storeId },
+    })
 
-    if (!cashSession) {
-      return { success: false, error: 'Sesión de caja no encontrada' }
+    if (!cashSessions || cashSessions.length === 0) {
+      return {
+        success: false,
+        error: 'No se encontraron sesiones de caja para esta tienda',
+      }
     }
 
-    await cashSession.destroy()
+    // Eliminar todas las sesiones de caja encontradas
+    const deletedCount = await CashSession.destroy({
+      where: { store_id: storeId },
+    })
 
-    return { success: true, message: 'Sesión de caja eliminada exitosamente' }
+    return {
+      success: true,
+      message: `${deletedCount} sesión(es) de caja eliminada(s) exitosamente para la tienda`,
+      deletedCount,
+    }
   } catch (error) {
-    console.error('Error deleting cash session:', error)
+    console.error('Error deleting cash sessions by store:', error)
     return {
       success: false,
       error:
         error instanceof Error
           ? error.message
-          : 'Error al eliminar la sesión de caja',
+          : 'Error al eliminar las sesiones de caja de la tienda',
     }
   }
 }

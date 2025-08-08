@@ -19,6 +19,7 @@ class WarehouseMovementResource
   public quantity!: number
   public movement_date!: Date
   public observations?: string
+  public status?: boolean
 }
 
 WarehouseMovementResource.init(
@@ -51,6 +52,11 @@ WarehouseMovementResource.init(
     observations: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: true, // Valor por defecto para status
     },
   },
   {

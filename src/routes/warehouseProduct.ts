@@ -36,9 +36,7 @@ router.patch(
   roleAuthorization('canEdit', 'inventario'),
   warehouseProductController.updateWarehouseProduct,
 )
-
-// Eliminar
-router.delete(
+router.put(
   '/:id',
   authorization,
   roleAuthorization('canDelete', 'inventario'),

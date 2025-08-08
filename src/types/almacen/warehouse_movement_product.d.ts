@@ -7,4 +7,5 @@ export interface WarehouseMovomentProductAttributes {
   quantity: number
   movement_date: Date
   observations?: string
+  status?: boolean // Optional, default is true
 }

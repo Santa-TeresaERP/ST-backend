@@ -30,7 +30,7 @@ router.patch(
 )
 
 // Eliminar un movimiento de producto por ID
-router.delete(
+router.put(
   '/:id',
   authorization,
   roleAuthorization('canDelete', 'inventario'),

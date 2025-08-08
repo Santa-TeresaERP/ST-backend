@@ -20,6 +20,7 @@ class WarehouseMovementProduct
   public quantity!: number
   public movement_date!: Date
   public observations?: string
+  public status?: boolean
 }
 
 WarehouseMovementProduct.init(
@@ -56,6 +57,11 @@ WarehouseMovementProduct.init(
     observations: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: true, // Default value for status
     },
   },
   {

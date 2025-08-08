@@ -4,4 +4,5 @@ export interface WarehouseProductAttributes {
   product_id: string
   quantity: number
   entry_date: Date
+  status?: boolean // Optional, default is true
 }

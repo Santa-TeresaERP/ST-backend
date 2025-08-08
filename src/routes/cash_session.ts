@@ -30,7 +30,11 @@ router.get(
 // Actualizar una sesión de caja
 router.patch('/:id', authorization, cashSessionController.updateCashSession)
 
-// Eliminar una sesión de caja
-router.delete('/:id', authorization, cashSessionController.deleteCashSession)
+// Eliminar todas las sesiones de caja de una tienda específica
+router.delete(
+  '/:storeId',
+  authorization,
+  cashSessionController.deleteCashSession,
+)
 
 export default router

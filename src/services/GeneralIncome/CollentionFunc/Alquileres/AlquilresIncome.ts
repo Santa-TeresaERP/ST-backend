@@ -1,66 +1,95 @@
-import serviceCreateGeneralExpense from '@services/GeneralExpense/serviceCreateGeneralExpense'
+// services/Rentals/createRentalIncome.ts
+import serviceCreateGeneralIncome from '@services/GeneralIncome/serviceCreateGeneralIncome'
 import Module from '@models/modules'
 import FinancialReport from '@models/financialReport'
-import Product from '@models/product'
-import { returnsAttributes } from '@type/ventas/returns'
+import Rental from '@models/rental'
+import Customer from '@models/customers'
+import Place from '@models/places'
+import User from '@models/user'
+import { GeneralIncomeAttributes } from '@type/finanzas/generalIncome'
+import { CustomerAttributes } from '@type/alquiler/customers'
+import { PlaceAttributes } from '@type/alquiler/places'
+import { UserAttributes } from '@type/user/auth'
+
+// Extiende Rental con asociaciones tipadas (dos variantes por alias implícito de Sequelize)
+type RentalWithAssociations = Rental & {
+  customer?: Customer & Partial<CustomerAttributes>
+  Customer?: Customer & Partial<CustomerAttributes>
+  place?: Place & Partial<PlaceAttributes>
+  Place?: Place & Partial<PlaceAttributes>
+  user?: User & Partial<UserAttributes>
+  User?: User & Partial<UserAttributes>
+}
 
 /**
- * Crea un gasto general relacionado a una devolución de venta
+ * Crea un registro de ingreso general relacionado al módulo "Alquileres"
+ * cuando se crea un alquiler
  */
-const createReturnExpense = async (returnData: returnsAttributes) => {
+const createRentalIncome = async (rentalId: string) => {
   try {
-    // 1. Buscar el módulo "Ventas"
-    const salesModule = await Module.findOne({
-      where: { name: 'Ventas' },
+    // 1) Módulo "Alquileres"
+    const rentalsModule = await Module.findOne({
+      where: { name: 'Alquileres' },
     })
+    if (!rentalsModule) throw new Error('❌ Módulo "Alquileres" no encontrado')
 
-    if (!salesModule) {
-      console.error('❌ Módulo "Ventas" no encontrado')
-      throw new Error('Módulo "Ventas" no encontrado')
-    }
-
-    // 2. Buscar el reporte financiero activo
+    // 2) Reporte activo
     const activeReport = await FinancialReport.findOne({
       where: { status: 'activo' },
       order: [['createdAt', 'DESC']],
     })
 
-    // 3. Buscar el producto relacionado
-    const product = await Product.findByPk(returnData.productId)
-    if (!product) {
-      console.error('❌ Producto no relacionado a la devolución')
-      throw new Error('Producto no relacionado a la devolución')
-    }
+    // 3) Alquiler con asociaciones
+    const rental = await Rental.findByPk(rentalId, {
+      include: [
+        { model: Customer, attributes: ['id', 'full_name'] }, // 👈 full_name
+        { model: Place, attributes: ['id', 'name', 'area'] },
+        { model: User, attributes: ['id', 'name', 'email'] },
+      ],
+    })
+    if (!rental) throw new Error('❌ Alquiler no encontrado')
 
-    // 4. Calcular el monto total de la devolución
-    const totalAmount = product.price * returnData.quantity
+    const r = rental as RentalWithAssociations
 
-    // 5. Generar descripción automática del gasto
-    const description = `Devolución de producto: ${product.name} - Motivo: ${returnData.reason} - Cantidad: ${returnData.quantity} - Precio unitario: $${product.price}${
-      returnData.observations
-        ? ` - Observaciones: ${returnData.observations}`
-        : ''
-    }`
+    const customerObj = r.customer ?? r.Customer
+    const placeObj = r.place ?? r.Place
+    const userObj = r.user ?? r.User
 
-    const expenseData = {
-      module_id: salesModule.id,
-      expense_type: 'Devolución de Venta',
+    const customerName = customerObj?.full_name ?? 'Cliente' // 👈 usa full_name
+    const placeName = placeObj?.name ?? 'Lugar'
+    const placeArea = placeObj?.area ? ` (${placeObj.area})` : ''
+    const sellerName = userObj?.name ?? 'Vendedor'
+
+    // 4) DECIMAL → number
+    const totalAmount = Number(rental.amount)
+
+    // 5) Descripción
+    const autoDescription =
+      `Ingreso por alquiler: ${placeName}${placeArea} - ` +
+      `Cliente: ${customerName} - Vendedor: ${sellerName} - ` +
+      `Desde: ${new Date(rental.start_date).toISOString()} - ` +
+      `Hasta: ${new Date(rental.end_date).toISOString()}`
+
+    // 6) Payload ingreso
+    const incomeData: GeneralIncomeAttributes = {
+      module_id: rentalsModule.id,
+      income_type: 'Alquiler',
       amount: totalAmount,
       date: new Date(),
-      description,
+      description: autoDescription,
       report_id: activeReport?.id || null,
     }
 
-    console.log('🧾 Creando gasto por devolución de venta:', expenseData)
+    console.log('🧾 Creando ingreso por alquiler:', incomeData)
 
-    const newExpense = await serviceCreateGeneralExpense(expenseData)
-
-    console.log('✅ Gasto registrado correctamente')
-    return newExpense
+    // 7) Crear ingreso
+    const newIncome = await serviceCreateGeneralIncome(incomeData)
+    console.log('✅ Ingreso por alquiler registrado correctamente')
+    return newIncome
   } catch (error) {
-    console.error('❌ Error al crear gasto por devolución:', error)
+    console.error('❌ Error creando ingreso por alquiler:', error)
     throw error
   }
 }
 
-export default createReturnExpense
+export default createRentalIncome

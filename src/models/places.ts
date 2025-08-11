@@ -12,6 +12,7 @@ class Place
   public location_id!: string
   public name!: string
   public area!: string
+  public imagen_url!: string
 }
 
 Place.init(
@@ -32,6 +33,10 @@ Place.init(
     area: {
       type: DataTypes.STRING(100),
       allowNull: false,
+    },
+    imagen_url: {
+      type: DataTypes.STRING(2048),
+      allowNull: true,
     },
   },
   {

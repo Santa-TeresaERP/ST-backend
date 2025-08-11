@@ -8,20 +8,10 @@ import authorizePermissions from '@middlewares/roleAuthorization'
 const router = express.Router()
 
 // Obtener todos los módulos - requiere permiso de lectura en módulo 'modules'
-router.get(
-  '/',
-  authorization,
-  authorizePermissions('canRead', 'modulos'),
-  getModules,
-)
+router.get('/', authorization, getModules)
 
 // Obtener un módulo por su ID - requiere permiso de lectura en módulo 'modules'
-router.get(
-  '/:id',
-  authorization,
-  authorizePermissions('canRead', 'modulos'),
-  getModuleById,
-)
+router.get('/:id', authorization, getModuleById)
 
 // Actualizar un módulo - requiere permiso de edición en módulo 'modules'
 router.patch(

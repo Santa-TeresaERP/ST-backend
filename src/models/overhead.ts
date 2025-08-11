@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid'
 class Overhead
   extends Model<
     OverheadAttributes,
-    Optional<OverheadAttributes, 'id' | 'createdAt' | 'updatedAt'>
+    Optional<OverheadAttributes, 'id' | 'createdAt' | 'updatedAt' | 'status'>
   >
   implements OverheadAttributes
 {
@@ -16,6 +16,7 @@ class Overhead
   public type!: string
   public amount!: number
   public description?: string
+  public status!: boolean
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
 }
@@ -41,6 +42,7 @@ Overhead.init(
     },
     amount: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
     description: { type: DataTypes.STRING, allowNull: true },
+    status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,

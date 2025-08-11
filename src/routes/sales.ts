@@ -17,7 +17,7 @@ router.post(
 // Obtener todas las ventas
 router.get('/', authorization, salesController.getSalesController)
 
-// Generar reporte de ventas
+// Generar reporte de ventas (JSON con texto)
 router.get('/report', authorization, async (req, res, next) => {
   try {
     await generateSalesReportController(req, res)

@@ -38,7 +38,7 @@ const generateSalesReportController = async (req: Request, res: Response) => {
   if ('error' in result) {
     return res.status(400).json(result)
   }
-  return res.status(200).send(result.stream)
+  return res.status(200).send(result.report)
 }
 
 export default generateSalesReportController

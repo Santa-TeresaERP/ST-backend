@@ -3,8 +3,6 @@ import saleDetail from '@models/saleDetail'
 import Product from '@models/product'
 import Store from '@models/store'
 import { Op } from 'sequelize'
-import PDFDocument from 'pdfkit'
-import { PassThrough } from 'stream'
 
 interface SalesReportOptions {
   storeId: string

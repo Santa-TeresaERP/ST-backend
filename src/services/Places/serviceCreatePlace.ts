@@ -7,8 +7,13 @@ const serviceCreatePlace = async (body: PlaceAttributes) => {
   if (!validation.success) {
     return { error: validation.error.errors }
   }
-  const { location_id, name, area } = validation.data
-  const newPlace = await Place.create({ location_id, name, area })
+  const { location_id, name, area, imagen_url } = validation.data
+  const newPlace = await Place.create({
+    location_id,
+    name,
+    area,
+    imagen_url: imagen_url ?? '',
+  })
   return newPlace
 }
 

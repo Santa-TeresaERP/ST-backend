@@ -16,14 +16,23 @@ type SaleRow = {
   id: string
   store_id: string
   income_date?: string | Date | null
-  createdAt?: string | Date
+  createdAt?: string | Date | null
 }
 
 type SaleDetailRow = {
   saleId: string
   quantity: number
   mount: number
-  product?: { name?: string; price?: number | null }
+  product?: { name?: string; price?: number | null } | null
+}
+
+type ReturnRow = {
+  price?: number | null // total de la devolución (ya multiplicado)
+  mount?: number | null // por si tu esquema usa otro nombre
+  total?: number | null
+  quantity?: number | null
+  product?: { name?: string | null } | null
+  // sale?: {}  // no usamos campos de sale en la salida
 }
 
 const serviceGenerateSalesReport = async ({
@@ -34,7 +43,7 @@ const serviceGenerateSalesReport = async ({
   const store = await Store.findByPk(storeId)
   if (!store) return { error: 'Tienda no encontrada' }
 
-  // Normalizamos rango
+  // Normalizamos rango (parseo LOCAL, sin desfaces por zona horaria)
   const start = startOfDay(from)
   const end = endOfDay(to)
 
@@ -43,10 +52,9 @@ const serviceGenerateSalesReport = async ({
 
   // 2) Filtrar por fecha usando income_date (fallback: createdAt)
   const salesInRange = allSales.filter((s) => {
-    const raw = s.income_date ?? s.createdAt
-    if (!raw) return false
-    const d = new Date(raw as any)
-    return d >= start && d <= end
+    const raw: string | Date | null | undefined = s.income_date ?? s.createdAt
+    const d = toDate(raw)
+    return d !== null && d >= start && d <= end
   })
 
   // 3) Traer todos los detalles y filtrar por las ventas del rango
@@ -91,31 +99,25 @@ const serviceGenerateSalesReport = async ({
   const sep = `+${repeat('-', prodWidth + 2)}+${repeat('-', qtyWidth + 2)}+${repeat('-', unitWidth + 2)}+${repeat('-', totalWidth + 2)}+`
 
   // ====== Pérdidas (returns) — por fecha del propio return + tienda por JOIN a sale
-  const returnsInRange = await Return.findAll({
+  const returnsInRange = (await Return.findAll({
     where: {
-      createdAt: { [Op.between]: [start, end] }, // si usas otro campo de fecha en returns, cámbialo aquí
+      createdAt: { [Op.between]: [start, end] }, // cambia a income_date si tu modelo de returns lo tiene
     },
     include: [
       { model: Product, as: 'product', attributes: ['name', 'price'] },
       { model: sale, as: 'sale', attributes: [], where: { store_id: storeId } },
     ],
-  })
+  })) as unknown as ReturnRow[]
 
   // usar el total guardado en returns (price ya es monto total)
-  function num(x: any) {
-    const n = Number(x)
-    return Number.isFinite(n) ? n : 0
-  }
-
-  type LossRow = { product: string; total: number }
   const lossMap = new Map<string, number>()
-
-  for (const r of returnsInRange as any[]) {
-    const name = r.product?.name ?? 'Producto'
+  for (const r of returnsInRange) {
+    const name = (r.product?.name ?? 'Producto') || 'Producto'
     const lineTotal = num(r.price ?? r.mount ?? r.total ?? 0)
     lossMap.set(name, (lossMap.get(name) ?? 0) + lineTotal)
   }
 
+  type LossRow = { product: string; total: number }
   const losses: LossRow[] = [...lossMap.entries()].map(([product, total]) => ({
     product,
     total,
@@ -197,18 +199,46 @@ const serviceGenerateSalesReport = async ({
 
 export default serviceGenerateSalesReport
 
-// ---- helpers ----
-function startOfDay(d: string | Date) {
-  const x = new Date(d)
-  return new Date(x.getFullYear(), x.getMonth(), x.getDate(), 0, 0, 0)
+// ---------- helpers (sin any y con parseo LOCAL) ----------
+function parseLocalDate(input: string | Date): Date {
+  if (input instanceof Date) {
+    return new Date(input.getFullYear(), input.getMonth(), input.getDate())
+  }
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(input)
+  if (m) {
+    const y = Number(m[1])
+    const mo = Number(m[2]) - 1
+    const d = Number(m[3])
+    return new Date(y, mo, d)
+  }
+  // Fallback: dejar que JS parsee y luego normalizar a local
+  const x = new Date(input)
+  return new Date(x.getFullYear(), x.getMonth(), x.getDate())
 }
-function endOfDay(d: string | Date) {
-  const x = new Date(d)
-  return new Date(x.getFullYear(), x.getMonth(), x.getDate(), 23, 59, 59)
+
+function startOfDay(d: string | Date): Date {
+  const x = parseLocalDate(d)
+  return new Date(x.getFullYear(), x.getMonth(), x.getDate(), 0, 0, 0, 0)
 }
-function toYMD(d: Date) {
+
+function endOfDay(d: string | Date): Date {
+  const x = parseLocalDate(d)
+  return new Date(x.getFullYear(), x.getMonth(), x.getDate(), 23, 59, 59, 999)
+}
+
+function toYMD(d: Date): string {
   const y = d.getFullYear()
   const m = String(d.getMonth() + 1).padStart(2, '0')
   const dd = String(d.getDate()).padStart(2, '0')
   return `${y}-${m}-${dd}`
+}
+
+function toDate(raw: string | Date | null | undefined): Date | null {
+  if (!raw) return null
+  return raw instanceof Date ? raw : new Date(raw)
+}
+
+function num(x: unknown): number {
+  const n = typeof x === 'string' || typeof x === 'number' ? Number(x) : NaN
+  return Number.isFinite(n) ? n : 0
 }

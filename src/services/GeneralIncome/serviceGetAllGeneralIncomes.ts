@@ -11,7 +11,6 @@ const serviceGetAllGeneralIncomes = async () => {
     const incomes = await GeneralIncome.findAll({
       include: [{
         model: Module,
-        as: 'module',
         attributes: ['name'] // Solo traemos el nombre para eficiencia
       }],
       order: [['date', 'DESC']],

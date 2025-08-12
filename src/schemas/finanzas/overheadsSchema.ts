@@ -8,7 +8,7 @@ export const createOverheadSchema = z.object({
     .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, {
       message: 'El nombre solo puede contener letras y espacios',
     }),
-  date: z.coerce.date({
+  date: z.string({
     required_error: 'La fecha es obligatoria',
     invalid_type_error: 'La fecha debe ser una fecha válida',
   }),
@@ -29,6 +29,12 @@ export const createOverheadSchema = z.object({
   description: z.string().optional(),
 })
 
+export const updateOverheadSchema = createOverheadSchema.omit({ type: true })
+
 export const overheadValidation = (data: OverheadAttributes) => {
   return createOverheadSchema.safeParse(data)
+}
+
+export const overheadUpdateValidation = (data: Partial<OverheadAttributes>) => {
+  return updateOverheadSchema.partial().safeParse(data)
 }

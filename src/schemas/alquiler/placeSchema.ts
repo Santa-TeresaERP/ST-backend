@@ -15,6 +15,12 @@ const PlaceSchema = z.object({
     .string()
     .min(1, 'El área es obligatoria')
     .max(100, 'El área no puede superar los 100 caracteres'),
+
+  imagen_url: z
+    .string()
+    .url('La URL de la imagen debe ser válida')
+    .max(2048, 'La URL de la imagen no puede superar los 2048 caracteres')
+    .optional(),
 })
 
 export const placeValidation = (data: PlaceAttributes) =>

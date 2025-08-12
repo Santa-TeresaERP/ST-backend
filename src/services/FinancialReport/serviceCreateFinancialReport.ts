@@ -7,76 +7,86 @@ import { FinancialReportAttributes } from '@type/finanzas/financialReport'
 import { createFinancialReportValidation } from 'src/schemas/finanzas/financialReportSchema'
 
 /**
- * Genera un nuevo reporte financiero.
- * 1. Busca todos los ingresos y gastos sin reporte en un rango de fechas.
- * 2. Calcula los totales y el beneficio neto.
- * 3. Crea el registro en la tabla `financial_reports`.
- * 4. Asigna el ID del nuevo reporte a los ingresos y gastos procesados.
- * Todo se ejecuta dentro de una transacción para garantizar la integridad de los datos.
+ * Crea un nuevo reporte financiero.
+ * Si el status es "proceso", se crean campos con valores "En proceso..."
+ * Si el status es "finalizado", se calculan los totales.
  */
-const serviceCreateFinancialReport = async (
-  body: FinancialReportAttributes,
-) => {
+const serviceCreateFinancialReport = async (body: FinancialReportAttributes) => {
   const validation = createFinancialReportValidation(body)
   if (!validation.success) {
+    console.error('Error de validación:', validation.error)
     return { error: JSON.stringify(validation.error.issues) }
   }
 
-  const { start_date, end_date, status, observations } = validation.data
+  const { start_date, status, observations } = validation.data
+
+  let end_date = null
+
+  if (status === 'finalizado' && !end_date) {
+    return { error: 'end_date es obligatorio al finalizar' }
+  }
+
   const transaction = await sequelize.transaction()
 
   try {
-    const incomesToReport = await GeneralIncome.findAll({
-      where: {
-        report_id: null,
-        date: { [Op.between]: [start_date, end_date] },
-      },
-      transaction,
-    })
-    const expensesToReport = await GeneralExpense.findAll({
-      where: {
-        report_id: null,
-        date: { [Op.between]: [start_date, end_date] },
-      },
-      transaction,
-    })
+    let total_income = 0
+    let total_expenses = 0
+    let net_profit = 0
 
-    const total_income = incomesToReport.reduce(
-      (sum, item) => sum + item.amount,
-      0,
-    )
-    const total_expenses = expensesToReport.reduce(
-      (sum, item) => sum + item.amount,
-      0,
-    )
-    const net_profit = total_income - total_expenses
+    if (status === 'finalizado') {
+      const incomesToReport = await GeneralIncome.findAll({
+        where: {
+          report_id: null,
+          date: { [Op.between]: [start_date, end_date!] }
+        },
+        transaction,
+      })
 
-    const newReport = await FinancialReport.create(
-      {
-        start_date,
-        end_date,
-        total_income,
-        total_expenses,
-        net_profit,
-        status,
-        observations,
-      },
-      { transaction },
-    )
+      const expensesToReport = await GeneralExpense.findAll({
+        where: {
+          report_id: null,
+          date: { [Op.between]: [start_date, end_date!] }
+        },
+        transaction,
+      })
 
-    const incomeIds = incomesToReport.map((i) => i.id)
-    const expenseIds = expensesToReport.map((e) => e.id)
+      total_income = incomesToReport.reduce((sum, item) => sum + item.amount, 0)
+      total_expenses = expensesToReport.reduce((sum, item) => sum + item.amount, 0)
+      net_profit = total_income - total_expenses
+    }
 
-    if (incomeIds.length > 0) {
+    const reportData = {
+      start_date,
+      end_date: status === 'finalizado' ? end_date : null,
+      total_income,
+      total_expenses,
+      net_profit,
+      status,
+      observations,
+    }
+
+    const newReport = await FinancialReport.create(reportData, { transaction })
+
+    if (status === 'finalizado') {
       await GeneralIncome.update(
         { report_id: newReport.id },
-        { where: { id: incomeIds }, transaction },
+        {
+          where: {
+            report_id: null,
+            date: { [Op.between]: [start_date, end_date!] }
+          },
+          transaction,
+        }
       )
-    }
-    if (expenseIds.length > 0) {
       await GeneralExpense.update(
         { report_id: newReport.id },
-        { where: { id: expenseIds }, transaction },
+        {
+          where: {
+            report_id: null,
+            date: { [Op.between]: [start_date, end_date!] }
+          },
+          transaction,
+        }
       )
     }
 
@@ -85,7 +95,7 @@ const serviceCreateFinancialReport = async (
   } catch (error) {
     await transaction.rollback()
     console.error('Error al generar el reporte financiero:', error)
-    return { error: 'Ocurrió un error inesperado al generar el reporte.' }
+    return { error: 'Error inesperado' }
   }
 }
 

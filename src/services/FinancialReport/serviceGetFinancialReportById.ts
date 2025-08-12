@@ -10,8 +10,8 @@ const serviceGetFinancialReportById = async (id: string) => {
   try {
     const report = await FinancialReport.findByPk(id, {
       include: [
-        { model: GeneralIncome, as: 'incomes' },
-        { model: GeneralExpense, as: 'expenses' },
+        { model: GeneralIncome },
+        { model: GeneralExpense },
       ],
     })
 

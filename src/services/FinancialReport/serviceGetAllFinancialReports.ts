@@ -11,8 +11,8 @@ const serviceGetAllFinancialReports = async () => {
   try {
     const reports = await FinancialReport.findAll({
       include: [
-        { model: GeneralIncome, as: 'incomes' },
-        { model: GeneralExpense, as: 'expenses' },
+        { model: GeneralIncome},
+        { model: GeneralExpense },
       ],
       order: [['start_date', 'DESC']],
     })

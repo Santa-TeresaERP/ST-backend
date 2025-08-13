@@ -16,12 +16,6 @@ router.get(
   authorization,
   overheadController.getMonthlyExpenseController,
 )
-router.get('/:id', authorization, overheadController.getOverheadController)
-router.patch('/:id', authorization, overheadController.updateOverheadController)
-router.delete(
-  '/:id',
-  authorization,
-  overheadController.deleteOverheadController,
-)
+router.get('/all', authorization, overheadController.getAllOverheadsController)
 
 export default router

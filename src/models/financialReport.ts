@@ -38,7 +38,8 @@ FinancialReport.init(
     },
     end_date: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: null,
     },
     total_income: {
       type: DataTypes.DECIMAL(10, 2),

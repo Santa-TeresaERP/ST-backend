@@ -8,7 +8,7 @@ export interface FinancialReportAttributes {
   total_income: number | string
   total_expenses: number | string
   net_profit: number | string
-  status: 'activo' | 'inactivo' | 'finalizado' | 'proceso' 
+  status: 'activo' | 'inactivo' | 'finalizado' | 'proceso'
   observations?: string | null
   createdAt?: Date
   updatedAt?: Date

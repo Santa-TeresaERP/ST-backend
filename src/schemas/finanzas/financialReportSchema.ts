@@ -10,10 +10,17 @@ export const createFinancialReportSchema = z.object({
     required_error: 'La fecha de inicio es obligatoria.',
     invalid_type_error: 'La fecha de inicio debe ser una fecha válida.',
   }),
+  end_date: z.coerce
+    .date({
+      invalid_type_error: 'La fecha de fin debe ser una fecha válida.',
+    })
+    .optional()
+    .nullable(),
   status: z
     .enum(['activo', 'inactivo', 'finalizado', 'proceso'], {
       required_error: 'El status es obligatorio.',
-      invalid_type_error: 'El status debe ser "activo", "inactivo", "finalizado" o "proceso".',
+      invalid_type_error:
+        'El status debe ser "activo", "inactivo", "finalizado" o "proceso".',
     })
     .default('activo'),
   observations: z
@@ -30,7 +37,8 @@ export const createFinancialReportSchema = z.object({
 export const updateFinancialReportSchema = z.object({
   status: z
     .enum(['activo', 'inactivo', 'finalizado', 'proceso'], {
-      invalid_type_error: 'El status debe ser "activo", "inactivo", "finalizado" o "proceso".',
+      invalid_type_error:
+        'El status debe ser "activo", "inactivo", "finalizado" o "proceso".',
     })
     .optional(),
   end_date: z.coerce.date({

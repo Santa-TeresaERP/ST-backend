@@ -10,10 +10,7 @@ import GeneralExpense from '@models/generalExpense'
 const serviceGetAllFinancialReports = async () => {
   try {
     const reports = await FinancialReport.findAll({
-      include: [
-        { model: GeneralIncome},
-        { model: GeneralExpense },
-      ],
+      include: [{ model: GeneralIncome }, { model: GeneralExpense }],
       order: [['start_date', 'DESC']],
     })
     return reports

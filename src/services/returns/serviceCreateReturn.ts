@@ -7,6 +7,9 @@ import { returnValidation } from '../../schemas/ventas/returnsSchema'
 import { returnsAttributes } from '@type/ventas/returns'
 import useWarehouseStore from '@services/warehouseStore'
 
+// ✅ Import agregado: registrar gasto por devolución
+import createReturnExpense from '@services/GeneralExpense/CollectionFunc/sales/ReturnsExpense'
+
 const serviceCreateReturn = async (
   body: returnsAttributes,
 ): Promise<Return> => {
@@ -48,12 +51,8 @@ const serviceCreateReturn = async (
 
   // 🔍 Si es una devolución, validar que no se devuelva más de lo que se vendió
   if (reason === 'devuelto') {
-    // Buscar el detalle de venta específico para este producto
     const saleDetail = await SaleDetail.findOne({
-      where: {
-        saleId: salesId,
-        productId: productId,
-      },
+      where: { saleId: salesId, productId },
     })
 
     if (!saleDetail) {
@@ -63,13 +62,8 @@ const serviceCreateReturn = async (
       throw new Error('Este producto no fue vendido en esta venta')
     }
 
-    // Calcular cuánto ya se ha devuelto de este producto en esta venta
     const existingReturns = await Return.findAll({
-      where: {
-        salesId: salesId,
-        productId: productId,
-        reason: 'devuelto',
-      },
+      where: { salesId, productId, reason: 'devuelto' },
     })
 
     const totalReturned = existingReturns.reduce(
@@ -112,7 +106,6 @@ const serviceCreateReturn = async (
 
   // ↕️ Lógica condicional según la razón
   let updatedQuantity = warehouseStore.quantity
-
   if (reason === 'devuelto') {
     updatedQuantity += quantity
   }
@@ -122,26 +115,16 @@ const serviceCreateReturn = async (
     quantity: updatedQuantity,
   })
 
-  // 📝 Actualizar las observaciones de la venta original
+  // 📝 Actualizar observaciones de la venta
   if (reason === 'devuelto') {
     const returnInfo = `Devolución: ${quantity} unidad(es) de "${product.name}"`
-
-    // Obtener las observaciones actuales de la venta
     const currentObservations = sale.observations || ''
+    const updatedObservations =
+      currentObservations.trim() !== ''
+        ? `${currentObservations}. ${returnInfo}`
+        : returnInfo
 
-    // Agregar la nueva información de devolución
-    let updatedObservations = ''
-    if (currentObservations.trim() !== '') {
-      updatedObservations = `${currentObservations}. ${returnInfo}`
-    } else {
-      updatedObservations = returnInfo
-    }
-
-    // Actualizar la venta con las nuevas observaciones
-    await sale.update({
-      observations: updatedObservations,
-    })
-
+    await sale.update({ observations: updatedObservations })
     console.log(
       `✅ Observaciones de la venta actualizadas: ${updatedObservations}`,
     )
@@ -162,6 +145,17 @@ const serviceCreateReturn = async (
     console.log(
       `✅ Devolución creada exitosamente para ${quantity} unidad(es) de "${product.name}"`,
     )
+
+    // 💸 Registrar gasto por devolución (no romper la creación si falla el asiento)
+    try {
+      await createReturnExpense(newReturn.id)
+    } catch (expenseErr) {
+      console.error(
+        '⚠️ No se pudo registrar el gasto por devolución:',
+        expenseErr,
+      )
+    }
+
     return newReturn
   } catch (error: unknown) {
     throw new Error(

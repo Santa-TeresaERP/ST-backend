@@ -10,7 +10,6 @@ const serviceGetGeneralIncomeById = async (id: string) => {
     const income = await GeneralIncome.findByPk(id, {
       include: [{
         model: Module,
-        as: 'module',
         attributes: ['name']
       }],
     });

@@ -4,13 +4,22 @@ import { createGeneralExpenseValidation } from 'src/schemas/finanzas/generalExpe
 import Module from '@models/modules' // Importamos Module para verificar su existencia
 
 const serviceCreateGeneralExpense = async (body: GeneralExpenseAttributes) => {
-  // 1. Validar los datos de entrada
-  const validation = createGeneralExpenseValidation(body)
+  console.log('Payload recibido en serviceCreateGeneralExpense:', body);
+
+  // Convertir amount explícitamente a number para evitar validación fallida
+  const bodyParsed = {
+    ...body,
+    amount: Number(body.amount),
+  };
+
+  const validation = createGeneralExpenseValidation(bodyParsed);
+
   if (!validation.success) {
-    return { error: JSON.stringify(validation.error.issues) }
+    console.log('Errores de validación:', validation.error.issues);
+    return { error: JSON.stringify(validation.error.issues) };
   }
 
-  const { module_id, expense_type, amount, date, description } = validation.data
+  const { module_id, expense_type, amount, date, description } = validation.data;
 
   try {
     // 2. (Opcional pero recomendado) Verificar que el módulo asociado existe

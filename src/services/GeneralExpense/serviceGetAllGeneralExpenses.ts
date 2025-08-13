@@ -12,7 +12,6 @@ const serviceGetAllGeneralExpenses = async () => {
       include: [
         {
           model: Module,
-          as: 'module',
           attributes: ['name'], // Solo traemos el nombre para eficiencia
         },
       ],

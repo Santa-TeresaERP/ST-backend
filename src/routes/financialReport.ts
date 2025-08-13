@@ -9,20 +9,20 @@ const router = express.Router()
 
 // Asignamos cada método HTTP y ruta a su controlador correspondiente
 
-// POST /api/finanzas/reports -> Generar un nuevo reporte
+//  Generar un nuevo reporte
 // [CORREGIDO] Se accede directamente a los métodos del objeto importado.
 router.post('/', authorization, financialReportController.create)
 
-// GET /api/finanzas/reports -> Obtener todos los reportes
+//  Obtener todos los reportes
 router.get('/', authorization, financialReportController.getAll)
 
-// GET /api/finanzas/reports/:id -> Obtener un reporte por ID
+//  Obtener un reporte por ID
 router.get('/:id', authorization, financialReportController.getById)
 
-// PUT /api/finanzas/reports/:id -> Actualizar las observaciones de un reporte
+//  Actualizar las observaciones de un reporte
 router.put('/:id', authorization, financialReportController.update)
 
-// DELETE /api/finanzas/reports/:id -> Eliminar un reporte
+//  Eliminar un reporte
 router.delete('/:id', authorization, financialReportController.delete)
 
 export default router

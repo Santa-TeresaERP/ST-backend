@@ -3,4 +3,5 @@ export interface PlaceAttributes {
   location_id: string
   name: string
   area: string
+  imagen_url: string
 }

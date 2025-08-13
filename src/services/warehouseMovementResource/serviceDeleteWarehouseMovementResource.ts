@@ -9,7 +9,9 @@ const serviceDeleteWarehouseMovementResource = async (id: string) => {
   // Alternar estado
   record.status = !record.status
   await record.save()
-  console.log(`Estado del recurso de movimiento de almacén con ID ${id} cambiado a ${record.status ? 'activo' : 'inactivo'}`)
+  console.log(
+    `Estado del recurso de movimiento de almacén con ID ${id} cambiado a ${record.status ? 'activo' : 'inactivo'}`,
+  )
 
   return { message: 'Recurso eliminado correctamente' }
 }

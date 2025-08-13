@@ -24,6 +24,27 @@ const createModules = async (options = { clean: false }) => {
         name: 'Produccion',
         description: 'Módulo para gestionar la producción de productos',
       },
+      {
+        name: 'Ventas',
+        description: 'Módulo para gestionar las ventas de productos',
+      },
+      {
+        name: 'Alquileres',
+        description: 'Módulo para gestionar los alquires de los lugares',
+      },
+      {
+        name: 'Museo',
+        description:
+          'Módulo para gestionar las ventas de los ticksets del museo',
+      },
+      {
+        name: 'Finanzas',
+        description: 'Módulo para gestionar las finznaza del monasterio',
+      },
+      {
+        name: 'Monasterio',
+        description: 'Módulo para gestionar el monasterios',
+      },
     ]
 
     if (options.clean) {

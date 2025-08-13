@@ -9,7 +9,7 @@ const router = express.Router()
 router.post(
   '/',
   authorization,
-  roleAuthorization('canWrite', 'produccion'),
+  roleAuthorization('canWrite', 'Produccion'),
   RecipeController.recipeCreate,
 )
 
@@ -17,7 +17,7 @@ router.post(
 router.get(
   '/',
   authorization,
-  roleAuthorization('canRead', 'produccion'),
+  roleAuthorization('canRead', 'Produccion'),
   RecipeController.recipeGet,
 )
 
@@ -25,7 +25,7 @@ router.get(
 router.get(
   '/byProduct/:id',
   authorization,
-  roleAuthorization('canRead', 'produccion'),
+  roleAuthorization('canRead', 'Produccion'),
   RecipeController.getRecipesByProd,
 )
 
@@ -33,7 +33,7 @@ router.get(
 router.delete(
   '/:id',
   authorization,
-  roleAuthorization('canDelete', 'produccion'),
+  roleAuthorization('canDelete', 'Produccion'),
   RecipeController.recipeDelete,
 )
 
@@ -41,7 +41,7 @@ router.delete(
 router.patch(
   '/:id',
   authorization,
-  roleAuthorization('canEdit', 'produccion'),
+  roleAuthorization('canEdit', 'Produccion'),
   RecipeController.updateRecipe,
 )
 

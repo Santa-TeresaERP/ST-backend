@@ -11,9 +11,13 @@ const serviceDeletewarehouseMovementProduct = async (id: string) => {
   // Alternar estado
   movement.status = !movement.status
   await movement.save()
-  console.log(`Estado del movimiento de producto con ID ${id} cambiado a ${movement.status ? 'activo' : 'inactivo'}`)
+  console.log(
+    `Estado del movimiento de producto con ID ${id} cambiado a ${movement.status ? 'activo' : 'inactivo'}`,
+  )
 
-  return { message: 'Estado del movimiento de producto actualizado correctamente' }
+  return {
+    message: 'Estado del movimiento de producto actualizado correctamente',
+  }
 }
 
 export default serviceDeletewarehouseMovementProduct

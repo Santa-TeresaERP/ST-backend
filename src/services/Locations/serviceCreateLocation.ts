@@ -7,7 +7,9 @@ export default async function createLocation(
   try {
     // Validación simple (puedes extenderla o usar Zod/Joi si gustas)
     if (!data.name || !data.address || data.capacity == null || !data.status) {
-      throw new Error('Todos los campos son obligatorios: name, address, capacity, status')
+      throw new Error(
+        'Todos los campos son obligatorios: name, address, capacity, status',
+      )
     }
 
     const newLocation = await Location.create(data)

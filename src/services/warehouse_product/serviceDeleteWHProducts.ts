@@ -11,7 +11,9 @@ export default async function deleteWarehouseProduct(id: string) {
   product.status = !product.status
   await product.save()
 
-  console.log(`Estado del producto con ID ${id} cambiado a ${product.status ? 'activo' : 'inactivo'}`)
+  console.log(
+    `Estado del producto con ID ${id} cambiado a ${product.status ? 'activo' : 'inactivo'}`,
+  )
 
   return product
 }

@@ -17,7 +17,7 @@ class WarehouseProduct
   public product_id!: string
   public quantity!: number
   public entry_date!: Date
-  public status ?: boolean
+  public status?: boolean
 }
 
 WarehouseProduct.init(

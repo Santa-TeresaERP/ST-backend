@@ -6,7 +6,7 @@ export default async function getAllLocations() {
     return locations
   } catch (error) {
     throw new Error(
-      `Error al obtener ubicaciones: ${error instanceof Error ? error.message : String(error)}`
+      `Error al obtener ubicaciones: ${error instanceof Error ? error.message : String(error)}`,
     )
   }
 }

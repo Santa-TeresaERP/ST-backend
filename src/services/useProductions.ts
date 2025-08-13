@@ -141,7 +141,9 @@ class useProductions {
     production.isActive = !production.isActive
     await production.save()
 
-    console.log(`Estado de producción con ID ${id} cambiado a ${production.isActive ? 'activo' : 'inactivo'}`)
+    console.log(
+      `Estado de producción con ID ${id} cambiado a ${production.isActive ? 'activo' : 'inactivo'}`,
+    )
 
     return {
       message: `Registro marcado como ${production.isActive ? 'activo' : 'inactivo'}`,

@@ -9,10 +9,7 @@ import GeneralExpense from '@models/generalExpense'
 const serviceGetFinancialReportById = async (id: string) => {
   try {
     const report = await FinancialReport.findByPk(id, {
-      include: [
-        { model: GeneralIncome },
-        { model: GeneralExpense },
-      ],
+      include: [{ model: GeneralIncome }, { model: GeneralExpense }],
     })
 
     if (!report) {

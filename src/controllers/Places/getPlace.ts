@@ -12,9 +12,14 @@ const getPlaceController = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error getting place:', error)
     if (error instanceof Error) {
-      res.status(500).json({ error: 'Internal Server Error', message: error.message })
+      res
+        .status(500)
+        .json({ error: 'Internal Server Error', message: error.message })
     } else {
-      res.status(500).json({ error: 'Internal Server Error', message: 'Unknown error occurred' })
+      res.status(500).json({
+        error: 'Internal Server Error',
+        message: 'Unknown error occurred',
+      })
     }
   }
 }

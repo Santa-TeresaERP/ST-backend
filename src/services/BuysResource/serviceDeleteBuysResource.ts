@@ -11,8 +11,10 @@ const serviceDeleteBuysResource = async (id: string) => {
   buysResource.status = !buysResource.status
   await buysResource.save()
 
-  console.log(`Estado del recurso de compra con ID ${id} cambiado a ${buysResource.status ? 'activo' : 'inactivo'}`)
-  
+  console.log(
+    `Estado del recurso de compra con ID ${id} cambiado a ${buysResource.status ? 'activo' : 'inactivo'}`,
+  )
+
   return buysResource
 }
 

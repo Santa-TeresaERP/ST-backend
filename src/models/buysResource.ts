@@ -22,7 +22,7 @@ class BuysResource
   public supplier_id!: string
   public quantity!: number
   public entry_date!: Date
-  public status ?: boolean
+  public status?: boolean
 }
 
 BuysResource.init(

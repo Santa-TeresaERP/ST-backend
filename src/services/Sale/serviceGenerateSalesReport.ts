@@ -1,81 +1,92 @@
-import sale from '@models/sale'
-import saleDetail from '@models/saleDetail'
-import Product from '@models/product'
 import Store from '@models/store'
+import Product from '@models/product'
+import Return from '@models/returns'
+import sale from '@models/sale'
+import serviceGetSales from '@services/Sale/serviceGetSales'
+import serviceGetSaleDetails from '@services/sale_detail/serviceGetSaleDetails'
 import { Op } from 'sequelize'
 
-interface SalesReportOptions {
+interface SalesReportRangeOptions {
   storeId: string
-  day: number
-  month: number
-  year: number
+  from: string | Date // fecha de inicio (YYYY-MM-DD o Date)
+  to: string | Date // fecha de fin (YYYY-MM-DD o Date)
 }
 
-interface SaleDetail {
-  product: { name: string }
+type SaleRow = {
+  id: string
+  store_id: string
+  income_date?: string | Date | null
+  createdAt?: string | Date | null
+}
+
+type SaleDetailRow = {
+  saleId: string
   quantity: number
   mount: number
+  product?: { name?: string; price?: number | null } | null
 }
 
-interface SaleWithDetails {
-  saleDetails: SaleDetail[]
+type ReturnRow = {
+  price?: number | null // total de la devolución (ya multiplicado)
+  mount?: number | null // por si tu esquema usa otro nombre
+  total?: number | null
+  quantity?: number | null
+  product?: { name?: string | null } | null
+  // sale?: {}  // no usamos campos de sale en la salida
 }
 
 const serviceGenerateSalesReport = async ({
   storeId,
-  day,
-  month,
-  year,
-}: SalesReportOptions) => {
+  from,
+  to,
+}: SalesReportRangeOptions) => {
   const store = await Store.findByPk(storeId)
   if (!store) return { error: 'Tienda no encontrada' }
 
-  const startDate = new Date(year, month - 1, day, 0, 0, 0)
-  const endDate = new Date(year, month - 1, day, 23, 59, 59)
+  // Normalizamos rango (parseo LOCAL, sin desfaces por zona horaria)
+  const start = startOfDay(from)
+  const end = endOfDay(to)
 
-  const sales = await sale.findAll({
-    where: {
-      store_id: storeId,
-      createdAt: { [Op.between]: [startDate, endDate] },
-    },
-    include: [
-      {
-        model: saleDetail,
-        as: 'saleDetails',
-        include: [{ model: Product, as: 'product' }],
-      },
-    ],
+  // 1) Ventas de la tienda (tu servicio no filtra por fecha => filtramos en memoria)
+  const allSales = (await serviceGetSales(storeId)) as unknown as SaleRow[]
+
+  // 2) Filtrar por fecha usando income_date (fallback: createdAt)
+  const salesInRange = allSales.filter((s) => {
+    const raw: string | Date | null | undefined = s.income_date ?? s.createdAt
+    const d = toDate(raw)
+    return d !== null && d >= start && d <= end
   })
 
-  // Pérdidas simuladas
-  const simulatedReturns = [
-    { product: 'Pan', total: 5 },
-    { product: 'Vino', total: 15 },
-  ]
+  // 3) Traer todos los detalles y filtrar por las ventas del rango
+  const allDetails =
+    (await serviceGetSaleDetails()) as unknown as SaleDetailRow[]
+  const saleIdSet = new Set(salesInRange.map((s) => s.id))
+  const detailsInRange = allDetails.filter((d) => saleIdSet.has(d.saleId))
 
-  // ====== Helpers de formato (solo diseño) ======
+  // ====== Helpers ======
   const money = (n: number) => `S/${n.toFixed(2)}`
   const repeat = (ch: string, n: number) => ch.repeat(Math.max(n, 0))
-  const toUnit = (qty: number, total: number) => (qty > 0 ? total / qty : 0)
+  const toUnit = (qty: number, total: number, fallback?: number | null) =>
+    qty > 0 ? total / qty : (fallback ?? 0)
 
-  // Construir filas de ventas (producto, cant, p.u., total)
+  // ====== Ventas ======
   type Row = { product: string; qty: number; unit: number; total: number }
   const rows: Row[] = []
   let totalVentas = 0
-  for (const s of sales as unknown as SaleWithDetails[]) {
-    for (const d of s.saleDetails) {
-      const unit = toUnit(d.quantity, d.mount)
-      rows.push({
-        product: d.product?.name ?? 'Producto',
-        qty: d.quantity,
-        unit,
-        total: d.mount,
-      })
-      totalVentas += d.mount
-    }
+
+  for (const d of detailsInRange) {
+    const name = d.product?.name ?? 'Producto'
+    const qty = Number(d.quantity) || 0
+    const lineTotal = Number(d.mount) || 0
+    const unit =
+      d.product?.price != null
+        ? Number(d.product.price)
+        : toUnit(qty, lineTotal)
+    rows.push({ product: name, qty, unit, total: lineTotal })
+    totalVentas += lineTotal
   }
 
-  // Anchos dinámicos (mejor alineación en monospace)
+  // Anchos dinámicos ventas
   const minProd = 18
   const prodWidth = Math.max(
     minProd,
@@ -85,17 +96,50 @@ const serviceGenerateSalesReport = async ({
   const qtyWidth = Math.max(7, 'Cantidad'.length)
   const unitWidth = Math.max(10, 'P.U.'.length)
   const totalWidth = Math.max(12, 'Total'.length)
-
   const sep = `+${repeat('-', prodWidth + 2)}+${repeat('-', qtyWidth + 2)}+${repeat('-', unitWidth + 2)}+${repeat('-', totalWidth + 2)}+`
 
-  // Cabecera
+  // ====== Pérdidas (returns) — por fecha del propio return + tienda por JOIN a sale
+  const returnsInRange = (await Return.findAll({
+    where: {
+      createdAt: { [Op.between]: [start, end] }, // cambia a income_date si tu modelo de returns lo tiene
+    },
+    include: [
+      { model: Product, as: 'product', attributes: ['name', 'price'] },
+      { model: sale, as: 'sale', attributes: [], where: { store_id: storeId } },
+    ],
+  })) as unknown as ReturnRow[]
+
+  // usar el total guardado en returns (price ya es monto total)
+  const lossMap = new Map<string, number>()
+  for (const r of returnsInRange) {
+    const name = (r.product?.name ?? 'Producto') || 'Producto'
+    const lineTotal = num(r.price ?? r.mount ?? r.total ?? 0)
+    lossMap.set(name, (lossMap.get(name) ?? 0) + lineTotal)
+  }
+
+  type LossRow = { product: string; total: number }
+  const losses: LossRow[] = [...lossMap.entries()].map(([product, total]) => ({
+    product,
+    total,
+  }))
+  const totalPerdidas = losses.reduce((acc, l) => acc + l.total, 0)
+
+  const lossProdW = Math.max(
+    18,
+    ...losses.map((r) => r.product.length),
+    'Producto'.length,
+  )
+  const lossTotalW = Math.max(12, 'Total'.length)
+  const lossSep = `+${repeat('-', lossProdW + 2)}+${repeat('-', lossTotalW + 2)}+`
+
+  // ====== Render del reporte ======
   let report = ''
   report += `========================================\n`
   report += `Tienda: ${store.store_name}\n`
-  report += `Fecha: ${startDate.toLocaleDateString()}\n`
+  report += `Desde: ${start.toLocaleDateString()}  Hasta: ${end.toLocaleDateString()}\n`
   report += `========================================\n\n`
 
-  // Tabla de ventas
+  // Ventas
   report += `Ventas:\n`
   if (rows.length === 0) {
     report += `— sin ventas registradas —\n\n`
@@ -111,23 +155,17 @@ const serviceGenerateSalesReport = async ({
 
   // Pérdidas
   report += `Pérdidas:\n`
-  const lossProdW = Math.max(
-    18,
-    ...simulatedReturns.map((r) => r.product.length),
-    'Producto'.length,
-  )
-  const lossTotalW = Math.max(12, 'Total'.length)
-  const lossSep = `+${repeat('-', lossProdW + 2)}+${repeat('-', lossTotalW + 2)}+`
-
-  let totalPerdidas = 0
-  report += `${lossSep}\n`
-  report += `| ${'Producto'.padEnd(lossProdW)} | ${'Total'.padStart(lossTotalW)} |\n`
-  report += `${lossSep}\n`
-  for (const r of simulatedReturns) {
-    totalPerdidas += r.total
-    report += `| ${r.product.padEnd(lossProdW)} | ${money(r.total).padStart(lossTotalW)} |\n`
+  if (losses.length === 0) {
+    report += `— sin pérdidas registradas —\n`
+  } else {
+    report += `${lossSep}\n`
+    report += `| ${'Producto'.padEnd(lossProdW)} | ${'Total'.padStart(lossTotalW)} |\n`
+    report += `${lossSep}\n`
+    for (const l of losses) {
+      report += `| ${l.product.padEnd(lossProdW)} | ${money(l.total).padStart(lossTotalW)} |\n`
+    }
+    report += `${lossSep}\n`
   }
-  report += `${lossSep}\n`
 
   // Totales
   report += `\n========================================\n`
@@ -136,16 +174,71 @@ const serviceGenerateSalesReport = async ({
   report += `Total general:  ${money(totalVentas - totalPerdidas)}\n`
   report += `========================================\n`
 
-  // Salida conservando compatibilidad
   return {
     success: true,
     message: 'Reporte de ventas generado',
     data: {
       report_text: report,
-      date: startDate.toLocaleDateString(),
+      date_range: { from: toYMD(start), to: toYMD(end) },
+      totals: {
+        sales: totalVentas,
+        losses: totalPerdidas,
+        net: totalVentas - totalPerdidas,
+        currency: 'PEN',
+      },
+      counts: {
+        sales: salesInRange.length,
+        lines: rows.length,
+        loss_lines: losses.length,
+      },
+      losses,
     },
     report,
   }
 }
 
 export default serviceGenerateSalesReport
+
+// ---------- helpers (sin any y con parseo LOCAL) ----------
+function parseLocalDate(input: string | Date): Date {
+  if (input instanceof Date) {
+    return new Date(input.getFullYear(), input.getMonth(), input.getDate())
+  }
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(input)
+  if (m) {
+    const y = Number(m[1])
+    const mo = Number(m[2]) - 1
+    const d = Number(m[3])
+    return new Date(y, mo, d)
+  }
+  // Fallback: dejar que JS parsee y luego normalizar a local
+  const x = new Date(input)
+  return new Date(x.getFullYear(), x.getMonth(), x.getDate())
+}
+
+function startOfDay(d: string | Date): Date {
+  const x = parseLocalDate(d)
+  return new Date(x.getFullYear(), x.getMonth(), x.getDate(), 0, 0, 0, 0)
+}
+
+function endOfDay(d: string | Date): Date {
+  const x = parseLocalDate(d)
+  return new Date(x.getFullYear(), x.getMonth(), x.getDate(), 23, 59, 59, 999)
+}
+
+function toYMD(d: Date): string {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const dd = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${dd}`
+}
+
+function toDate(raw: string | Date | null | undefined): Date | null {
+  if (!raw) return null
+  return raw instanceof Date ? raw : new Date(raw)
+}
+
+function num(x: unknown): number {
+  const n = typeof x === 'string' || typeof x === 'number' ? Number(x) : NaN
+  return Number.isFinite(n) ? n : 0
+}

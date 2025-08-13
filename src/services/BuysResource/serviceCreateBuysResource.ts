@@ -6,19 +6,19 @@ import Supplier from '@models/suplier'
 import Warehouse from '@models/warehouse'
 import { validateWarehouseStatus } from '../../schemas/almacen/warehouseSchema'
 
+// 👇 NUEVO: crea el gasto en "Inventario" por la compra
+import createResourceExpense from '@services/GeneralExpense/CollectionFunc/Inventory/ResourceExpense'
+
 const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
-  // Agregar timestamp único para rastrear llamadas
   const callId = Date.now().toString(36) + Math.random().toString(36).substr(2)
   console.log(`🎯 [${callId}] INICIO de serviceCreateBuysResource`)
 
   const validation = buysResourceValidation(body)
-
   if (!validation.success) {
-    // Devuelve el error detallado de validación
     return {
       error: 'Error de validación',
       details: validation.error.errors,
-      body, // Incluye el body recibido para depuración
+      body,
     }
   }
 
@@ -34,24 +34,19 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
   } = validation.data
 
   try {
-    console.log(
-      `🔍 [${callId}] Iniciando serviceCreateBuysResource con datos:`,
-      {
-        warehouse_id,
-        resource_id,
-        supplier_id,
-        quantity,
-        type_unit,
-        unit_price,
-        total_cost,
-      },
-    )
+    console.log(`🔍 [${callId}] Datos validados`, {
+      warehouse_id,
+      resource_id,
+      supplier_id,
+      quantity,
+      type_unit,
+      unit_price,
+      total_cost,
+    })
 
-    // Obtener información del proveedor para usar en las observaciones
     const supplier = await Supplier.findByPk(supplier_id)
     const supplierName = supplier ? supplier.suplier_name : `ID: ${supplier_id}`
 
-    // Validar que el almacén exista
     const warehouse = await Warehouse.findByPk(warehouse_id)
     if (!warehouse) {
       return {
@@ -64,7 +59,6 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
       }
     }
 
-    // Validar estado activo/inactivo del almacén usando la función del schema
     const warehouseStatusValidation = validateWarehouseStatus({
       status: warehouse.status,
     })
@@ -79,61 +73,28 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
       }
     }
 
-    // Verificar si ya existe un registro con las mismas relaciones
     const existingResource = await BuysResource.findOne({
-      where: {
-        warehouse_id,
-        resource_id,
-        supplier_id,
-      },
+      where: { warehouse_id, resource_id, supplier_id },
     })
 
-    console.log(
-      '📦 Registro existente encontrado:',
-      existingResource
-        ? {
-            id: existingResource.id,
-            currentQuantity: existingResource.quantity,
-            currentUnit: existingResource.type_unit,
-          }
-        : 'No existe',
-    )
-
     if (existingResource) {
-      // Si existe, actualizar sumando solo la cantidad (sin recalcular el costo total)
       const previousQuantity = existingResource.quantity
       const newQuantity = previousQuantity + quantity
-
-      console.log('🔄 Actualizando registro existente:', {
-        previousQuantity,
-        quantityToAdd: quantity,
-        newQuantity,
-      })
 
       const updatedResource = await existingResource.update({
         type_unit,
         unit_price,
-        total_cost, // Mantener el costo total del input, no recalcular
+        total_cost,
         quantity: newQuantity,
         entry_date,
       })
-
-      console.log('✅ Registro actualizado:', {
-        id: updatedResource.id,
-        finalQuantity: updatedResource.quantity,
-      })
-
-      // NOTA: No llamamos a serviceCreateWarehouseMovementResource para actualizaciones
-      // porque ya manejamos la cantidad correctamente y evitamos duplicación
-      console.log(
-        `📝 [${callId}] Saltando creación de movimiento para evitar duplicación`,
-      )
 
       console.log(`🏁 [${callId}] FIN - Registro actualizado correctamente`)
       console.log(
         `🔍 [${callId}] CANTIDAD FINAL EN DB: ${updatedResource.quantity}`,
       )
 
+      // 👇 SOLO creamos gasto al CREAR, no al actualizar
       return {
         resource: updatedResource,
         movement: { message: 'Movimiento omitido para evitar duplicación' },
@@ -142,9 +103,7 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
       }
     }
 
-    // Si no existe, crear un nuevo registro
-    console.log('➕ Creando nuevo registro con cantidad:', quantity)
-
+    // ➕ Crear un nuevo registro
     const newWarehouseResource = await BuysResource.create({
       warehouse_id,
       resource_id,
@@ -156,13 +115,7 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
       entry_date,
     })
 
-    console.log('✅ Nuevo registro creado:', {
-      id: newWarehouseResource.id,
-      quantity: newWarehouseResource.quantity,
-      type_unit: newWarehouseResource.type_unit,
-    })
-
-    // Crear movimiento de almacén para la nueva compra
+    // Movimiento de almacén
     const movementResult = await serviceCreateWarehouseMovementResource({
       warehouse_id,
       resource_id,
@@ -171,7 +124,6 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
       movement_date: entry_date,
       observations: `Nueva compra registrada. Proveedor: ${supplierName}`,
     })
-
     if ('error' in movementResult) {
       console.warn(
         'Error al crear movimiento de almacén:',
@@ -179,8 +131,22 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
       )
     }
 
-    console.log(`🏁 [${callId}] FIN - Nuevo registro creado correctamente`)
+    // 🧾 NUEVO: crear gasto de Inventario por la compra (no rompe si falla)
+    try {
+      await createResourceExpense({
+        resource_name: String(resource_id), // si quieres el nombre real, tráelo del modelo Resource
+        quantity,
+        type_unit,
+        unit_price,
+        total_cost,
+        supplier_name: supplierName,
+        entry_date,
+      })
+    } catch (e) {
+      console.warn('⚠️ No se pudo crear el gasto de inventario:', e)
+    }
 
+    console.log(`🏁 [${callId}] FIN - Nuevo registro creado correctamente`)
     return {
       resource: newWarehouseResource,
       movement: movementResult,
@@ -188,19 +154,15 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
       message: 'Registro creado exitosamente',
     }
   } catch (error: unknown) {
-    // Devuelve el error real de la base de datos con detalles
     if (error instanceof Error) {
       return {
         error: 'Error al crear el Dato de compra',
         details: error.message,
         stack: error.stack,
-        body, // Incluye el body recibido para depuración
+        body,
       }
     }
-    return {
-      error: 'Error desconocido al crear el Dato de compra',
-      body,
-    }
+    return { error: 'Error desconocido al crear el Dato de compra', body }
   }
 }
 

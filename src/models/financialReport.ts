@@ -14,11 +14,11 @@ class FinancialReport
 {
   public id!: string
   public start_date!: Date
-  public end_date!: Date
+  public end_date!: Date | null
   public total_income!: number
   public total_expenses!: number
   public net_profit!: number
-  public status!: 'activo' | 'inactivo'
+  public status!: 'activo' | 'inactivo' | 'finalizado' | 'proceso'
   public observations?: string | null
 
   public readonly createdAt!: Date
@@ -38,7 +38,8 @@ FinancialReport.init(
     },
     end_date: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: null,
     },
     total_income: {
       type: DataTypes.DECIMAL(10, 2),
@@ -53,7 +54,7 @@ FinancialReport.init(
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM('activo', 'inactivo'),
+      type: DataTypes.ENUM('activo', 'inactivo', 'finalizado', 'proceso'),
       allowNull: false,
       defaultValue: 'activo',
     },

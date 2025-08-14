@@ -1,16 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import WarehouseMovementResource from '@models/warehouseMovomentResource'
 import { WarehouseMovomentResourceAttributes } from '@type/almacen/warehouse_movoment_resource'
 import { warehouseMovementResourceValidation } from '../../schemas/almacen/warehouseMovomentResourceSchema'
 import BuysResource from '@models/buysResource'
-import Warehouse from '@models/warehouse'
-import Supplier from '@models/suplier'
-import serviceUpdateWarehouseResource from '../../services/BuysResource/serviceUpdateBuysResource'
-import { validateWarehouseStatus } from '../../schemas/almacen/warehouseSchema'
-
+import { Transaction } from 'sequelize'
 const serviceCreateWarehouseMovementResource = async (
   body: WarehouseMovomentResourceAttributes,
-  transaction?: any,
+  transaction?: Transaction, // La transacción sigue siendo opcional para compatibilidad
 ) => {
   console.log(
     '🔍 Iniciando serviceCreateWarehouseMovementResource con body:',
@@ -33,113 +28,65 @@ const serviceCreateWarehouseMovementResource = async (
     observations,
   } = validation.data
 
-  // Buscar el recurso actual en stock (buy_resource)
-  // Para movimientos de salida por producción, buscar cualquier registro del recurso
-  let warehouseResource = await BuysResource.findOne({
-    where: { warehouse_id, resource_id },
-    transaction,
-  })
+  // --- INICIO DE LA SOLUCIÓN DE MÍNIMO IMPACTO ---
 
-  // Si no existe un registro específico para este almacén, buscar cualquier registro del recurso
-  if (!warehouseResource && movement_type === 'salida') {
-    warehouseResource = await BuysResource.findOne({
-      where: { resource_id },
-      order: [['entry_date', 'DESC']], // Obtener el más reciente
-      transaction,
-    })
+  // 1. VERIFICAR SI EL STOCK YA FUE GESTIONADO EXTERNAMENTE
+  // Si la observación incluye estas palabras clave, asumimos que otro servicio ya actualizó el stock.
+  const isStockExternallyManaged =
+    observations?.includes('produccion') ||
+    observations?.includes('retroactivo')
 
-    // Si aún no existe, crear un registro negativo
-    if (!warehouseResource) {
-      console.log(
-        `🔍 No hay registros existentes para el recurso ${resource_id}, creando registro base`,
-      )
-
-      // Buscar un supplier por defecto
-      const defaultSupplier = await Supplier.findOne({ transaction })
-      if (!defaultSupplier) {
-        return {
-          error: 'No se encontró supplier por defecto para crear el registro',
-        }
-      }
-
-      warehouseResource = await BuysResource.create(
-        {
-          warehouse_id,
-          resource_id,
-          quantity: 0,
-          type_unit: 'unit', // Unidad por defecto
-          unit_price: 0,
-          total_cost: 0,
-          supplier_id: defaultSupplier.id!,
-          entry_date: new Date(),
-        },
-        { transaction },
-      )
-
-      console.log(`✅ Registro base creado para el recurso ${resource_id}`)
-    }
+  // 2. CORTOCIRCUITO PARA MOVIMIENTOS DE AUDITORÍA (CANTIDAD CERO)
+  if (quantity === 0) {
+    console.log(
+      '📝 Detectado movimiento de auditoría (cantidad 0). Registrando evento...',
+    )
+    const newRecord = await WarehouseMovementResource.create(
+      { ...body },
+      { transaction },
+    )
+    return { success: true, newRecord }
   }
 
-  // Validar que el recurso exista en el almacén
-  const warehouse = await Warehouse.findByPk(warehouse_id)
-  if (!warehouse) {
-    return { success: false, error: 'Almacén no encontrado' }
-  }
-
-  // Validar estado activo/inactivo del almacén usando la función del schema
-  const warehouseStatusValidation = validateWarehouseStatus({
-    status: warehouse.status,
-  })
-  if (!warehouseStatusValidation.success) {
-    return warehouseStatusValidation
-  }
-
-  // Si no existe, rechazar entrada/salida (entrada debe pasar por proveedor)
-  if (!warehouseResource) {
-    return {
-      error:
-        movement_type === 'entrada'
-          ? 'El recurso aún no ha sido registrado en el almacén (requiere proveedor).'
-          : 'El recurso no existe en el almacén. No se puede registrar una salida.',
-    }
-  }
+  // --- FIN DE LA SOLUCIÓN ---
 
   try {
-    // SALIDA: Solo actualizar stock si NO es un movimiento de producción
-    // Los movimientos de producción ya actualizaron el stock previamente
-    if (movement_type === 'salida' && !observations?.includes('produccion')) {
-      const newQuantity = warehouseResource.quantity - quantity
-
+    // 3. LA LÓGICA DE ACTUALIZACIÓN DE STOCK SOLO SE EJECUTA SI NO FUE GESTIONADA EXTERNAMENTE
+    if (!isStockExternallyManaged) {
       console.log(
-        `📉 Actualizando stock a: ${newQuantity} (Recurso ID: ${warehouseResource.id})`,
+        '🔄 Gestionando stock físico dentro de serviceCreateWarehouseMovementResource...',
       )
 
-      const updateResult = await serviceUpdateWarehouseResource(
-        warehouseResource.id!,
-        {
-          quantity: newQuantity, // Puede ser negativo
-        },
-      )
+      // Aquí va tu lógica original para encontrar y actualizar BuysResource
+      const warehouseResource = await BuysResource.findOne({
+        where: { warehouse_id, resource_id },
+        transaction,
+      })
 
-      if ('error' in updateResult) {
-        console.log('❌ Error al actualizar stock:', updateResult.error)
-        return {
-          error: 'Error al actualizar el stock de buy_resource.',
-          details: updateResult.error,
-        }
+      if (!warehouseResource) {
+        return { error: `El recurso ${resource_id} no existe en el almacén.` }
       }
 
+      if (movement_type === 'salida') {
+        if (warehouseResource.quantity < quantity) {
+          return { error: 'Stock insuficiente.' }
+        }
+        warehouseResource.quantity -= quantity
+      } else {
+        // entrada
+        warehouseResource.quantity += quantity
+      }
+
+      // En lugar de llamar a serviceUpdateWarehouseResource, guardamos directamente
+      await warehouseResource.save({ transaction })
       console.log('✅ Stock actualizado correctamente')
-    } else if (
-      movement_type === 'salida' &&
-      observations?.includes('produccion')
-    ) {
+    } else {
       console.log(
-        '📝 Movimiento de producción - stock ya actualizado previamente',
+        '📝 Stock gestionado externamente por otro servicio. Este servicio solo registrará el movimiento.',
       )
     }
 
-    // Registrar el movimiento en warehouse_movement_resources
+    // 4. REGISTRAR EL MOVIMIENTO (ESTO SIEMPRE SE HACE)
     const newRecord = await WarehouseMovementResource.create(
       {
         warehouse_id,
@@ -152,7 +99,8 @@ const serviceCreateWarehouseMovementResource = async (
       { transaction },
     )
 
-    return { newRecord }
+    // Has usado diferentes formatos de retorno, estandarizamos a uno que indique éxito.
+    return { success: true, newRecord }
   } catch (error) {
     console.error('❌ Error en serviceCreateWarehouseMovementResource:', error)
     return {

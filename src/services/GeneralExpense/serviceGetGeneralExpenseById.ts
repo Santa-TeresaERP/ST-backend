@@ -11,7 +11,6 @@ const serviceGetGeneralExpenseById = async (id: string) => {
       include: [
         {
           model: Module,
-          as: 'module',
           attributes: ['name'],
         },
       ],

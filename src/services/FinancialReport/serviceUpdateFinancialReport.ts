@@ -1,43 +1,24 @@
 import FinancialReport from '@models/financialReport'
 import { FinancialReportAttributes } from '@type/finanzas/financialReport'
-import { updateFinancialReportValidation } from 'src/schemas/finanzas/financialReportSchema'
-
 /**
  * Actualiza las observaciones y status de un reporte financiero existente.
  */
-const serviceUpdateFinancialReport = async (
-  id: string,
-  body: Partial<FinancialReportAttributes>,
-) => {
-  const validation = updateFinancialReportValidation(body)
-  if (!validation.success) {
-    return { error: JSON.stringify(validation.error.issues) }
-  }
-
+const serviceUpdateFinancialReport = async (id: string, payload: Partial<FinancialReportAttributes>) => {
   try {
-    const report = await FinancialReport.findByPk(id)
-    if (!report) {
-      return { error: 'Reporte financiero no encontrado.' }
-    }
+    const report = await FinancialReport.findByPk(id);
+    if (!report) return { error: 'Reporte no encontrado' };
 
-    // Actualizamos solo los campos permitidos: observaciones y status
-    const updateData: Partial<FinancialReportAttributes> = {}
-    if (body.observations !== undefined) {
-      updateData.observations = body.observations
-    }
-    if (body.status !== undefined) {
-      updateData.status = body.status
-    }
+    // Actualizar solo lo que viene en payload
+    if (payload.end_date !== undefined) report.end_date = payload.end_date;
+    if (payload.observations !== undefined) report.observations = payload.observations;
+    if (payload.status !== undefined) report.status = payload.status;
 
-    await report.update(updateData)
-    return report
+    await report.save();
+    return report;
   } catch (error) {
-    console.error(
-      `Error al actualizar el reporte financiero con ID ${id}:`,
-      error,
-    )
-    return { error: 'Ocurrió un error inesperado al actualizar el reporte.' }
+    console.error(error);
+    return { error: 'Error al actualizar reporte' };
   }
-}
+};
 
 export default serviceUpdateFinancialReport

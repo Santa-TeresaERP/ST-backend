@@ -7,12 +7,8 @@ const serviceUpdatePermission = async (
   id: string,
   body: PermissionsAttributes | { permissions: Array<PermissionsAttributes> },
 ) => {
-  console.log('🔍 updatePermission recibido:', JSON.stringify(body, null, 2))
-
   // Verificar si es actualización múltiple
   if ('permissions' in body && Array.isArray(body.permissions)) {
-    console.log('🔍 Actualizando múltiples permisos')
-
     if (body.permissions.length === 0) {
       return { error: 'Se requiere al menos un permiso en el array' }
     }
@@ -22,8 +18,6 @@ const serviceUpdatePermission = async (
       const errors = []
 
       for (const permissionData of body.permissions) {
-        console.log('🔍 Procesando permiso:', permissionData)
-
         // Convertir canUpdate a canEdit para compatibilidad
         const normalizedPermission = {
           ...permissionData,
@@ -39,7 +33,6 @@ const serviceUpdatePermission = async (
         const validation = permissionsValidation(normalizedPermission)
 
         if (!validation.success) {
-          console.log('❌ Error de validación:', validation.error.errors)
           errors.push({
             moduleId: permissionData.moduleId,
             error: validation.error.errors,
@@ -64,9 +57,6 @@ const serviceUpdatePermission = async (
         let permission
         if (!existingRolePermission) {
           // 🔥 CREAR permiso ÚNICO para este ROL + MÓDULO (nunca reutilizar)
-          console.log(
-            `📝 Creando nuevo permiso ÚNICO para rol: ${id}, módulo: ${moduleId}`,
-          )
           permission = await Permissions.create({
             moduleId,
             canRead,
@@ -80,9 +70,6 @@ const serviceUpdatePermission = async (
             roleId: id,
             permissionId: permission.id,
           })
-          console.log(
-            `📝 Relación creada para rol: ${id}, permiso ÚNICO: ${permission.id}`,
-          )
         } else {
           // 🔥 ACTUALIZAR permiso específico de este rol
           permission = (
@@ -90,9 +77,6 @@ const serviceUpdatePermission = async (
               Permission: Permissions
             }
           ).Permission
-          console.log(
-            `📝 Actualizando permiso existente para rol: ${id}, módulo: ${moduleId}, permiso: ${permission.id}`,
-          )
           await permission.update({ canRead, canWrite, canEdit, canDelete })
         }
 
@@ -114,8 +98,6 @@ const serviceUpdatePermission = async (
     }
   } else {
     // Actualización individual (comportamiento original)
-    console.log('🔍 Actualizando permiso individual')
-
     const validation = permissionsValidation(body as PermissionsAttributes)
 
     if (!validation.success) {

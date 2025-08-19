@@ -57,8 +57,8 @@ class migrate {
         END $$;
       `)
 
-      await createAdmin()
       await createModules()
+      await createAdmin()
       await createRoles()
       await createDefaultWarehouseAndPlant()
       console.log('Migration succesfully')

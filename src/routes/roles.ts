@@ -1,47 +1,47 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
-// import authorizePermissions from '@middlewares/roleAuthorization'
+import roleAuthorization from '@middlewares/roleAuthorization'
 import rolesController from '@controllers/roles'
 
 const router = express.Router()
 
-// Crear un rol - requiere permiso de escritura en módulo 'roles'
+// Crear un rol
 router.post(
   '/',
   authorization,
-  // authorizePermissions('canWrite', 'roles'),
+  roleAuthorization('canWrite', 'roles'),
   rolesController.createRole,
 )
 
-// Obtener todos los roles - requiere permiso de lectura en módulo 'roles'
+// Obtener todos los roles
 router.get(
   '/',
   authorization,
-  // authorizePermissions('canRead', 'roles'),
+  roleAuthorization('canRead', 'roles'),
   rolesController.getRoles,
 )
 
-// Obtener un rol - requiere permiso de lectura en módulo 'roles'
+// Obtener un rol
 router.get(
   '/:id',
   authorization,
-  // authorizePermissions('canRead', 'roles'),
+  roleAuthorization('canRead', 'roles'),
   rolesController.getRole,
 )
 
-// Actualizar un rol - requiere permiso de edición en módulo 'roles'
+// Actualizar rol
 router.patch(
   '/:id',
   authorization,
-  // authorizePermissions('canEdit', 'roles'),
+  roleAuthorization('canEdit', 'roles'),
   rolesController.updateRole,
 )
 
-// Eliminar un rol - requiere permiso de eliminación en módulo 'roles'
+// Eliminar rol
 router.delete(
   '/:id',
   authorization,
-  // authorizePermissions('canDelete', 'roles'),
+  roleAuthorization('canDelete', 'roles'),
   rolesController.deleteRole,
 )
 

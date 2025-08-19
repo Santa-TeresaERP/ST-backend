@@ -2,6 +2,7 @@ import express from 'express'
 import authorization from '@middlewares/authorization'
 // import authorizePermissions from '@middlewares/roleAuthorization'
 import permissionController from '@controllers/permission/index'
+import roleAuthorization from '@middlewares/roleAuthorization'
 
 const router = express.Router()
 
@@ -9,7 +10,7 @@ const router = express.Router()
 router.post(
   '/individual',
   authorization,
-  // authorizePermissions('canWrite', 'permissions'),
+  roleAuthorization('canWrite', 'roles'),
   permissionController.createPermissionController,
 )
 
@@ -17,23 +18,31 @@ router.post(
 router.post(
   '/',
   authorization,
-  // authorizePermissions('canWrite', 'permissions'),
+  roleAuthorization('canWrite', 'roles'),
   permissionController.createMultiplePermissionsController,
 )
 
-// Obtener todos los permisos - requiere permiso de lectura en módulo 'permissions'
+// Obtener todos los permisos
 router.get(
   '/',
   authorization,
-  // authorizePermissions('canRead', 'permissions'),
+  roleAuthorization('canRead', 'roles'),
   permissionController.getPermissionsController,
 )
 
-// Actualizar permisos de un rol - requiere permiso de edición en módulo 'permissions'
+// Actualizar un permiso
+router.patch(
+  '/:id',
+  authorization,
+  roleAuthorization('canEdit', 'roles'),
+  permissionController.updatePermissionController,
+)
+
+// Actualizar permisos de un rol específico
 router.patch(
   '/role/:roleId',
   authorization,
-  // authorizePermissions('canEdit', 'permissions'),
+  roleAuthorization('canEdit', 'roles'),
   permissionController.updatePermissionController,
 )
 
@@ -41,7 +50,7 @@ router.patch(
 router.delete(
   '/:id',
   authorization,
-  // authorizePermissions('canDelete', 'permissions'),
+  roleAuthorization('canDelete', 'roles'),
   permissionController.deletePermissionController,
 )
 

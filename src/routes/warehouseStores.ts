@@ -1,6 +1,7 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
-import warehouseStoreController from '@controllers/warehouseStore/index'
+import roleAuthorization from '@middlewares/roleAuthorization'
+import WarehouseStoreController from '@controllers/WarehouseStore/index'
 
 const router = express.Router()
 
@@ -8,35 +9,40 @@ const router = express.Router()
 router.post(
   '/',
   authorization,
-  warehouseStoreController.createWarehouseStoreController,
+  roleAuthorization('canWrite', 'Ventas'),
+  WarehouseStoreController.createWarehouseStoreController,
 )
 
 // Ruta para obtener todos los registros del almacén
 router.get(
   '/',
   authorization,
-  warehouseStoreController.getWarehouseStoresController,
+  roleAuthorization('canRead', 'Ventas'),
+  WarehouseStoreController.getWarehouseStoresController,
 )
 
 // Ruta para obtener un registro específico del almacén por ID
 router.get(
   '/:id',
   authorization,
-  warehouseStoreController.getWarehouseStoreController,
+  roleAuthorization('canRead', 'Ventas'),
+  WarehouseStoreController.getWarehouseStoreController,
 )
 
 // Ruta para actualizar un registro específico del almacén por ID
 router.put(
   '/:id',
   authorization,
-  warehouseStoreController.updateWarehouseStoreController,
+  roleAuthorization('canEdit', 'Ventas'),
+  WarehouseStoreController.updateWarehouseStoreController,
 )
 
 // Ruta para eliminar un registro específico del almacén por ID
 router.delete(
   '/:id',
   authorization,
-  warehouseStoreController.deleteWarehouseStoreController,
+  roleAuthorization('canDelete', 'Ventas'),
+  WarehouseStoreController.deleteWarehouseStoreController,
 )
 
 export default router

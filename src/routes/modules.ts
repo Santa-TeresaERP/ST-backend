@@ -1,23 +1,33 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
+import roleAuthorization from '@middlewares/roleAuthorization'
 import { getModuleById } from '@controllers/modules/getModuleById'
 import { getModules } from '@controllers/modules/getModules'
 import { updateModule } from '@controllers/modules/updateModule'
-import authorizePermissions from '@middlewares/roleAuthorization'
 
 const router = express.Router()
 
-// Obtener todos los módulos - requiere permiso de lectura en módulo 'modules'
-router.get('/', authorization, getModules)
+// Obtener todos los módulos
+router.get(
+  '/',
+  authorization,
+  roleAuthorization('canRead', 'modulos'),
+  getModules,
+)
 
-// Obtener un módulo por su ID - requiere permiso de lectura en módulo 'modules'
-router.get('/:id', authorization, getModuleById)
+// Obtener un módulo por su ID
+router.get(
+  '/:id',
+  authorization,
+  roleAuthorization('canRead', 'modulos'),
+  getModuleById,
+)
 
-// Actualizar un módulo - requiere permiso de edición en módulo 'modules'
+// Actualizar un módulo
 router.patch(
   '/:id',
   authorization,
-  authorizePermissions('canEdit', 'modulos'),
+  roleAuthorization('canEdit', 'modulos'),
   updateModule,
 )
 

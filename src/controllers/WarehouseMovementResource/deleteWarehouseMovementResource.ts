@@ -1,25 +1,25 @@
-import serviceDeleteWarehouseMovementResource from '@services/warehouseMovementResource/serviceDeleteWarehouseMovementResource';
-import { Request, Response } from 'express';
+import serviceDeleteWarehouseMovementResource from '@services/warehouseMovementResource/serviceDeleteWarehouseMovementResource'
+import { Request, Response } from 'express'
 
 const deleteWarehouseMovementResource = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
-    const { id } = req.params;
+    const { id } = req.params
 
-    const result = await serviceDeleteWarehouseMovementResource(id);
+    const result = await serviceDeleteWarehouseMovementResource(id)
 
     if ('error' in result) {
-      res.status(404).json({ error: result.error });
-      return;
+      res.status(404).json({ error: result.error })
+      return
     }
 
-    res.json({ message: result.message });
+    res.json({ message: result.message })
   } catch (error) {
-    console.error('Error interno del servidor:', error);
-    res.status(500).json({ error: 'Error interno del servidor' });
+    console.error('Error interno del servidor:', error)
+    res.status(500).json({ error: 'Error interno del servidor' })
   }
-};
+}
 
-export default deleteWarehouseMovementResource;
+export default deleteWarehouseMovementResource

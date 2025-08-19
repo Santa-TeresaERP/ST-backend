@@ -11,7 +11,7 @@ export default async function getLocationById(id: string) {
     return location
   } catch (error) {
     throw new Error(
-      `Error al obtener ubicación: ${error instanceof Error ? error.message : String(error)}`
+      `Error al obtener ubicación: ${error instanceof Error ? error.message : String(error)}`,
     )
   }
 }

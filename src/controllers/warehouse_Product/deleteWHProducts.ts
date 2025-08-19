@@ -6,10 +6,12 @@ export default async function toggleWarehouseProductStatus(
   res: Response,
 ) {
   try {
-    const product = await warehouseProductService.deleteWarehouseProduct(req.params.id)
-    res.json({ 
+    const product = await warehouseProductService.deleteWarehouseProduct(
+      req.params.id,
+    )
+    res.json({
       message: `Estado del producto actualizado a ${product.status ? 'activo' : 'inactivo'}`,
-      product
+      product,
     })
   } catch (error: unknown) {
     console.error('Error updating warehouse product status:', error)

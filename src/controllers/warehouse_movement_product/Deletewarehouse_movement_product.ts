@@ -14,7 +14,9 @@ const deleteWarehouseMovementProductController = async (
       res.status(400).json({ error: movement.error })
       return
     }
-    res.json({ message: 'Estado de movimiento de producto cambiado exitosamente' })
+    res.json({
+      message: 'Estado de movimiento de producto cambiado exitosamente',
+    })
     return
   } catch {
     res.status(500).json({ error: 'Error interno del servidor' })

@@ -7,9 +7,12 @@ const updatePermissionController = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { roleId } = req.params
+    // Usar roleId si existe, sino usar id (para compatibilidad con ambas rutas)
+    const { roleId, id } = req.params
+    const idToUse = roleId || id
+
     const result = await usePermissions.serviceUpdatePermission(
-      roleId,
+      idToUse,
       req.body,
     )
 

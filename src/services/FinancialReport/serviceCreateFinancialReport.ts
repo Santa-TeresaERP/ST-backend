@@ -12,7 +12,9 @@ import { createFinancialReportValidation } from 'src/schemas/finanzas/financialR
  * - Auto-finalización: Al crear uno nuevo, finaliza el anterior con fecha fin de mes
  * - Descripción automática: "Registro del mes {mes}" si no se proporciona
  */
-const serviceCreateFinancialReport = async (body: FinancialReportAttributes) => {
+const serviceCreateFinancialReport = async (
+  body: FinancialReportAttributes,
+) => {
   const validation = createFinancialReportValidation(body)
   if (!validation.success) {
     console.error('Error de validación:', validation.error)
@@ -155,7 +157,7 @@ const serviceCreateFinancialReport = async (body: FinancialReportAttributes) => 
     ]
     const currentMonth = monthNames[newStartDate.getMonth()]
     const currentYear = newStartDate.getFullYear()
-    
+
     const defaultObservations = `Registro del mes ${currentMonth} ${currentYear}`
 
     // 4. Crear el nuevo reporte con status "proceso"
@@ -174,7 +176,7 @@ const serviceCreateFinancialReport = async (body: FinancialReportAttributes) => 
     })
 
     await transaction.commit()
-    
+
     console.log(
       `✅ Nuevo reporte mensual creado: ${currentMonth} ${currentYear} (desde ${newStartDate.toLocaleDateString()})`,
     )

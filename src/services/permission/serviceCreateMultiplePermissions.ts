@@ -32,8 +32,6 @@ const serviceCreateMultiplePermissions = async (body: {
     const errors = []
 
     for (const permissionData of permissions) {
-      console.log('🔍 Procesando permiso:', permissionData)
-
       // Validar cada permiso individualmente
       const validation = permissionsValidation({
         moduleId: permissionData.moduleId,

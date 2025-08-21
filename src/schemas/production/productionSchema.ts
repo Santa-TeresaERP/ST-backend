@@ -22,10 +22,7 @@ const productionSchema = z.object({
 
   plant_id: z.string().uuid('El ID de la planta debe ser un UUID válido'),
 
-  isActive: z
-    .boolean()
-    .optional()
-    .default(true),
+  isActive: z.boolean().optional().default(true),
 
   createdAt: z.date().optional(),
 

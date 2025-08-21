@@ -12,7 +12,7 @@ export default async function deleteLocation(id: string) {
     return { message: 'Ubicación eliminada exitosamente' }
   } catch (error) {
     throw new Error(
-      `Error al eliminar ubicación: ${error instanceof Error ? error.message : String(error)}`
+      `Error al eliminar ubicación: ${error instanceof Error ? error.message : String(error)}`,
     )
   }
 }

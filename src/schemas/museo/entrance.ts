@@ -10,6 +10,10 @@ export const entranceSchema = z.object({
 
   sale_date: z.string().min(1, 'La fecha de venta es obligatoria'),
 
+  cantidad: z
+    .number({ invalid_type_error: 'La cantidad debe ser un número' })
+    .min(1, 'La cantidad debe ser al menos 1'),
+
   sale_number: z.string().min(1, 'El número de venta es obligatorio'),
 
   sale_channel: z.string().min(1, 'El canal de venta es obligatorio'),

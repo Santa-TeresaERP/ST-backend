@@ -17,6 +17,7 @@ class Entrance
   public user_id!: string
   public type_person_id!: string
   public sale_date!: string
+  public cantidad!: number
   public sale_number!: string
   public sale_channel!: string
   public total_sale!: number
@@ -30,6 +31,7 @@ Entrance.init(
     user_id: { type: DataTypes.UUID, allowNull: false },
     type_person_id: { type: DataTypes.UUID, allowNull: false },
     sale_date: { type: DataTypes.STRING, allowNull: false },
+    cantidad: { type: DataTypes.INTEGER, allowNull: false },
     sale_number: { type: DataTypes.STRING, allowNull: false },
     sale_channel: { type: DataTypes.UUID, allowNull: false },
     total_sale: { type: DataTypes.FLOAT, allowNull: false },

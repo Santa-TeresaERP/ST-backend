@@ -5,8 +5,8 @@ const serviceDeleteRental = async (id: string) => {
   if (!rentalRecord) {
     return { error: 'El alquiler no existe' }
   }
-  await rentalRecord.destroy()
-  return { message: 'Alquiler eliminado correctamente' }
+  await rentalRecord.update({ status: false })
+  return { message: 'Alquiler desactivado correctamente' }
 }
 
 export default serviceDeleteRental

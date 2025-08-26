@@ -1,6 +1,7 @@
 import Rental from '@models/rental'
 import { RentalAttributes } from '@type/alquiler/rentals'
 import { rentalValidation } from '../../schemas/alquiler/rentalsSchema'
+import { Op } from 'sequelize'
 
 // ✅ Importa el income correcto de Alquileres
 import createRentalIncome from '@services/GeneralIncome/CollentionFunc/Alquileres/AlquilresIncome'
@@ -13,6 +14,23 @@ const serviceCreateRental = async (body: RentalAttributes) => {
 
   const { customer_id, place_id, user_id, start_date, end_date, amount } =
     validation.data
+
+  // Evitar crear si existe un alquiler ACTIVO que se solape para el mismo lugar
+  const activeOverlap = await Rental.findOne({
+    where: {
+      place_id,
+      status: true,
+      start_date: { [Op.lte]: end_date }, // existente inicia antes o cuando termina el nuevo
+      end_date: { [Op.gte]: start_date }, // existente termina después o cuando inicia el nuevo
+    },
+  })
+
+  if (activeOverlap) {
+    return {
+      error:
+        'No se puede crear el alquiler: ya existe un alquiler activo para este lugar en el período indicado.',
+    }
+  }
 
   // 1) Crear el alquiler
   const newRental = await Rental.create({

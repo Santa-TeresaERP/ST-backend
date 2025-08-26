@@ -15,41 +15,52 @@ const assignAdminPermissions = async (adminRoleId: string) => {
       return
     }
 
-    // Asignar todos los permisos en todos los módulos al rol de administrador
+    // Asignar o actualizar todos los permisos en todos los módulos al rol de administrador
     for (const module of modules) {
-      console.log(
-        `📝 Creando permiso para módulo: ${module.name} (ID: ${module.id})`,
-      )
-
-      // Crear un permiso específico para el Admin con todos los permisos habilitados
-      const permission = await Permission.create({
-        moduleId: module.id,
-        canRead: true,
-        canWrite: true,
-        canEdit: true,
-        canDelete: true,
+      // Buscar si ya existe un permiso para este rol y módulo
+      const existingRolePermission = await RolesPermissions.findOne({
+        where: { roleId: adminRoleId },
+        include: [
+          {
+            model: Permission,
+            where: { moduleId: module.id },
+          },
+        ],
       })
 
-      console.log(`✅ Permiso creado con ID: ${permission.id}`)
+      if (existingRolePermission) {
+        // Si ya existe, actualizarlo para asegurar que todo esté en true
+        const permission = (
+          existingRolePermission as RolesPermissions & {
+            Permission: Permission
+          }
+        ).Permission
+        await permission.update({
+          canRead: true,
+          canWrite: true,
+          canEdit: true,
+          canDelete: true,
+        })
+        console.log(`✅ Permiso actualizado para módulo: ${module.name}`)
+      } else {
+        // Si no existe, crear el permiso y la relación
+        console.log(
+          `📝 Creando permiso para módulo: ${module.name} (ID: ${module.id})`,
+        )
+        const permission = await Permission.create({
+          moduleId: module.id,
+          canRead: true,
+          canWrite: true,
+          canEdit: true,
+          canDelete: true,
+        })
 
-      const [, created] = await RolesPermissions.findOrCreate({
-        where: {
+        await RolesPermissions.create({
           roleId: adminRoleId,
           permissionId: permission.id,
-        },
-        defaults: {
-          roleId: adminRoleId,
-          permissionId: permission.id,
-        },
-      })
-
-      if (created) {
+        })
         console.log(
           `🔗 Relación rol-permiso creada para módulo: ${module.name}`,
-        )
-      } else {
-        console.log(
-          `⚠️ Relación rol-permiso ya existía para módulo: ${module.name}`,
         )
       }
     }

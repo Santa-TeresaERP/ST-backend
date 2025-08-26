@@ -2,7 +2,6 @@ import sale from '@models/sale'
 import Return from '@models/returns'
 import CashSession from '@models/cashSession'
 import { Op } from 'sequelize'
-import Product from '@models/product'
 
 /**
  * Obtiene el total de ventas y devoluciones para una sesión de caja específica
@@ -34,42 +33,23 @@ const getSessionTotals = async (sessionId: string) => {
     })
 
     // Calcular el total de devoluciones en el período
-    // Primero obtenemos los IDs de las ventas en el período
-    const saleIds = salesInPeriod
-      .map((s) => s.id)
-      .filter((id): id is string => id !== undefined)
-
-    // Luego buscamos todas las devoluciones asociadas a esas ventas
     const returnsInPeriod = await Return.findAll({
       where: {
-        salesId: {
-          [Op.in]: saleIds,
+        storeId: session.store_id, // Usar storeId para buscar devoluciones
+        reason: {
+          [Op.not]: 'devuelto', // Excluir las devoluciones de dinero
         },
         createdAt: {
           [Op.between]: [session.started_at, session.ended_at || new Date()],
         },
       },
-      include: [
-        {
-          model: Product,
-          as: 'product',
-        },
-      ],
     })
 
-    // Calculamos el total de devoluciones (usando el precio del producto)
-    let totalReturns = 0
-    for (const returnItem of returnsInPeriod) {
-      try {
-        // Verificamos si podemos obtener el producto a través de la relación
-        const product = await Product.findByPk(returnItem.productId)
-        if (product && product.price) {
-          totalReturns += Number(product.price)
-        }
-      } catch (error) {
-        console.error('Error al obtener producto de devolución:', error)
-      }
-    }
+    // Calculamos el total de devoluciones usando el campo 'price' de la devolución
+    const totalReturns = returnsInPeriod.reduce(
+      (sum, returnItem) => sum + Number(returnItem.price),
+      0,
+    )
 
     // Calcular el monto final
     const finalAmount = Number(session.start_amount) + totalSales - totalReturns

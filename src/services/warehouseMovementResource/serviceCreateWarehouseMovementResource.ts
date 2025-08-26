@@ -34,7 +34,8 @@ const serviceCreateWarehouseMovementResource = async (
   // Si la observación incluye estas palabras clave, asumimos que otro servicio ya actualizó el stock.
   const isStockExternallyManaged =
     observations?.includes('produccion') ||
-    observations?.includes('retroactivo')
+    observations?.includes('retroactivo') ||
+    observations?.includes('Nueva compra registrada')
 
   // 2. CORTOCIRCUITO PARA MOVIMIENTOS DE AUDITORÍA (CANTIDAD CERO)
   if (quantity === 0) {

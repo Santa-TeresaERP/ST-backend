@@ -29,6 +29,8 @@ const RentalSchema = z.object({
     .positive({
       message: 'El monto debe ser un valor positivo',
     }),
+
+  status: z.boolean().optional().default(true),
 })
 
 export const rentalValidation = (data: RentalAttributes) =>

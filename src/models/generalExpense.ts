@@ -64,15 +64,16 @@ GeneralExpense.init(
 )
 
 // --- RELACIONES ---
+// Relación con Module (por module_id)
 GeneralExpense.belongsTo(Module, {
-  foreignKey: 'report_id',
+  foreignKey: 'module_id',
 })
 
 Module.hasMany(GeneralExpense, {
   foreignKey: 'module_id',
 })
 
-// Relación con FinancialReport
+// Relación con FinancialReport (por report_id)
 GeneralExpense.belongsTo(FinancialReport, {
   foreignKey: 'report_id',
 })

@@ -17,6 +17,7 @@ class Rental
   public start_date!: Date
   public end_date!: Date
   public amount!: number
+  public status!: boolean
 
   public readonly createdAt!: Date
   public readonly updatedAt!: Date
@@ -52,6 +53,11 @@ Rental.init(
     amount: {
       type: DataTypes.DECIMAL(10, 2), // Using DECIMAL for monetary values
       allowNull: false,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
     },
   },
   {

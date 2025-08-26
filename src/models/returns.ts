@@ -5,6 +5,8 @@ import Product from '@models/product'
 import Sale from '@models/sale'
 import { v4 as uuid } from 'uuid'
 
+import Store from './store'
+
 class Return
   extends Model<returnsAttributes, Optional<returnsAttributes, 'id'>>
   implements returnsAttributes
@@ -12,6 +14,7 @@ class Return
   public id!: string
   public productId!: string
   public salesId!: string
+  public storeId!: string
   public reason!: string
   public observations?: string
   public quantity!: number
@@ -32,6 +35,10 @@ Return.init(
       allowNull: true,
     },
     salesId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
+    storeId: {
       type: DataTypes.UUID,
       allowNull: true,
     },
@@ -63,5 +70,7 @@ Product.hasMany(Return, { foreignKey: 'productId', as: 'returns' })
 Return.belongsTo(Product, { foreignKey: 'productId', as: 'product' })
 Sale.hasMany(Return, { foreignKey: 'salesId', as: 'returns' })
 Return.belongsTo(Sale, { foreignKey: 'salesId', as: 'sale' })
+Store.hasMany(Return, { foreignKey: 'storeId', as: 'returns' })
+Return.belongsTo(Store, { foreignKey: 'storeId', as: 'store' })
 
 export default Return

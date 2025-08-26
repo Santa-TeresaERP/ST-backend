@@ -14,6 +14,11 @@ export const returnSchema = z.object({
     .uuid('El ID de la venta debe ser un UUID válido')
     .optional(), // ✅ ahora opcional
 
+  storeId: z
+    .string()
+    .uuid('El ID de la tienda debe ser un UUID válido')
+    .optional(),
+
   reason: z
     .string()
     .nullable()

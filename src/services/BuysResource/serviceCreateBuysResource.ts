@@ -90,11 +90,12 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
       const previousQuantity = existingResource.quantity
       const addedQuantity = quantity // delta de esta compra
       const newQuantity = previousQuantity + addedQuantity
+      const newPurchaseCost = Math.round(unit_price * addedQuantity * 100) / 100
 
       const updatedResource = await existingResource.update({
         type_unit,
         unit_price,
-        total_cost: Math.round(unit_price * newQuantity * 100) / 100, // total acumulado
+        total_cost, // Recalcular el costo total
         quantity: newQuantity,
         entry_date,
       })
@@ -110,7 +111,7 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
           quantity: addedQuantity, // solo el agregado
           type_unit,
           unit_price,
-          total_cost: Math.round(unit_price * addedQuantity * 100) / 100,
+          total_cost: newPurchaseCost,
           supplier_name: supplierName,
           entry_date, // puede ser Date o string (collector lo normaliza)
         })
@@ -118,11 +119,26 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
         console.warn('⚠️ No se pudo crear el gasto (delta) de inventario:', e)
       }
 
-      // (Opcional) Crear movimiento por delta. Si lo quieres, lo añadimos aquí.
+      // Crear movimiento de almacén para la cantidad agregada
+      const movementResult = await serviceCreateWarehouseMovementResource({
+        warehouse_id,
+        resource_id,
+        movement_type: 'entrada',
+        quantity: addedQuantity,
+        movement_date: entry_date,
+        observations: `Nueva compra registrada. Proveedor: ${supplierName}`,
+      })
+      if ('error' in movementResult) {
+        console.warn(
+          '⚠️ Error al crear movimiento de almacén en actualización:',
+          movementResult.error,
+        )
+      }
+
       return {
         success: true,
         resource: updatedResource,
-        movement: { message: 'Movimiento omitido para evitar duplicación' },
+        movement: movementResult,
         action: 'updated',
         message: `Registro actualizado. Cantidad anterior: ${previousQuantity}, agregada: ${addedQuantity}, total: ${newQuantity}`,
       }

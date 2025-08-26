@@ -10,6 +10,7 @@ import sequelize from '@config/database'
 
 // ✅ Import agregado: registrar gasto por devolución
 import createReturnExpense from '@services/GeneralExpense/CollectionFunc/sales/ReturnsExpense'
+import WarehouseStore from '@models/warehouseStore'
 
 const serviceCreateReturn = async (
   body: returnsAttributes,
@@ -33,6 +34,7 @@ const serviceCreateReturn = async (
     id = uuidv4(),
     productId,
     salesId,
+    storeId: bodyStoreId,
     reason,
     observations,
     quantity,
@@ -58,7 +60,7 @@ const serviceCreateReturn = async (
 
   // 📦 Buscar la venta para obtener el storeId
   let sale = null
-  let storeId: string | null = null
+  let storeId: string | null = bodyStoreId || null
   if (salesId) {
     console.log('🔍 Buscando venta con ID:', salesId)
     sale = await Sale.findByPk(salesId)
@@ -67,16 +69,17 @@ const serviceCreateReturn = async (
     }
     storeId = sale.store_id
     console.log('🏪 ID de tienda obtenido de la venta:', storeId)
-  } else {
+  } else if (!storeId) {
     console.log(
-      'ℹ️ No se proporcionó ID de venta, se registrará como pérdida directa',
+      'ℹ️ No se proporcionó ID de venta ni de tienda, se registrará como pérdida directa',
     )
     // Obtener storeId del inventario
     // Primero obtenemos todas las tiendas que tienen este producto
     const allInventoryItems =
       await useWarehouseStore.serviceGetWarehouseStores()
     const inventoryItems = allInventoryItems.filter(
-      (item: any) => item.productId === productId && item.quantity > 0,
+      (item: WarehouseStore) =>
+        item.productId === productId && item.quantity > 0,
     )
 
     if (inventoryItems.length === 0) {
@@ -224,7 +227,8 @@ const serviceCreateReturn = async (
       {
         id,
         productId: productId ?? null,
-        salesId: salesId ?? null,
+        salesId: salesId ?? undefined,
+        storeId: storeId,
         reason: reason ?? '',
         observations: observations ?? undefined,
         quantity,
@@ -237,18 +241,20 @@ const serviceCreateReturn = async (
       ` Devolución creada exitosamente para ${quantity} unidad(es) de "${product.name}"`,
     )
 
-    // Registrar gasto por devolución (no romper la creación si falla el asiento)
+    // Confirmar la transacción si todo salió bien
+    await transaction.commit()
+
+    // Registrar gasto por devolución DESPUÉS de commit para evitar lecturas sucias
+    // Si falla, no afecta la creación de la devolución
     try {
       await createReturnExpense(newReturn.id)
     } catch (expenseErr) {
       console.error(
-        ' No se pudo registrar el gasto por devolución:',
+        ' No se pudo registrar el gasto por devolución tras el commit:',
         expenseErr,
       )
     }
 
-    // Confirmar la transacción si todo salió bien
-    await transaction.commit()
     return newReturn
   } catch (error: unknown) {
     // Revertir la transacción en caso de error

@@ -1,7 +1,6 @@
 import CashSession from '@models/cashSession'
 import Sale from '@models/sale'
 import Return from '@models/returns' // Cambiamos de Lost a Return
-import Product from '@models/product'
 import { Op } from 'sequelize'
 
 const serviceUpdateCashSession = async (
@@ -27,43 +26,21 @@ const serviceUpdateCashSession = async (
         })) || 0
 
       // Calcular devoluciones/pérdidas en el rango de la sesión
-      // Obtenemos todas las devoluciones para la tienda en el período
+      // Buscamos devoluciones directamente por storeId y rango de fechas
       const returns = await Return.findAll({
         where: {
+          storeId: session.store_id, // Usar storeId en lugar de join
           createdAt: {
             [Op.gte]: session.started_at,
             [Op.lte]: data.ended_at || new Date(),
           },
         },
-        include: [
-          {
-            model: Sale,
-            as: 'sale',
-            where: {
-              store_id: session.store_id,
-            },
-            required: true,
-          },
-          {
-            model: Product,
-            as: 'product',
-            required: true,
-          },
-        ],
       })
 
-      // Calculamos el valor monetario de las devoluciones
-      let perdidas = 0
-      for (const returnItem of returns) {
-        try {
-          const product = await Product.findByPk(returnItem.productId)
-          if (product && product.price) {
-            perdidas += Number(product.price)
-          }
-        } catch (error) {
-          console.error('Error al obtener producto de devolución:', error)
-        }
-      }
+      // Calculamos el valor monetario de las devoluciones usando el campo price
+      const perdidas = returns.reduce((total, returnItem) => {
+        return total + Number(returnItem.price || 0)
+      }, 0)
 
       const end_amount =
         Number(session.start_amount) + Number(ventas) - Number(perdidas)

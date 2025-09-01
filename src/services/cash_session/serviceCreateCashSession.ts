@@ -20,17 +20,17 @@ const serviceCreateCashSession = async (
       }
     }
 
-    // Buscar la última sesión cerrada para esta tienda
-    const lastClosedSession = await CashSession.findOne({
-      where: {
-        store_id: data.store_id,
-        status: 'closed',
-      },
-      order: [['ended_at', 'DESC']],
-    })
+    // El start_amount debe ser el valor que el usuario especifica
+    // No usar automáticamente el end_amount de la sesión anterior
+    const start_amount = data.start_amount ?? 0
 
-    // Si hay una sesión anterior, usar su end_amount como start_amount
-    const start_amount = lastClosedSession?.end_amount ?? data.start_amount ?? 0
+    // Validar que se proporcione un start_amount válido
+    if (data.start_amount === undefined || data.start_amount === null) {
+      return {
+        success: false,
+        error: 'start_amount es requerido para crear una sesión de caja',
+      }
+    }
 
     // Crear la nueva sesión
     if (!data.store_id) {

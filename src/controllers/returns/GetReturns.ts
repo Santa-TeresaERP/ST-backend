@@ -26,15 +26,23 @@ const GetReturns = async (req: AuthRequest, res: Response): Promise<void> => {
 
     const result = await useReturns.serviceGetReturns(storeId)
 
-    if (result && 'error' in result) {
-      res.status(400).json({ error: result.error })
+    if (!result) {
+      res.status(500).json({ error: 'Error interno al obtener devoluciones' })
       return
     }
 
-    res.status(200).json(result)
+    if ('error' in result) {
+      res.status(400).json({ error: result.error, details: result.details })
+      return
+    }
+
+    res.status(200).json(result.data)
   } catch (error) {
     console.error('Error fetching returns:', error)
-    res.status(500).json({ error: 'Error al obtener devoluciones' })
+    res.status(500).json({
+      error: 'Error al obtener devoluciones',
+      details: error instanceof Error ? error.message : 'Error desconocido',
+    })
   }
 }
 

@@ -13,6 +13,14 @@ const getCashSessionDetails = async (
   try {
     const { id } = req.params
 
+    // Validar que el ID sea un UUID válido
+    if (!id || typeof id !== 'string') {
+      res.status(400).json({
+        error: 'ID de sesión inválido',
+      })
+      return
+    }
+
     // Verificar si existe la sesión
     const cashSession = await CashSession.findByPk(id)
 

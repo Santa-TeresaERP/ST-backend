@@ -6,12 +6,14 @@ type ServiceResult =
 
 const serviceGetReturns = async (storeId?: string): Promise<ServiceResult> => {
   try {
-    const whereClause = storeId ? { store_id: storeId } : {}
+    const whereClause = storeId ? { storeId: storeId } : {}
     const items = await Return.findAll({
       where: whereClause,
+      order: [['createdAt', 'DESC']], // Ordenar por fecha de creación descendente
     })
     return { success: true, data: items }
   } catch (error: unknown) {
+    console.error('Error in serviceGetReturns:', error)
     return {
       error: 'Error al obtener las devoluciones',
       details: error instanceof Error ? error.message : 'Error desconocido',

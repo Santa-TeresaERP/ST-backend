@@ -41,10 +41,8 @@ const cashSessionCheck = async (
       else if (req.originalUrl.includes('/returns/')) {
         const returnItem = await Return.findByPk(req.params.id)
         if (returnItem) {
-          const sale = await Sale.findByPk(returnItem.salesId)
-          if (sale) {
-            storeId = sale.store_id
-          }
+          // Usar directamente el storeId de la devolución
+          storeId = returnItem.storeId
         }
       }
     }

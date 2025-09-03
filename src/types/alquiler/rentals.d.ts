@@ -6,4 +6,5 @@ export interface RentalAttributes {
   start_date: Date
   end_date: Date
   amount: number
+  status?: boolean
 }

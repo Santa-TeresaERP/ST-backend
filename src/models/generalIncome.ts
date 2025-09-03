@@ -33,7 +33,6 @@ GeneralIncome.init(
     },
     module_id: {
       type: DataTypes.UUID,
-      primaryKey: true,
       allowNull: false,
     },
     income_type: {

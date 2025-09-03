@@ -1,4 +1,3 @@
-import { Op } from 'sequelize'
 import sequelize from '@config/database'
 import FinancialReport from '@models/financialReport'
 import GeneralIncome from '@models/generalIncome'
@@ -15,7 +14,13 @@ import { createFinancialReportValidation } from 'src/schemas/finanzas/financialR
 const serviceCreateFinancialReport = async (
   body: FinancialReportAttributes,
 ) => {
-  const validation = createFinancialReportValidation(body)
+  // Si no se envía start_date, usar el primer día del mes actual
+  const now = new Date()
+  const inferredStartDate = new Date(now.getFullYear(), now.getMonth(), 1)
+  const validation = createFinancialReportValidation({
+    ...body,
+    start_date: body.start_date ?? inferredStartDate,
+  } as FinancialReportAttributes)
   if (!validation.success) {
     console.error('Error de validación:', validation.error)
     return { error: JSON.stringify(validation.error.issues) }
@@ -42,36 +47,35 @@ const serviceCreateFinancialReport = async (
         previousStartDate.getMonth() + 1,
         0, // Día 0 del siguiente mes = último día del mes actual
       )
+      endOfMonth.setHours(23, 59, 59, 999)
 
-      // Obtener todos los ingresos sin reporte asignado en el mes
+      // Obtener todos los ingresos y gastos sin reporte asignado (report_id: null)
       const incomesToReport = await GeneralIncome.findAll({
-        where: {
-          report_id: null,
-          date: {
-            [Op.between]: [previousReport.start_date, endOfMonth],
-          },
-        },
+        where: { report_id: null },
         transaction,
       })
-
-      // Obtener todos los gastos sin reporte asignado en el mes
       const expensesToReport = await GeneralExpense.findAll({
-        where: {
-          report_id: null,
-          date: {
-            [Op.between]: [previousReport.start_date, endOfMonth],
-          },
-        },
+        where: { report_id: null },
         transaction,
       })
 
-      // Calcular totales
+      // Log de los datos que se van a actualizar
+      console.log(
+        'GeneralIncome a actualizar:',
+        incomesToReport.map((i) => (i.toJSON ? i.toJSON() : i)),
+      )
+      console.log(
+        'GeneralExpense a actualizar:',
+        expensesToReport.map((e) => (e.toJSON ? e.toJSON() : e)),
+      )
+
+      // Calcular totales de TODO lo no asignado
       const total_income = incomesToReport.reduce(
-        (sum, item) => sum + item.amount,
+        (sum, item) => sum + Number(item.amount),
         0,
       )
       const total_expenses = expensesToReport.reduce(
-        (sum, item) => sum + item.amount,
+        (sum, item) => sum + Number(item.amount),
         0,
       )
       const net_profit = total_income - total_expenses
@@ -107,29 +111,18 @@ const serviceCreateFinancialReport = async (
         { transaction },
       )
 
-      // Asignar los ingresos y gastos al reporte finalizado
+      // Asignar todos los ingresos y gastos nulos al reporte anterior
       await GeneralIncome.update(
         { report_id: previousReport.id },
         {
-          where: {
-            report_id: null,
-            date: {
-              [Op.between]: [previousReport.start_date, endOfMonth],
-            },
-          },
+          where: { report_id: null },
           transaction,
         },
       )
-
       await GeneralExpense.update(
         { report_id: previousReport.id },
         {
-          where: {
-            report_id: null,
-            date: {
-              [Op.between]: [previousReport.start_date, endOfMonth],
-            },
-          },
+          where: { report_id: null },
           transaction,
         },
       )

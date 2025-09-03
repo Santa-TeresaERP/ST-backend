@@ -16,7 +16,7 @@ router.get('/:id', authorization, rentalsController.getRentalController)
 // Actualizar un alquiler específico por ID
 router.patch('/:id', authorization, rentalsController.updateRentalController)
 
-// Eliminar un alquiler específico por ID
-router.delete('/:id', authorization, rentalsController.deleteRentalController)
+// Desactivar (soft delete) un alquiler específico por ID
+router.put('/:id', authorization, rentalsController.deleteRentalController)
 
 export default router

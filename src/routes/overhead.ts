@@ -16,6 +16,6 @@ router.get(
   authorization,
   overheadController.getMonthlyExpenseController,
 )
-router.get('/all', authorization, overheadController.getAllOverheadsController)
+router.get('/', authorization, overheadController.getOverheadsController)
 
 export default router

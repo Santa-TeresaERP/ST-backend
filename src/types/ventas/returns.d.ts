@@ -1,7 +1,8 @@
 export interface returnsAttributes {
   id?: string
-  productId?: stringal
+  productId?: string
   salesId?: string
+  storeId?: string
   reason: string
   observations?: string
   quantity: number

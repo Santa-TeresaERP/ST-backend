@@ -15,9 +15,8 @@ const assignAdminPermissions = async (adminRoleId: string) => {
       return
     }
 
-    // Asignar o actualizar todos los permisos en todos los módulos al rol de administrador
     for (const module of modules) {
-      // Buscar si ya existe un permiso para este rol y módulo
+      // Buscar permiso asociado a este rol y módulo
       const existingRolePermission = await RolesPermissions.findOne({
         where: { roleId: adminRoleId },
         include: [
@@ -29,24 +28,32 @@ const assignAdminPermissions = async (adminRoleId: string) => {
       })
 
       if (existingRolePermission) {
-        // Si ya existe, actualizarlo para asegurar que todo esté en true
+        // Ya existe -> forzar flags en true siempre
         const permission = (
           existingRolePermission as RolesPermissions & {
             Permission: Permission
           }
         ).Permission
-        await permission.update({
-          canRead: true,
-          canWrite: true,
-          canEdit: true,
-          canDelete: true,
-        })
-        console.log(`✅ Permiso actualizado para módulo: ${module.name}`)
+
+        if (
+          !permission.canRead ||
+          !permission.canWrite ||
+          !permission.canEdit ||
+          !permission.canDelete
+        ) {
+          await permission.update({
+            canRead: true,
+            canWrite: true,
+            canEdit: true,
+            canDelete: true,
+          })
+          console.log(`✅ Permiso actualizado para módulo: ${module.name}`)
+        } else {
+          console.log(`🔒 Permiso ya estaba en true para módulo: ${module.name}`)
+        }
       } else {
-        // Si no existe, crear el permiso y la relación
-        console.log(
-          `📝 Creando permiso para módulo: ${module.name} (ID: ${module.id})`,
-        )
+        // No existe -> crearlo con todos los flags en true
+        console.log(`📝 Creando permiso para módulo: ${module.name}`)
         const permission = await Permission.create({
           moduleId: module.id,
           canRead: true,
@@ -59,9 +66,7 @@ const assignAdminPermissions = async (adminRoleId: string) => {
           roleId: adminRoleId,
           permissionId: permission.id,
         })
-        console.log(
-          `🔗 Relación rol-permiso creada para módulo: ${module.name}`,
-        )
+        console.log(`🔗 Relación rol-permiso creada para módulo: ${module.name}`)
       }
     }
 

@@ -40,6 +40,7 @@ const serviceCreateRental = async (body: RentalAttributes) => {
     start_date,
     end_date,
     amount,
+    status: true, // Set status to true by default for new rentals
   })
 
   // 2) Registrar el ingreso contable por alquiler (no romper si falla)

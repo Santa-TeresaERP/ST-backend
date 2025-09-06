@@ -7,8 +7,15 @@ const serviceUpdateRental = async (id: string, body: RentalAttributes) => {
   if (!validation.success) {
     return { error: validation.error.errors }
   }
-  const { customer_id, place_id, user_id, start_date, end_date, amount } =
-    validation.data
+  const {
+    customer_id,
+    place_id,
+    user_id,
+    start_date,
+    end_date,
+    amount,
+    status,
+  } = validation.data
   const rentalRecord = await Rental.findByPk(id)
   if (!rentalRecord) {
     return { error: 'El alquiler no existe' }
@@ -20,6 +27,7 @@ const serviceUpdateRental = async (id: string, body: RentalAttributes) => {
     start_date,
     end_date,
     amount,
+    status,
   })
   return rentalRecord
 }

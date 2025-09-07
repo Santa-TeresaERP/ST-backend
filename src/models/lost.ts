@@ -38,7 +38,8 @@ Lost.init(
 )
 
 // Relaciones
-Lost.belongsTo(Production, { foreignKey: 'product_id' })
-Production.hasMany(Lost, { foreignKey: 'product_id' })
+// Relaciones correctas
+Lost.belongsTo(Production, { foreignKey: 'production_id', as: 'production' })
+Production.hasMany(Lost, { foreignKey: 'production_id', as: 'losts' })
 
 export default Lost

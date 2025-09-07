@@ -1,113 +1,119 @@
 import ExcelJS from 'exceljs'
 import { getDataDeVentas } from './DataDepVentas'
 
-export const exportVentasExcel = async (startDate: string, endDate: string) => {
+export const exportVentasExcel = async (
+  startDate: string,
+  endDate: string,
+): Promise<Buffer> => {
   try {
-    // 1. Obtener datos con el otro service
+    // 1. Llamar al service
     const result = await getDataDeVentas(startDate, endDate)
-
     if (!result.success || !result.data) {
       throw new Error(result.message || 'No se encontraron datos para exportar')
     }
 
     const { buysResources, productions, losts, sales, returns } = result.data
 
-    // 2. Crear un nuevo workbook
+    // 2. Crear Excel
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Departamento de Ventas')
 
-    // 3. Encabezados
+    // Encabezados
     worksheet.addRow([`${startDate} ----> ${endDate}`])
     worksheet.addRow([])
-    worksheet.addRow([
-      'modulo',
-      'objeto',
-      'tipo',
-      'gasto',
-      'ganancia',
-    ])
+    worksheet.addRow(['modulo', 'objeto', 'tipo', 'gasto', 'ganancia'])
 
     let totalGasto = 0
     let totalGanancia = 0
 
-    // 4. Agregar datos de buysResources (inventario)
-    buysResources.forEach((item: any) => {
-      const gasto = Number(item.cost || 0)
+    // 3. buysResources → inventario
+    ;(buysResources as any[]).forEach((buy) => {
+      const gasto = Number(buy.total_cost || 0)
       totalGasto += gasto
       worksheet.addRow([
         'inventario',
-        item.resource?.name || '',
+        buy.resource?.name || '', // 👈 minúscula
         'recurso',
         `s/${gasto}`,
         '',
       ])
     })
 
-    // 5. Agregar datos de productions
-    productions.forEach((item: any) => {
-      const gasto = Number(item.cost || 0)
-      totalGasto += gasto
+    // 4. productions
+    ;(productions as any[]).forEach((prod) => {
       worksheet.addRow([
         'produccion',
-        item.product?.name || '',
+        prod.Product?.name || '', // 👈 mayúscula
         'producto',
-        `s/${gasto}`,
+        `s/${50}`,
         '',
       ])
     })
 
-    // 6. Agregar datos de pérdidas
-    losts.forEach((item: any) => {
-      const gasto = Number(item.amount || 0)
+    // 5. losts
+    ;(losts as any[]).forEach((lost) => {
+      const gasto = Number(lost.quantity || 0)
       totalGasto += gasto
       worksheet.addRow([
         'produccion',
-        item.product?.name || '',
+        lost.production?.Product?.name || '', // 👈 ahora correcto
         'perdida',
         `s/${gasto}`,
         '',
       ])
     })
 
-    // 7. Agregar datos de ventas
-    sales.forEach((item: any) => {
-      const ganancia = Number(item.total || 0)
-      totalGanancia += ganancia
-      worksheet.addRow([
-        'ventas',
-        item.product?.name || '',
-        'venta',
-        '',
-        `s/${ganancia}`,
-      ])
+    // 6. sales
+    ;(sales as any[]).forEach((sale) => {
+      sale.saleDetails?.forEach((detail: any) => {
+        const ganancia = Number(detail.mount || 0)
+        totalGanancia += ganancia
+        worksheet.addRow([
+          'ventas',
+          detail.product?.name || '', // 👈 producto del detalle
+          'venta',
+          '',
+          `s/${ganancia}`,
+        ])
+      })
     })
 
-    // 8. Agregar datos de devoluciones
-    returns.forEach((item: any) => {
-      const gasto = Number(item.price || 0)
+    // 7. returns
+    ;(returns as any[]).forEach((ret) => {
+      const gasto = Number(ret.price || 0)
       totalGasto += gasto
       worksheet.addRow([
         'ventas',
-        item.product?.name || '',
-        'perdida(devuelto)',
+        ret.product?.name || '', // 👈 minúscula
+        `perdida(${ret.reason || 'devuelto'})`,
         `s/${gasto}`,
         '',
       ])
     })
 
-    // 9. Fila total
+    // 8. Totales
     worksheet.addRow([])
-    worksheet.addRow(['', '', 'total', `s/${totalGasto}`, `s/${totalGanancia}`])
+    worksheet.addRow([
+      '',
+      '',
+      'total',
+      `s/${totalGasto}`,
+      `s/${totalGanancia}`,
+      '',
+    ])
 
     // Ajustar ancho de columnas
     worksheet.columns.forEach((col) => {
-      col.width = 18
+      col.width = 20
     })
 
-    // 10. Retornar el buffer del Excel
-    const buffer = await workbook.xlsx.writeBuffer()
-    return buffer
-  } catch (error: any) {
-    throw new Error(`Error en exportVentasExcel: ${error.message}`)
+    // 9. Retornar buffer como Buffer de Node.js
+    const arrayBuffer = await workbook.xlsx.writeBuffer()
+    return Buffer.from(arrayBuffer)
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Error en exportVentasExcel: ${error.message}`)
+    }
+    throw new Error('Error desconocido en exportVentasExcel')
   }
 }

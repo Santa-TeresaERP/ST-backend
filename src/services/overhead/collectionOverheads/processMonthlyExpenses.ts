@@ -15,9 +15,11 @@ export const processMonthlyExpenseOverheads = async () => {
 
     // 1. Buscar reporte financiero activo
     const activeReport = await FinancialReport.findOne({
-      where: { status: 'activo' },
+      where: { status: 'proceso' },
       order: [['createdAt', 'DESC']],
     })
+
+    console.log('reporte activo:', activeReport) // Log del reporte activo
 
     if (!activeReport) {
       console.log('⚠️ No se encontró reporte financiero activo')

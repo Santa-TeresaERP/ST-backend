@@ -56,7 +56,7 @@ const createResourceExpense = async (
 
     // 2) Reporte activo (opcional)
     const activeReport = await FinancialReport.findOne({
-      where: { status: 'activo' },
+      where: { status: 'proceso' },
       order: [['createdAt', 'DESC']],
     })
 

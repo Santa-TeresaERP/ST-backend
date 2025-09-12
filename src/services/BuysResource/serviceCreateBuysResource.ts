@@ -6,6 +6,7 @@ import Supplier from '@models/suplier'
 import Warehouse from '@models/warehouse'
 import Resource from '@models/resource'
 import { validateWarehouseStatus } from '../../schemas/almacen/warehouseSchema'
+import { getValidDate } from '../../utils/dateUtils'
 
 // Creador de gasto por compra en Inventario
 import createResourceExpense from '@services/GeneralExpense/CollectionFunc/Inventory/ResourceExpense'
@@ -97,7 +98,7 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
         unit_price,
         total_cost, // Recalcular el costo total
         quantity: newQuantity,
-        entry_date,
+        entry_date: getValidDate(entry_date),
       })
 
       console.log(
@@ -125,7 +126,7 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
         resource_id,
         movement_type: 'entrada',
         quantity: addedQuantity,
-        movement_date: entry_date,
+        movement_date: getValidDate(entry_date),
         observations: `Nueva compra registrada. Proveedor: ${supplierName}`,
       })
       if ('error' in movementResult) {
@@ -153,7 +154,7 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
       total_cost: Math.round(unit_price * quantity * 100) / 100,
       supplier_id,
       quantity,
-      entry_date,
+      entry_date: getValidDate(entry_date),
     })
 
     // 4) Movimiento de almacén (entrada)
@@ -162,7 +163,7 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
       resource_id,
       movement_type: 'entrada',
       quantity,
-      movement_date: entry_date,
+      movement_date: getValidDate(entry_date),
       observations: `Nueva compra registrada. Proveedor: ${supplierName}`,
     })
     if ('error' in movementResult) {

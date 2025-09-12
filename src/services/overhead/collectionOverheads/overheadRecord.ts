@@ -23,9 +23,11 @@ export const createOverheadRecord = async (
   try {
     // 1. Buscar un reporte financiero activo para asociar
     const activeReport = await FinancialReport.findOne({
-      where: { status: 'activo' },
+      where: { status: 'proceso' },
       order: [['createdAt', 'DESC']], // Obtener el más reciente
     })
+
+    console.log('reporte activo:', activeReport)
 
     let moduleId: string
 

@@ -1,3 +1,16 @@
+// Utilidad para validar y corregir la fecha
+function getValidDate(dateValue: string | Date): Date {
+  if (!dateValue) return new Date();
+  if (dateValue instanceof Date && !isNaN(dateValue.getTime())) return dateValue;
+  if (typeof dateValue === 'string') {
+    // Si ya tiene la parte de la hora, no concatenar
+    const dateStr = dateValue.includes('T') ? dateValue : dateValue + 'T00:00:00';
+    const d = new Date(dateStr);
+    if (!isNaN(d.getTime())) return d;
+  }
+  // Si todo falla, retorna la fecha actual
+  return new Date()
+}
 import Production from '@models/production'
 import { productionAttributes } from '@type/production/production'
 import { productionValidation } from '../../schemas/production/productionSchema'
@@ -7,6 +20,7 @@ import sequelize from '@config/database' // Importar sequelize para transaccione
 import Recipe from '@models/recipe'
 import BuysResource from '@models/buysResource'
 import Resource from '@models/resource'
+import WarehouseProduct from '@models/warehouseProduct'
 import { convertQuantity, areUnitsCompatible } from './unitConversionService'
 import serviceCreatewarehouseMovementProduct from '../warehouse_movement_product/serviceCreatewarehouse_movement_product'
 import serviceCreatewarehouseMovementResource from '../warehouseMovementResource/serviceCreateWarehouseMovementResource'
@@ -260,7 +274,7 @@ const serviceCreateProduction = async (body: productionAttributes) => {
         product_id: newProduction.productId,
         movement_type: 'entrada',
         quantity: newProduction.quantityProduced,
-        movement_date: new Date(newProduction.productionDate),
+        movement_date: getValidDate(newProduction.productionDate),
         observations: `Producción de "${product.name}"`,
       },
       t, // Pasar la transacción
@@ -282,6 +296,15 @@ const serviceCreateProduction = async (body: productionAttributes) => {
     }
     console.log('✅ Movimiento de producto creado exitosamente')
 
+    // Obtener el warehouse_product actualizado antes de confirmar la transacción
+    const updatedWarehouseProduct = await WarehouseProduct.findOne({
+      where: {
+        warehouse_id: plant.warehouse_id,
+        product_id: newProduction.productId,
+      },
+      transaction: t,
+    })
+
     // Si todo va bien, confirmar la transacción
     await t.commit()
     console.log('✅ Transacción completada exitosamente')
@@ -294,6 +317,14 @@ const serviceCreateProduction = async (body: productionAttributes) => {
       observacion: observation,
       planta: plant.plant_name,
       warehouse_id_movimiento: plant.warehouse_id,
+      // Incluir datos actualizados del inventario para que el frontend pueda actualizar la vista
+      warehouse_product_updated: updatedWarehouseProduct ? {
+        id: updatedWarehouseProduct.id,
+        warehouse_id: updatedWarehouseProduct.warehouse_id,
+        product_id: updatedWarehouseProduct.product_id,
+        quantity: updatedWarehouseProduct.quantity,
+        entry_date: updatedWarehouseProduct.entry_date,
+      } : null
     }
 
     console.log('📄 Datos de la producción creada:', datosFinales)

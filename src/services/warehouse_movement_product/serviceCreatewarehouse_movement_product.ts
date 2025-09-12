@@ -6,6 +6,7 @@ import { Transaction } from 'sequelize'
 import WarehouseStore from '@models/warehouseStore'
 import Warehouse from '@models/warehouse' // Necesario para la validación
 import { validateWarehouseStatus } from 'src/schemas/almacen/warehouseSchema' // Necesario para la validación
+import { getValidDate } from '../../utils/dateUtils'
 
 const serviceCreatewarehouseMovementProduct = async (
   data: WarehouseMovomentProductAttributes,
@@ -96,7 +97,7 @@ const serviceCreatewarehouseMovementProduct = async (
         product_id,
         movement_type,
         quantity,
-        movement_date,
+        movement_date: getValidDate(movement_date),
         observations,
       },
       { transaction },

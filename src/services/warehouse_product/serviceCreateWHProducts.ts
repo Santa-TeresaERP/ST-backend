@@ -3,6 +3,7 @@ import Product from '@models/product'
 import Warehouse from '@models/warehouse'
 import { WarehouseProductAttributes } from '@type/almacen/warehouse_product.d'
 import { validateWarehouseStatus } from 'src/schemas/almacen/warehouseSchema'
+import { getValidDate } from '../../utils/dateUtils'
 
 export default async function createWarehouseProduct(
   data: Omit<WarehouseProductAttributes, 'createdAt' | 'updatedAt'>,
@@ -29,7 +30,7 @@ export default async function createWarehouseProduct(
     if (existingRecord) {
       // Si ya existe, actualizar cantidad y entry_date
       existingRecord.quantity += data.quantity
-      existingRecord.entry_date = data.entry_date || new Date()
+      existingRecord.entry_date = getValidDate(data.entry_date) || new Date()
       await existingRecord.save()
       return existingRecord
     }
@@ -37,7 +38,7 @@ export default async function createWarehouseProduct(
     // Si no existe, crear nuevo registro
     const newRecord = await WarehouseProduct.create({
       ...data,
-      entry_date: data.entry_date || new Date(),
+      entry_date: getValidDate(data.entry_date) || new Date(),
     })
 
     // Validar estado activo/inactivo del almacén usando la función del schema

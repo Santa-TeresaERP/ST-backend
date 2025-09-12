@@ -82,9 +82,10 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
     const supplierName = supplier?.suplier_name ?? `ID: ${supplier_id}`
     const resourceName = resource?.name ?? String(resource_id)
 
-    // 2) ¿Existe registro acumulado para (almacén, recurso, proveedor)?
+    // 2) ¿Existe registro acumulado para (almacén, recurso)?
+    //    Nota: Ignoramos supplier_id para no crear nuevos datos cuando cambia el proveedor
     const existingResource = await BuysResource.findOne({
-      where: { warehouse_id, resource_id, supplier_id },
+      where: { warehouse_id, resource_id },
     })
 
     if (existingResource) {
@@ -99,6 +100,7 @@ const serviceCreateBuysResource = async (body: buysResourceAttributes) => {
         total_cost, // Recalcular el costo total
         quantity: newQuantity,
         entry_date: getValidDate(entry_date),
+        supplier_id, // Actualizar al nuevo proveedor si cambió
       })
 
       console.log(

@@ -6,6 +6,7 @@ import serviceGetAllOverheads from './serviceGetAllOverheads'
 import serviceGetMonthlyExpense from './serviceGetMonthlyExpense'
 import serviceUpdateOverhead from './serviceUpdateOverhead'
 import serviceDeleteOverhead from './serviceDeleteOverhead'
+import serviceGetMonastery from './serviceGetMonastery'
 
 const useOverhead = () => {
   return {
@@ -13,6 +14,7 @@ const useOverhead = () => {
     createMonasterioOH: serviceCreateMonasterioOH,
     deleteOverhead: serviceDeleteOverhead,
     getOverheads: serviceGetOverheads,
+    getMonastery: serviceGetMonastery,
     getOverhead: serviceGetOverhead,
     getAllOverheads: serviceGetAllOverheads,
     getMonthlyExpense: serviceGetMonthlyExpense,

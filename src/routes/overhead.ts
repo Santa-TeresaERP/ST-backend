@@ -16,6 +16,11 @@ router.get(
   authorization,
   overheadController.getMonthlyExpenseController,
 )
+router.get(
+  '/monastery',
+  authorization,
+  overheadController.getMonasteryController,
+)
 router.get('/', authorization, overheadController.getOverheadsController)
 
 export default router

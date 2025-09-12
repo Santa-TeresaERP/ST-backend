@@ -19,7 +19,7 @@ const createLossesExpense = async (lostData: {
   try {
     // 1. Buscar el módulo "Producción"
     const productionModule = await Module.findOne({
-      where: { name: 'Producción' },
+      where: { name: 'Produccion' },
     })
 
     if (!productionModule) {

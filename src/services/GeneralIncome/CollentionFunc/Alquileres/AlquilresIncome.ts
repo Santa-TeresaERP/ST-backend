@@ -35,7 +35,7 @@ const createRentalIncome = async (rentalId: string) => {
 
     // 2) Reporte activo
     const activeReport = await FinancialReport.findOne({
-      where: { status: 'activo' },
+      where: { status: 'proceso' },
       order: [['createdAt', 'DESC']],
     })
 

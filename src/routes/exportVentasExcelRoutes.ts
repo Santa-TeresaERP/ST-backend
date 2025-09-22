@@ -4,6 +4,6 @@ import { exportVentasExcelController } from '@controllers/generarExcel/exportVen
 const router = Router()
 
 // POST porque recibe fechas en el body
-router.post('/export-ventas-excel', exportVentasExcelController)
+router.post('/', exportVentasExcelController)
 
 export default router

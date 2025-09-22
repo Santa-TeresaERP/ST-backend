@@ -2,6 +2,7 @@ import { createOverheadsController } from './createOverheads'
 import { createMonasterioOHController } from './createMonasterioOH'
 import { getAllOverheadsController } from './getAllOverheads'
 import { getOverheadController } from './getOverhead'
+import { getMonasteryController } from './getMonastery'
 import { updateOverheadController } from './updateOverhead'
 import { deleteOverheadController } from './deleteOverhead'
 import { getMonthlyExpenseController } from './getMonthlyExpense'
@@ -16,6 +17,7 @@ const overheadController = {
   updateOverheadController,
   deleteOverheadController,
   getMonthlyExpenseController,
+  getMonasteryController,
 }
 
 export default overheadController

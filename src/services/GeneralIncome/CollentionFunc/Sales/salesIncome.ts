@@ -22,7 +22,7 @@ const createSalesIncome = async (saleData: salesAttributes) => {
 
     // 2) Reporte financiero activo (más reciente)
     const activeReport = await FinancialReport.findOne({
-      where: { status: 'activo' },
+      where: { status: 'proceso' },
       order: [['createdAt', 'DESC']],
     })
 

@@ -23,7 +23,7 @@ const createReturnExpense = async (returnId: string) => {
 
     // 2. Buscar un reporte financiero activo para asociar el gasto
     const activeReport = await FinancialReport.findOne({
-      where: { status: 'activo' },
+      where: { status: 'proceso' },
       order: [['createdAt', 'DESC']],
     })
 

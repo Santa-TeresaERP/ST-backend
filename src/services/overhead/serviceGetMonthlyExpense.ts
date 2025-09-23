@@ -8,13 +8,17 @@ const serviceGetMonthlyExpense = async () => {
         status: 'true',
       },
     })
+
+    // 👉 en vez de lanzar error, devolvemos []
     if (!overheads || overheads.length === 0) {
-      throw new Error('No overheads found for the specified month and year')
+      return []
     }
+
     return overheads
   } catch (error) {
     console.error(`❌ Error fetching monthly expenses`, error)
-    throw error
+    // si quieres, puedes devolver [] aquí también en vez de throw
+    return []
   }
 }
 

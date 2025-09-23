@@ -1,0 +1,19 @@
+name: Hello World
+
+on:
+  push:
+    branches: [main, development]
+
+jobs:
+  say_hello:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print Hello World
+        run: echo "Hello, World!"
+    
+      - name: Print Current Date
+        run: date
+      
+      - name: Print Say Goodbye
+        run: echo "Goodbye!"

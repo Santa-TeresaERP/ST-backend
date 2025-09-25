@@ -23,7 +23,8 @@ export default async function getAllMonasteryExpenses(
     console.error('Error en el controlador getAllMonasteryExpenses:', error)
     return res.status(500).json({
       success: false,
-      message: 'Error interno del servidor al obtener los gastos del monasterio',
+      message:
+        'Error interno del servidor al obtener los gastos del monasterio',
       error: error instanceof Error ? error.message : 'Error desconocido',
     })
   }

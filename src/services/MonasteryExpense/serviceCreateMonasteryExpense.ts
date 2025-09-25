@@ -1,35 +1,16 @@
 import { v4 as uuidv4 } from 'uuid'
 import { MonasteryExpense } from '@models/monasteryexpense'
-import { CreateMonasteryExpenseDTO } from '@type/finanzas/monasteryexpense'
-
-type MonasteryExpenseCreationAttributes = {
-  id: string
-  expense_date: Date
-  description: string
-  amount: number
-  category: string
-  payment_method: string
-  receipt_number: string | null
-  notes: string | null
-}
 
 export default async function createMonasteryExpense(
-  data: CreateMonasteryExpenseDTO,
+  data: Omit<MonasteryExpense, 'id' | 'created_at' | 'updated_at'>,
 ) {
   try {
-    // Crear el objeto con los datos del nuevo gasto
-    const expenseData: MonasteryExpenseCreationAttributes = {
+    const expenseData = {
+      ...data,
       id: uuidv4(),
       expense_date: new Date(data.expense_date),
-      description: data.description,
-      amount: data.amount,
-      category: data.category,
-      payment_method: data.payment_method,
-      receipt_number: data.receipt_number || null,
-      notes: data.notes || null,
     }
 
-    // Crear el nuevo registro de gasto
     const newExpense = await MonasteryExpense.create(expenseData)
 
     return {

@@ -1,9 +1,8 @@
 import { MonasteryExpense } from '@models/monasteryexpense'
-import { UpdateMonasteryExpenseDTO } from '@types/finanzas/monasteryexpense'
 
 export default async function updateMonasteryExpense(
   id: string,
-  data: UpdateMonasteryExpenseDTO,
+  data: Partial<Omit<MonasteryExpense, 'id' | 'created_at' | 'updated_at'>>,
 ) {
   try {
     const expense = await MonasteryExpense.findByPk(id)
@@ -15,14 +14,7 @@ export default async function updateMonasteryExpense(
       }
     }
 
-    const updatedExpense = await expense.update({
-      ...data,
-      expense_date: data.expense_date || expense.expense_date,
-      description: data.description || expense.description,
-      amount: data.amount || expense.amount,
-      category: data.category || expense.category,
-      payment_method: data.payment_method || expense.payment_method,
-    })
+    const updatedExpense = await expense.update(data)
 
     return {
       success: true,

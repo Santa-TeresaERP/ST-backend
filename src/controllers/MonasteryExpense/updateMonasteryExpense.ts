@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import updateMonasteryExpenseService from '@services/MonasteryExpense/serviceUpdateMonasteryExpense'
-import { UpdateMonasteryExpenseDTO } from '@type/finanzas/monasteryexpense'
 
 export default async function updateMonasteryExpense(
   req: Request,
@@ -8,7 +7,7 @@ export default async function updateMonasteryExpense(
 ) {
   try {
     const { id } = req.params
-    const data: UpdateMonasteryExpenseDTO = req.body
+    const data = req.body
 
     const result = await updateMonasteryExpenseService(id, data)
 

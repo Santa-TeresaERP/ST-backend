@@ -113,7 +113,8 @@ export class MonasteryExpense extends Model<
 
     return (results as unknown as ExpenseByCategory[]).map((r) => ({
       category: r.category,
-      total: typeof r.total === 'string' ? parseFloat(r.total) || 0 : r.total || 0,
+      total:
+        typeof r.total === 'string' ? parseFloat(r.total) || 0 : r.total || 0,
     }))
   }
 }

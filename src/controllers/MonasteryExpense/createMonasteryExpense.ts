@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import createMonasteryExpenseService from '@services/MonasteryExpense/serviceCreateMonasteryExpense'
-import { CreateMonasteryExpenseDTO } from '@type/finanzas/monasteryexpense'
 
 export default async function createMonasteryExpense(
   req: Request,
@@ -8,7 +7,7 @@ export default async function createMonasteryExpense(
   next: NextFunction,
 ): Promise<void> {
   try {
-    const data: CreateMonasteryExpenseDTO = req.body
+    const data = req.body
     const result = await createMonasteryExpenseService(data)
 
     if (!result.success) {

@@ -3,7 +3,7 @@ import { MonasteryExpense } from '@models/monasteryexpense'
 export default async function deleteMonasteryExpense(id: string) {
   try {
     const expense = await MonasteryExpense.findByPk(id)
-    
+
     if (!expense) {
       return {
         success: false,

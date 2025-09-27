@@ -58,4 +58,18 @@ Overhead.init(
   },
 )
 
+// Importar MonasteryExpense después de la definición para evitar dependencias circulares
+import MonasteryExpense from './monasteryexpense'
+
+// Definir las asociaciones
+Overhead.hasMany(MonasteryExpense, {
+  foreignKey: 'overheadsId',
+  as: 'monasteryExpenses',
+})
+
+MonasteryExpense.belongsTo(Overhead, {
+  foreignKey: 'overheadsId',
+  as: 'overhead',
+})
+
 export default Overhead

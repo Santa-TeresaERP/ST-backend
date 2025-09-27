@@ -1,9 +1,12 @@
-import { DataTypes, Model } from 'sequelize'
+import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '../config/database'
 import { MonasteryExpense as MonasteryExpenseAttributes } from '../types/finanzas/monasteryexpense'
 
 class MonasteryExpense
-  extends Model<MonasteryExpenseAttributes>
+  extends Model<
+    MonasteryExpenseAttributes,
+    Optional<MonasteryExpenseAttributes, 'id' | 'overheadsId'>
+  >
   implements MonasteryExpenseAttributes
 {
   public id!: string
@@ -44,19 +47,18 @@ MonasteryExpense.init(
     },
     overheadsId: {
       type: DataTypes.UUID,
-      allowNull: false,
-      references: {
-        model: 'overheads',
-        key: 'id',
-      },
+      allowNull: true,
     },
   },
   {
     sequelize,
-    modelName: 'MonasteryExpense',
     tableName: 'monastery_expenses',
     timestamps: true,
   },
 )
+
+// Definir las asociaciones después de la inicialización del modelo
+// Para evitar problemas de dependencias circulares, las asociaciones
+// se establecen mediante una función que se llama después de importar todos los modelos
 
 export default MonasteryExpense

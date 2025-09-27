@@ -3,7 +3,7 @@ import MonasteryExpense from '@models/monasteryexpense'
 export default async function getAllMonasteryExpenses() {
   try {
     const expenses = await MonasteryExpense.findAll({
-      order: [['expense_date', 'DESC']],
+      order: [['date', 'DESC']],
     })
 
     return {

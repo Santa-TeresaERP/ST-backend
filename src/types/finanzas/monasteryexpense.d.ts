@@ -1,9 +1,9 @@
 export interface MonasteryExpense {
-  id: string
+  id?: string
   category: string
   amount: number
   Name: string
   date: Date
   descripción: string
-  overheadsId: string
+  overheadsId?: string | null
 }

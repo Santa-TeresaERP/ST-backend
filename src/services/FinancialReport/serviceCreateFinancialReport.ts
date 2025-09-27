@@ -4,6 +4,9 @@ import GeneralIncome from '@models/generalIncome'
 import GeneralExpense from '@models/generalExpense'
 import MonasteryExpense from '@models/monasteryexpense'
 import serviceCreateMonasterioOH from '@services/overhead/serviceCreateMonasterioOH'
+import Overhead from '@models/overhead'
+import Module from '@models/modules'
+import serviceCreateGeneralExpense from '@services/GeneralExpense/serviceCreateGeneralExpense'
 import { FinancialReportAttributes } from '@type/finanzas/financialReport'
 import { createFinancialReportValidation } from 'src/schemas/finanzas/financialReportSchema'
 
@@ -226,6 +229,56 @@ const serviceCreateFinancialReport = async (
     })
 
     await transaction.commit()
+
+    // 5. Tras crear el nuevo reporte, generar gastos por overheads mensuales activos
+    try {
+      const monthlyOverheads = await Overhead.findAll({
+        where: { type: 'gasto mensual', status: true },
+        order: [['createdAt', 'ASC']],
+      })
+
+      if (monthlyOverheads.length > 0) {
+        // Usar módulo "Finanzas" por defecto para gastos mensuales
+        const defaultModule = await Module.findOne({
+          where: { name: 'Finanzas' },
+        })
+        if (!defaultModule) {
+          console.warn(
+            '⚠️ Módulo "Finanzas" no encontrado; se omite la creación de gastos mensuales',
+          )
+        } else {
+          for (const ovh of monthlyOverheads) {
+            const description = `${ovh.name}${ovh.description ? ` - ${ovh.description}` : ''}`
+
+            // Evitar duplicados dentro del mismo reporte
+            const exists = await GeneralExpense.findOne({
+              where: {
+                expense_type: 'Gasto Mensual',
+                report_id: newReport.id,
+                module_id: defaultModule.id,
+                description,
+              },
+            })
+
+            if (!exists) {
+              await serviceCreateGeneralExpense({
+                module_id: defaultModule.id,
+                expense_type: 'Gasto Mensual',
+                amount: Number(ovh.amount),
+                date: new Date(ovh.date as unknown as string),
+                description,
+                report_id: newReport.id,
+              })
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn(
+        '⚠️ Error procesando gastos mensuales para el nuevo reporte:',
+        e,
+      )
+    }
 
     console.log(
       `✅ Nuevo reporte mensual creado: ${currentMonth} ${currentYear} (desde ${newStartDate.toLocaleDateString()})`,

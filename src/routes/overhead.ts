@@ -23,4 +23,8 @@ router.get(
 )
 router.get('/', authorization, overheadController.getOverheadsController)
 
+router.patch('/:id', authorization, overheadController.updateOverheadController)
+
+router.put('/:id', authorization, overheadController.deleteOverheadController)
+
 export default router

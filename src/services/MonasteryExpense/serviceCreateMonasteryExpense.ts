@@ -9,6 +9,10 @@ export default async function createMonasteryExpense(
     const expenseData = {
       ...data,
       id: uuidv4(),
+      overheadsId:
+        data.overheadsId && data.overheadsId.trim() !== ''
+          ? data.overheadsId
+          : null,
     }
 
     const newExpense = await MonasteryExpense.create(expenseData)

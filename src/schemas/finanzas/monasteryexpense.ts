@@ -7,5 +7,5 @@ export const monasteryExpenseSchema = z.object({
   Name: z.string(),
   date: z.coerce.date(),
   descripción: z.string(),
-  overheadsId: z.string().uuid(),
+  overheadsId: z.string().optional().default(''), // Permitir vacío y establecer como opcional
 })

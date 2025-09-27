@@ -8,16 +8,25 @@ export const getMonthlyExpenseController = async (
   const { getMonthlyExpense } = useOverhead()
 
   try {
-    const monthlyExpenses = await getMonthlyExpense()
+    const result = await getMonthlyExpense()
 
-    if ('error' in monthlyExpenses) {
-      res.status(400).json({ error: monthlyExpenses.error })
-      return
+    if (!result.success) {
+      res.status(400).json({
+        success: false,
+        message: result.message,
+        error: result.error,
+      })
     }
 
-    res.status(200).json(monthlyExpenses)
+    res.status(200).json({
+      success: true,
+      data: result.data,
+      message: result.message,
+    })
   } catch (error) {
     res.status(500).json({
+      success: false,
+      message: 'Error interno del servidor',
       error:
         error instanceof Error ? error.message : 'An unknown error occurred',
     })

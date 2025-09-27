@@ -5,19 +5,31 @@ const serviceGetMonthlyExpense = async () => {
     const overheads = await Overhead.findAll({
       where: {
         type: 'gasto mensual',
+        status: true, // Cambiar a boolean en lugar de string
       },
     })
 
-    // 👉 en vez de lanzar error, devolvemos []
     if (!overheads || overheads.length === 0) {
-      return []
+      return {
+        success: true,
+        data: [],
+        message: 'No hay gastos mensuales registrados para este período',
+      }
     }
 
-    return overheads
+    return {
+      success: true,
+      data: overheads,
+      message: `Se encontraron ${overheads.length} gastos mensuales`,
+    }
   } catch (error) {
     console.error(`❌ Error fetching monthly expenses`, error)
-    // si quieres, puedes devolver [] aquí también en vez de throw
-    return []
+    return {
+      success: false,
+      data: [],
+      message: 'Error al obtener los gastos mensuales',
+      error: error instanceof Error ? error.message : 'Error desconocido',
+    }
   }
 }
 

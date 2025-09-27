@@ -2,6 +2,8 @@ import sequelize from '@config/database'
 import FinancialReport from '@models/financialReport'
 import GeneralIncome from '@models/generalIncome'
 import GeneralExpense from '@models/generalExpense'
+import MonasteryExpense from '@models/monasteryexpense'
+import serviceCreateMonasterioOH from '@services/overhead/serviceCreateMonasterioOH'
 import Overhead from '@models/overhead'
 import Module from '@models/modules'
 import serviceCreateGeneralExpense from '@services/GeneralExpense/serviceCreateGeneralExpense'
@@ -51,6 +53,61 @@ const serviceCreateFinancialReport = async (
         0, // Día 0 del siguiente mes = último día del mes actual
       )
       endOfMonth.setHours(23, 59, 59, 999)
+
+      // 2.1. Antes de cerrar, crear overhead de monasterio si hay gastos sin asignar
+      const unassignedMonasteryExpenses = await MonasteryExpense.findAll({
+        where: { overheadsId: null },
+        transaction,
+      })
+
+      if (unassignedMonasteryExpenses.length > 0) {
+        // Calcular el total de gastos sin asignar
+        const totalMonasteryAmount = unassignedMonasteryExpenses.reduce(
+          (sum, expense) => sum + Number(expense.amount),
+          0,
+        )
+
+        const monthNames = [
+          'enero',
+          'febrero',
+          'marzo',
+          'abril',
+          'mayo',
+          'junio',
+          'julio',
+          'agosto',
+          'septiembre',
+          'octubre',
+          'noviembre',
+          'diciembre',
+        ]
+        const reportMonth = monthNames[previousStartDate.getMonth()]
+        const reportYear = previousStartDate.getFullYear()
+
+        // Crear overhead de monasterio automáticamente
+        const overheadResult = await serviceCreateMonasterioOH(
+          {
+            name: `Gastos Monasterio ${reportMonth} ${reportYear}`,
+            description: `Gastos automáticos del monasterio correspondientes al periodo ${reportMonth} ${reportYear}`,
+            type: 'monasterio',
+            amount: totalMonasteryAmount,
+            date: endOfMonth.toISOString(),
+            status: true,
+          },
+          transaction,
+        )
+
+        if (overheadResult.error) {
+          console.warn(
+            '⚠️ Error creando overhead de monasterio automático:',
+            overheadResult.error,
+          )
+        } else {
+          console.log(
+            `✅ Overhead de monasterio creado automáticamente: ${totalMonasteryAmount} con ${unassignedMonasteryExpenses.length} gastos asociados`,
+          )
+        }
+      }
 
       // Obtener todos los ingresos y gastos sin reporte asignado (report_id: null)
       const incomesToReport = await GeneralIncome.findAll({

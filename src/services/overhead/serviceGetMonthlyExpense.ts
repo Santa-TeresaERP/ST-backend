@@ -5,7 +5,6 @@ const serviceGetMonthlyExpense = async () => {
     const overheads = await Overhead.findAll({
       where: {
         type: 'gasto mensual',
-        status: 'true',
       },
     })
 

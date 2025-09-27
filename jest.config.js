@@ -9,4 +9,4 @@ module.exports = {
     '^@environments$': '<rootDir>/src/tests/mocks/environments.ts',
     '^src/(.*)$': '<rootDir>/src/$1',
   },
-};
+}

@@ -1,4 +1,4 @@
-import { MonasteryExpense } from '@models/monasteryexpense'
+import MonasteryExpense from '@models/monasteryexpense'
 
 export default async function deleteMonasteryExpense(id: string) {
   try {

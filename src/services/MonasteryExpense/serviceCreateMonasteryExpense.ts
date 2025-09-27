@@ -1,14 +1,14 @@
 import { v4 as uuidv4 } from 'uuid'
-import { MonasteryExpense } from '@models/monasteryexpense'
+import MonasteryExpense from '@models/monasteryexpense'
+import { MonasteryExpense as MonasteryExpenseAttributes } from 'src/types/finanzas/monasteryexpense'
 
 export default async function createMonasteryExpense(
-  data: Omit<MonasteryExpense, 'id' | 'created_at' | 'updated_at'>,
+  data: Omit<MonasteryExpenseAttributes, 'id'>,
 ) {
   try {
     const expenseData = {
       ...data,
       id: uuidv4(),
-      expense_date: new Date(data.expense_date),
     }
 
     const newExpense = await MonasteryExpense.create(expenseData)

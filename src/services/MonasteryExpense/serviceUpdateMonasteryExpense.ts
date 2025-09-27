@@ -1,8 +1,9 @@
-import { MonasteryExpense } from '@models/monasteryexpense'
+import MonasteryExpense from '@models/monasteryexpense'
+import { MonasteryExpense as MonasteryExpenseAttributes } from 'src/types/finanzas/monasteryexpense'
 
 export default async function updateMonasteryExpense(
   id: string,
-  data: Partial<Omit<MonasteryExpense, 'id' | 'created_at' | 'updated_at'>>,
+  data: Partial<Omit<MonasteryExpenseAttributes, 'id'>>,
 ) {
   try {
     const expense = await MonasteryExpense.findByPk(id)

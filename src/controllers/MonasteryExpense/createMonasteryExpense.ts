@@ -1,17 +1,28 @@
 import { NextFunction, Request, Response } from 'express'
 import createMonasteryExpenseService from '@services/MonasteryExpense/serviceCreateMonasteryExpense'
+import { monasteryExpenseSchema } from '../../schemas/finanzas/monasteryexpense'
 
 export default async function createMonasteryExpense(
   req: Request,
   res: Response,
   next: NextFunction,
-): Promise<void> {
+): Promise<Response | void> {
   try {
-    const data = req.body
+    const validatedData = monasteryExpenseSchema.safeParse(req.body)
+
+    if (!validatedData.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Error de validación',
+        errors: validatedData.error.errors,
+      })
+    }
+
+    const data = validatedData.data
     const result = await createMonasteryExpenseService(data)
 
     if (!result.success) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: result.message,
         error: result.error,

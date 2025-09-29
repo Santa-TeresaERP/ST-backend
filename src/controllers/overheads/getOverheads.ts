@@ -5,12 +5,12 @@ export const getOverheadsController = async (_req: Request, res: Response) => {
   const { getOverheads } = useOverhead()
 
   try {
-    const overhead = await getOverheads()
-    res.status(200).json(overhead)
+    const overheads = await getOverheads()
+    res.status(200).json(overheads)
   } catch (error) {
+    console.error('Error in getOverheadsController:', error)
     const message =
       error instanceof Error ? error.message : 'An unknown error occurred'
-    const status = message === 'Overhead not found' ? 404 : 500
-    res.status(status).json({ error: message })
+    res.status(500).json({ error: message })
   }
 }

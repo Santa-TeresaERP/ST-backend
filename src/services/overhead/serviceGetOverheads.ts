@@ -2,16 +2,18 @@ import Overhead from '@models/overhead'
 
 const serviceGetOverheads = async () => {
   try {
-    const overhead = await Overhead.findOne({
-      where: { status: 'true' },
+    // Cambiamos a findAll para obtener todos los overheads activos
+    const overheads = await Overhead.findAll({
+      where: { status: true }, // Usar boolean true, no string 'true'
+      order: [['createdAt', 'DESC']],
     })
-    if (!overhead) {
-      throw new Error('Overhead not found')
-    }
-    return overhead
+
+    // Retornamos la lista, incluso si está vacía
+    return overheads
   } catch (error) {
     console.error(`❌ Error fetching overheads:`, error)
-    throw error
+    // En lugar de lanzar el error, retornamos array vacío
+    return []
   }
 }
 

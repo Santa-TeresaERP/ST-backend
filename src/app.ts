@@ -35,11 +35,11 @@ app.use(express.json())
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')))
 
 // Cargar rutas
-routeLoader(app)
+routeLoader(app).then(() => {
+  // Middleware de manejo de errores
+  app.use(errorHandler)
 
-// Middleware de manejo de errores
-app.use(errorHandler)
-
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+  })
 })

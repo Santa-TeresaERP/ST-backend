@@ -5,8 +5,8 @@ export const createOverheadSchema = z.object({
   name: z
     .string()
     .min(1, { message: 'El nombre es obligatorio' })
-    .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/, {
-      message: 'El nombre solo puede contener letras y espacios',
+    .regex(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9\s]+$/, {
+      message: 'El nombre solo puede contener letras, números y espacios',
     }),
   date: z.string({
     required_error: 'La fecha es obligatoria',

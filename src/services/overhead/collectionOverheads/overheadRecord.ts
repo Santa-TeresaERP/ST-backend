@@ -77,8 +77,13 @@ export const createOverheadRecord = async (
           }
 
           console.log('📝 Creando gasto de monasterio:', expenseData)
+          console.log('📊 Módulo encontrado para Monasterio:', {
+            moduleId,
+            reportId: activeReport?.id || 'SIN_REPORTE',
+          })
+
           const newExpense = await serviceCreateGeneralExpense(expenseData)
-          console.log('✅ Gasto de monasterio creado exitosamente')
+          console.log('✅ Gasto de monasterio creado exitosamente:', newExpense)
           return newExpense
         }
       }

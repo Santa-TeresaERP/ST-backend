@@ -1,61 +1,63 @@
 import { Op } from 'sequelize'
-import Return from '@models/returns'
-import Sale from '@models/sale'
-import BuysResource from '@models/buysResource'
-import Production from '@models/production'
-import Lost from '@models/lost'
-import Resource from '@models/resource'
-import Product from '@models/product'
-import SaleDetail from '@models/saleDetail'
+import GeneralIncome from '@models/generalIncome'
+import GeneralExpense from '@models/generalExpense'
+import Module from '@models/modules'
 
-export const getDataDeVentas = async (startDate: string, endDate: string) => {
+export const getGeneralReport = async (startDate: string, endDate: string) => {
   try {
     if (!startDate || !endDate) {
       throw new Error('Debes enviar startDate y endDate')
     }
 
+    // Normalizar fechas al inicio y fin del día
+    const start = new Date(startDate)
+    start.setHours(0, 0, 0, 0)
+
+    const end = new Date(endDate)
+    end.setHours(23, 59, 59, 999)
+
+    // ⚡ Usamos el campo "date" que existe en la tabla
     const filters = {
-      createdAt: {
-        [Op.between]: [new Date(startDate), new Date(endDate)],
+      date: {
+        [Op.between]: [start, end],
       },
     }
 
-    const buysResources = await BuysResource.findAll({
+    const incomes = await GeneralIncome.findAll({
       where: filters,
-      include: [{ model: Resource, as: 'resource', attributes: ['name'] }],
+      include: [{ model: Module, attributes: ['name'] }],
+      order: [['date', 'DESC']],
     })
 
-    const productions = await Production.findAll({
+    const expenses = await GeneralExpense.findAll({
       where: filters,
-      include: [{ model: Product, attributes: ['name'] }], // Production → Product
-    })
-    const losts = await Lost.findAll({
-      where: filters,
-      include: [
-        {
-          model: Production,
-          as: 'production',
-          attributes: ['id'],
-          include: [{ model: Product, attributes: ['name'] }],
-        },
-      ],
+      include: [{ model: Module, attributes: ['name'] }],
+      order: [['date', 'DESC']],
     })
 
-    const sales = await Sale.findAll({
-      where: filters,
-      include: [
-        {
-          model: SaleDetail,
-          as: 'saleDetails',
-          include: [{ model: Product, as: 'product', attributes: ['name'] }],
-        },
-      ],
-    })
+    // Helper para normalizar strings
+    const normalize = (str?: string) => str?.toLowerCase().trim() ?? ''
 
-    const returns = await Return.findAll({
-      where: filters,
-      include: [{ model: Product, as: 'product', attributes: ['name'] }],
-    })
+    // 🔹 Clasificación de los datos
+    const buysResources = expenses.filter((e) =>
+      normalize(e.expense_type).includes('compra'),
+    )
+
+    const productions = incomes.filter((i) =>
+      normalize(i.income_type).includes('producción'),
+    )
+
+    const losts = expenses.filter((e) =>
+      normalize(e.expense_type).includes('pérdida'),
+    )
+
+    const sales = incomes.filter(
+      (i) => normalize(i.income_type).includes('venta'), // ahora captura "venta" y "ventas"
+    )
+
+    const returns = expenses.filter((e) =>
+      normalize(e.expense_type).includes('devolución'),
+    )
 
     return {
       success: true as const,
@@ -72,11 +74,11 @@ export const getDataDeVentas = async (startDate: string, endDate: string) => {
     const message =
       error instanceof Error
         ? error.message
-        : 'Error desconocido en getDataDeVentas'
+        : 'Error desconocido en getGeneralReport'
 
     return {
       success: false as const,
-      message: `Error en getDataDeVentas: ${message}`,
+      message: `Error en getGeneralReport: ${message}`,
     }
   }
 }

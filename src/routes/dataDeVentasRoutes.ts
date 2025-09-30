@@ -3,7 +3,7 @@ import { getDataDeVentasController } from '@controllers/generarExcel/dataDeVenta
 
 const router = Router()
 
-// POST porque recibe startDate y endDate en el body
-router.post('/data-ventas', getDataDeVentasController)
+// Ruta POST para obtener el reporte general de ventas
+router.post('/ventas/data', getDataDeVentasController)
 
 export default router

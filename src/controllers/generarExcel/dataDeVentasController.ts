@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import { getDataDeVentas } from '@services/generarExcel/DataDepVentas'
+import { getGeneralReport } from '@services/generarExcel/DataDepVentas'
 
 export const getDataDeVentasController = async (
   req: Request,
   res: Response,
-) => {
+): Promise<void> => {
   try {
     const { startDate, endDate } = req.body
 
@@ -13,19 +13,23 @@ export const getDataDeVentasController = async (
         success: false,
         message: 'Debes enviar startDate y endDate en el body',
       })
+      return
     }
 
-    const result = await getDataDeVentas(startDate, endDate)
+    const result = await getGeneralReport(startDate, endDate)
 
     if (!result.success) {
       res.status(400).json(result)
+      return
     }
 
     res.json(result)
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Error desconocido'
+
     res.status(500).json({
       success: false,
-      message: `Error en getDataDeVentasController: ${error.message}`,
+      message: `Error en getDataDeVentasController: ${message}`,
     })
   }
 }

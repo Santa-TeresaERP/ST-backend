@@ -16,7 +16,7 @@ export const getGeneralReport = async (startDate: string, endDate: string) => {
     const end = new Date(endDate)
     end.setHours(23, 59, 59, 999)
 
-    // ⚡ Usamos el campo "date" que existe en la tabla
+    // Filtro por campo "date" de las tablas
     const filters = {
       date: {
         [Op.between]: [start, end],
@@ -38,7 +38,7 @@ export const getGeneralReport = async (startDate: string, endDate: string) => {
     // Helper para normalizar strings
     const normalize = (str?: string) => str?.toLowerCase().trim() ?? ''
 
-    // 🔹 Clasificación de los datos
+    // Clasificación
     const buysResources = expenses.filter((e) =>
       normalize(e.expense_type).includes('compra'),
     )
@@ -52,7 +52,9 @@ export const getGeneralReport = async (startDate: string, endDate: string) => {
     )
 
     const sales = incomes.filter(
-      (i) => normalize(i.income_type).includes('venta'), // ahora captura "venta" y "ventas"
+      (i) =>
+        normalize(i.income_type).includes('venta') &&
+        normalize(i.description ?? '').startsWith('registro de venta'),
     )
 
     const returns = expenses.filter((e) =>
@@ -61,7 +63,7 @@ export const getGeneralReport = async (startDate: string, endDate: string) => {
 
     return {
       success: true as const,
-      message: 'Datos de ventas obtenidos correctamente',
+      message: 'Reporte general generado correctamente',
       data: {
         buysResources,
         productions,

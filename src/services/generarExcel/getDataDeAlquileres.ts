@@ -12,11 +12,11 @@ export const getDataDeAlquileres = async (
     }
 
     // Normalizar fechas
-    const start = new Date(startDate)
-    start.setHours(0, 0, 0, 0)
+    const [year, month, day] = startDate.split('-').map(Number)
+    const start = new Date(year, month - 1, day, 0, 0, 0, 0)
 
-    const end = new Date(endDate)
-    end.setHours(23, 59, 59, 999) // 👈 incluir todo el día
+    const [y2, m2, d2] = endDate.split('-').map(Number)
+    const end = new Date(y2, m2 - 1, d2, 23, 59, 59, 999)
 
     const filters = {
       date: {

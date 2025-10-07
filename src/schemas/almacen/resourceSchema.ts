@@ -10,7 +10,9 @@ export const resourceSchema = z.object({
   observation: z
     .string()
     .max(150, 'La observación no debe exceder los 150 caracteres')
-    .optional(),
+    .nullable()
+    .optional(), // 👈 ahora acepta string | null | undefined
+
   status: z.boolean().optional(),
 })
 

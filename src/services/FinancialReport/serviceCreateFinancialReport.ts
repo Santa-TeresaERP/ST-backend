@@ -2,6 +2,11 @@ import sequelize from '@config/database'
 import FinancialReport from '@models/financialReport'
 import GeneralIncome from '@models/generalIncome'
 import GeneralExpense from '@models/generalExpense'
+import MonasteryExpense from '@models/monasteryexpense'
+import serviceCreateMonasterioOH from '@services/overhead/serviceCreateMonasterioOH'
+import Overhead from '@models/overhead'
+import Module from '@models/modules'
+import serviceCreateGeneralExpense from '@services/GeneralExpense/serviceCreateGeneralExpense'
 import { FinancialReportAttributes } from '@type/finanzas/financialReport'
 import { createFinancialReportValidation } from 'src/schemas/finanzas/financialReportSchema'
 
@@ -48,6 +53,61 @@ const serviceCreateFinancialReport = async (
         0, // Día 0 del siguiente mes = último día del mes actual
       )
       endOfMonth.setHours(23, 59, 59, 999)
+
+      // 2.1. Antes de cerrar, crear overhead de monasterio si hay gastos sin asignar
+      const unassignedMonasteryExpenses = await MonasteryExpense.findAll({
+        where: { overheadsId: null },
+        transaction,
+      })
+
+      if (unassignedMonasteryExpenses.length > 0) {
+        // Calcular el total de gastos sin asignar
+        const totalMonasteryAmount = unassignedMonasteryExpenses.reduce(
+          (sum, expense) => sum + Number(expense.amount),
+          0,
+        )
+
+        const monthNames = [
+          'enero',
+          'febrero',
+          'marzo',
+          'abril',
+          'mayo',
+          'junio',
+          'julio',
+          'agosto',
+          'septiembre',
+          'octubre',
+          'noviembre',
+          'diciembre',
+        ]
+        const reportMonth = monthNames[previousStartDate.getMonth()]
+        const reportYear = previousStartDate.getFullYear()
+
+        // Crear overhead de monasterio automáticamente
+        const overheadResult = await serviceCreateMonasterioOH(
+          {
+            name: `Gastos Monasterio ${reportMonth} ${reportYear}`,
+            description: `Gastos automáticos del monasterio correspondientes al periodo ${reportMonth} ${reportYear}`,
+            type: 'monasterio',
+            amount: totalMonasteryAmount,
+            date: endOfMonth.toISOString(),
+            status: true,
+          },
+          transaction,
+        )
+
+        if (overheadResult.error) {
+          console.warn(
+            '⚠️ Error creando overhead de monasterio automático:',
+            overheadResult.error,
+          )
+        } else {
+          console.log(
+            `✅ Overhead de monasterio creado automáticamente: ${totalMonasteryAmount} con ${unassignedMonasteryExpenses.length} gastos asociados`,
+          )
+        }
+      }
 
       // Obtener todos los ingresos y gastos sin reporte asignado (report_id: null)
       const incomesToReport = await GeneralIncome.findAll({
@@ -169,6 +229,56 @@ const serviceCreateFinancialReport = async (
     })
 
     await transaction.commit()
+
+    // 5. Tras crear el nuevo reporte, generar gastos por overheads mensuales activos
+    try {
+      const monthlyOverheads = await Overhead.findAll({
+        where: { type: 'gasto mensual', status: true },
+        order: [['createdAt', 'ASC']],
+      })
+
+      if (monthlyOverheads.length > 0) {
+        // Usar módulo "Finanzas" por defecto para gastos mensuales
+        const defaultModule = await Module.findOne({
+          where: { name: 'Finanzas' },
+        })
+        if (!defaultModule) {
+          console.warn(
+            '⚠️ Módulo "Finanzas" no encontrado; se omite la creación de gastos mensuales',
+          )
+        } else {
+          for (const ovh of monthlyOverheads) {
+            const description = `${ovh.name}${ovh.description ? ` - ${ovh.description}` : ''}`
+
+            // Evitar duplicados dentro del mismo reporte
+            const exists = await GeneralExpense.findOne({
+              where: {
+                expense_type: 'Gasto Mensual',
+                report_id: newReport.id,
+                module_id: defaultModule.id,
+                description,
+              },
+            })
+
+            if (!exists) {
+              await serviceCreateGeneralExpense({
+                module_id: defaultModule.id,
+                expense_type: 'Gasto Mensual',
+                amount: Number(ovh.amount),
+                date: new Date(ovh.date as unknown as string),
+                description,
+                report_id: newReport.id,
+              })
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn(
+        '⚠️ Error procesando gastos mensuales para el nuevo reporte:',
+        e,
+      )
+    }
 
     console.log(
       `✅ Nuevo reporte mensual creado: ${currentMonth} ${currentYear} (desde ${newStartDate.toLocaleDateString()})`,

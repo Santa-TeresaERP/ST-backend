@@ -37,6 +37,7 @@
       "@services/*": ["./src/services/*"],
       "@errors/*": ["./src/errors/*"],
       "@type/*": ["./src/types/*"],
+      "@types/*": ["./src/types/*"],
       "@environments": ["./src/config/environments.ts"],
       "@config/jwt": ["./src/config/authJwt.ts"],
       "@config/database": ["./src/config/database.ts"],

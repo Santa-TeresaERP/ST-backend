@@ -1,0 +1,28 @@
+name: Run lint
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  say_hello:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Install nodejs
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: node -v
+
+      - name: Install dependencies
+        run: |
+          npm ci
+
+      - name: Run linter
+        run: npx eslint

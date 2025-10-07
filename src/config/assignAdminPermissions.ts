@@ -49,7 +49,9 @@ const assignAdminPermissions = async (adminRoleId: string) => {
           })
           console.log(`✅ Permiso actualizado para módulo: ${module.name}`)
         } else {
-          console.log(`🔒 Permiso ya estaba en true para módulo: ${module.name}`)
+          console.log(
+            `🔒 Permiso ya estaba en true para módulo: ${module.name}`,
+          )
         }
       } else {
         // No existe -> crearlo con todos los flags en true
@@ -66,7 +68,9 @@ const assignAdminPermissions = async (adminRoleId: string) => {
           roleId: adminRoleId,
           permissionId: permission.id,
         })
-        console.log(`🔗 Relación rol-permiso creada para módulo: ${module.name}`)
+        console.log(
+          `🔗 Relación rol-permiso creada para módulo: ${module.name}`,
+        )
       }
     }
 

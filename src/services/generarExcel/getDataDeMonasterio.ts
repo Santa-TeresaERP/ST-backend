@@ -11,6 +11,14 @@ export const getDataDeMonasterio = async (
       throw new Error('Debes enviar startDate y endDate')
     }
 
+    const monasterioModule = await Module.findOne({
+      where: { name: 'Monasterio' },
+    })
+
+    if (!monasterioModule) {
+      throw new Error('Módulo "Monasterio" no encontrado')
+    }
+
     // Normalizar fechas
     const start = new Date(startDate)
     start.setHours(0, 0, 0, 0)
@@ -22,7 +30,7 @@ export const getDataDeMonasterio = async (
       date: {
         [Op.between]: [start, end],
       },
-      module_id: '86a88e7b-a00c-433d-83d7-986bb2fef906', // 👈 solo por el módulo Monasterio
+      module_id: monasterioModule.id,
     }
 
     const gastosMonasterio = await GeneralExpense.findAll({

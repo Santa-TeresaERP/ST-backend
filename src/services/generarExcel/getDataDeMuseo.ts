@@ -8,6 +8,12 @@ export const getDataDeMuseo = async (startDate: string, endDate: string) => {
       throw new Error('Debes enviar startDate y endDate')
     }
 
+    const museoModule = await Module.findOne({ where: { name: 'Museo' } })
+
+    if (!museoModule) {
+      throw new Error('Módulo "Museo" no encontrado')
+    }
+
     // Normalizar fechas
     const start = new Date(startDate)
     start.setHours(0, 0, 0, 0)
@@ -19,7 +25,7 @@ export const getDataDeMuseo = async (startDate: string, endDate: string) => {
       date: {
         [Op.between]: [start, end],
       },
-      module_id: 'dc0f05ef-6bbe-418f-bec3-5ad71e84d0f7', // 👈 ID del módulo Museo
+      module_id: museoModule.id,
     }
 
     const gastosMuseo = await GeneralIncome.findAll({

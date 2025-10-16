@@ -3,19 +3,31 @@ import GeneralIncome from '../../models/generalIncome'
 import GeneralExpense from '../../models/generalExpense'
 import Module from '../../models/modules'
 
-// IDs de los módulos relevantes
-const VENTAS_MODULE_ID = '6b45ab26-624a-4ee3-8fc5-35f68d3c7756'
-const PRODUCCION_MODULE_IDS = [
-  'fb32692b-f493-4048-9186-90926c222489',
-  '7806a85b-826b-4183-a277-e471344301ee',
-]
-const INVENTARIO_MODULE_ID = '01ff8ab1-5cb2-473b-8c70-ffa0d3d65c98'
-
 export const getDataDeVentas = async (startDate: string, endDate: string) => {
   try {
     if (!startDate || !endDate) {
       throw new Error('Debes enviar startDate y endDate')
     }
+
+    // 1. Obtener los IDs de los módulos dinámicamente
+    const ventasModule = await Module.findOne({ where: { name: 'Ventas' } })
+    const produccionModule = await Module.findOne({
+      where: { name: 'Produccion' },
+    })
+    const inventarioModule = await Module.findOne({
+      where: { name: 'inventario' },
+    })
+
+    // Validar que todos los módulos necesarios existen
+    if (!ventasModule || !produccionModule || !inventarioModule) {
+      throw new Error(
+        'Uno o más módulos necesarios (Ventas, Produccion, inventario) no se encontraron',
+      )
+    }
+
+    const ventasModuleId = ventasModule.id
+    const produccionModuleId = produccionModule.id
+    const inventarioModuleId = inventarioModule.id
 
     // Normalizar fechas
     const [year, month, day] = startDate.split('-').map(Number)
@@ -31,36 +43,36 @@ export const getDataDeVentas = async (startDate: string, endDate: string) => {
       },
     }
 
-    // 1. Ingresos del módulo Ventas
+    // 2. Ingresos del módulo Ventas
     const ingresosVentas: any[] = await GeneralIncome.findAll({
-      where: { ...filters, module_id: VENTAS_MODULE_ID },
+      where: { ...filters, module_id: ventasModuleId },
       include: [{ model: Module, attributes: ['name'] }],
       order: [['date', 'DESC']],
     })
 
-    // 2. Pérdidas de Producción
+    // 3. Pérdidas de Producción
     const perdidasProduccion: any[] = await GeneralExpense.findAll({
       where: {
         ...filters,
-        module_id: { [Op.in]: PRODUCCION_MODULE_IDS },
+        module_id: produccionModuleId,
         expense_type: 'Pérdidas de Producción',
       },
       include: [{ model: Module, attributes: ['name'] }],
       order: [['date', 'DESC']],
     })
 
-    // 3. Gastos de Inventario
+    // 4. Gastos de Inventario
     const gastosInventario: any[] = await GeneralExpense.findAll({
-      where: { ...filters, module_id: INVENTARIO_MODULE_ID },
+      where: { ...filters, module_id: inventarioModuleId },
       include: [{ model: Module, attributes: ['name'] }],
       order: [['date', 'DESC']],
     })
 
-    // 4. Devoluciones de Venta
+    // 5. Devoluciones de Venta
     const devolucionVentas: any[] = await GeneralExpense.findAll({
       where: {
         ...filters,
-        module_id: VENTAS_MODULE_ID,
+        module_id: ventasModuleId,
         expense_type: 'Devoluciones de Venta',
       },
       include: [{ model: Module, attributes: ['name'] }],

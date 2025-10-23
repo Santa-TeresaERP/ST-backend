@@ -1,13 +1,12 @@
 import ExcelJS from 'exceljs'
 import { getDataDeMonasterio } from './getDataDeMonasterio'
 
-interface Monasterio {
-  Module?: {
-    name?: string
-  }
-  expense_type?: string | null
-  description?: string | null
-  amount?: number | string | null
+interface MonasteryExpenseRow {
+  category: string
+  Name: string
+  descripción: string
+  amount: number
+  date: Date
 }
 
 export const exportMonasteriosExcel = async (
@@ -21,36 +20,53 @@ export const exportMonasteriosExcel = async (
       throw new Error(result.message || 'No se encontraron datos para exportar')
     }
 
-    const gastos: Monasterio[] = result.data
+    const gastos: MonasteryExpenseRow[] = result.data
 
     const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet('Monasterios')
+    const worksheet = workbook.addWorksheet('Gastos del Monasterio')
 
-    // Encabezado
-    worksheet.addRow([`Reporte de Monasterios ${startDate} a ${endDate}`])
-    worksheet.addRow([])
-    worksheet.addRow(['Módulo', 'Tipo', 'Gasto', 'Pago'])
+    // Título
+    worksheet.addRow([
+      `Reporte de Gastos del Monasterio (${startDate} a ${endDate})`,
+    ])
+    worksheet.getRow(1).font = { bold: true, size: 14 }
+    worksheet.mergeCells('A1:E1')
+
+    worksheet.addRow([]) // Fila vacía
+
+    // Encabezados
+    worksheet.addRow([
+      'Categoría',
+      'Nombre del Gasto',
+      'Descripción',
+      'Fecha',
+      'Monto (S/)',
+    ])
+    worksheet.getRow(3).font = { bold: true }
 
     let totalPago = 0
 
     gastos.forEach((g) => {
-      const modulo = g.Module?.name || 'Monasterio'
-      const tipo = g.expense_type || ''
-      const descripcion = g.description || ''
-
-      // extraer solo la primera parte de description antes del primer " - "
-      const gasto = descripcion.split('-')[0].trim()
-
       const pago = Number(g.amount || 0)
       totalPago += pago
 
-      worksheet.addRow([modulo, tipo, gasto, `s/${pago.toFixed(2)}`])
+      worksheet.addRow([
+        g.category,
+        g.Name,
+        g.descripción,
+        g.date.toISOString().split('T')[0], // Fecha formateada YYYY-MM-DD
+        pago.toFixed(2),
+      ])
     })
 
     worksheet.addRow([])
-    worksheet.addRow(['', '', 'TOTAL', `s/${totalPago.toFixed(2)}`])
+    worksheet.addRow(['', '', 'TOTAL', '', totalPago.toFixed(2)])
+    worksheet.getRow(worksheet.lastRow!.number).font = { bold: true }
 
-    worksheet.columns.forEach((col) => (col.width = 25))
+    // Ajuste de tamaño de columnas
+    worksheet.columns.forEach((col) => {
+      col.width = 25
+    })
 
     const arrayBuffer = await workbook.xlsx.writeBuffer()
     return Buffer.from(arrayBuffer)

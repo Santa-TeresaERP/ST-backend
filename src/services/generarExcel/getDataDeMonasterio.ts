@@ -1,6 +1,5 @@
 import { Op } from 'sequelize'
-import GeneralExpense from '@models/generalExpense'
-import Module from '@models/modules'
+import MonasteryExpense from '@models/monasteryexpense'
 
 export const getDataDeMonasterio = async (
   startDate: string,
@@ -9,14 +8,6 @@ export const getDataDeMonasterio = async (
   try {
     if (!startDate || !endDate) {
       throw new Error('Debes enviar startDate y endDate')
-    }
-
-    const monasterioModule = await Module.findOne({
-      where: { name: 'Monasterio' },
-    })
-
-    if (!monasterioModule) {
-      throw new Error('Módulo "Monasterio" no encontrado')
     }
 
     // Normalizar fechas
@@ -30,12 +21,10 @@ export const getDataDeMonasterio = async (
       date: {
         [Op.between]: [start, end],
       },
-      module_id: monasterioModule.id,
     }
 
-    const gastosMonasterio = await GeneralExpense.findAll({
+    const gastosMonasterio = await MonasteryExpense.findAll({
       where: filters,
-      include: [{ model: Module, attributes: ['name'] }],
       order: [['date', 'DESC']],
     })
 

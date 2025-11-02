@@ -15,6 +15,7 @@ class Product
   public description!: string
   public imagen_url!: string
   public status?: boolean
+  public producible!: boolean
   public createdAt?: Date
   public updatedAt?: Date
 }
@@ -30,7 +31,12 @@ Product.init(
     status: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: true, // ← Por defecto está activo
+      defaultValue: true,
+    },
+    producible: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
     },
     createdAt: {
       type: DataTypes.DATE,

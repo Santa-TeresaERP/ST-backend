@@ -6,6 +6,7 @@ export interface ProductAttributes {
   description: string
   imagen_url: string
   status?: boolean // ← Opcional aquí
+  producible?: boolean; // Nuevo campo agregado
   createdAt?: Date
   updatedAt?: Date
 }

@@ -45,6 +45,10 @@ const createModules = async (options = { clean: false }) => {
         name: 'Monasterio',
         description: 'Módulo para gestionar el monasterios',
       },
+      {
+        name: 'Iglesia',
+        description: 'Módulo para la gestion de la iglesia',
+      },
     ]
 
     if (options.clean) {

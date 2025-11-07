@@ -5,7 +5,8 @@ export interface ProductAttributes {
   price: number
   description: string
   imagen_url: string
-  producible?: boolean; // Nuevo campo agregado
+  status?: boolean
+  producible?: boolean // Nuevo campo agregado
   createdAt?: Date
   updatedAt?: Date
 }

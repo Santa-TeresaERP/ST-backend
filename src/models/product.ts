@@ -14,6 +14,7 @@ class Product
   public price!: number
   public description!: string
   public imagen_url!: string
+  public status?: boolean
   public producible!: boolean
   public createdAt?: Date
   public updatedAt?: Date
@@ -27,6 +28,11 @@ Product.init(
     price: { type: DataTypes.DECIMAL, allowNull: false },
     description: { type: DataTypes.STRING, allowNull: true },
     imagen_url: { type: DataTypes.STRING(2048), allowNull: true },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
     producible: {
       type: DataTypes.BOOLEAN,
       allowNull: false,

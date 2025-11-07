@@ -18,6 +18,8 @@ const productsSchema = z.object({
 
   // Cambiamos a optional ya que la URL se generará en el backend
   imagen_url: z.string().optional(),
+
+  producible: z.boolean().default(true), // Nuevo campo con valor por defecto
 })
 
 export const productsValidation = (data: ProductAttributes) =>

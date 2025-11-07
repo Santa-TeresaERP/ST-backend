@@ -6,7 +6,7 @@ import { CategoryAttributes } from '@type/production/categories'
 class Category
   extends Model<
     CategoryAttributes,
-    Optional<CategoryAttributes, 'id' | 'status'>
+    Optional<CategoryAttributes, 'id' >
   >
   implements CategoryAttributes
 {
@@ -15,7 +15,6 @@ class Category
   public description!: string
   public readonly createdAt!: Date // Agregado para timestamps
   public readonly updatedAt!: Date // Agregado para timestamps
-  public status!: boolean // Agregado para el estado de la categoría
 }
 
 Category.init(
@@ -33,7 +32,6 @@ Category.init(
       allowNull: true,
       defaultValue: DataTypes.NOW,
     },
-    status: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: true }, // Agregado para el estado de la categoría
   },
   {
     sequelize,

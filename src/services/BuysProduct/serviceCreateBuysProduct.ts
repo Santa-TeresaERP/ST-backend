@@ -1,0 +1,178 @@
+import BuysProduct from '@models/buysProduct'
+import { buysProductValidation } from '../../schemas/almacen/BuysProductSchema'
+import { buysProductAttributes } from '@type/almacen/buys_product'
+import serviceCreatewarehouseMovementProduct from '../warehouse_movement_product/serviceCreatewarehouse_movement_product'
+import Supplier from '@models/suplier'
+import Warehouse from '@models/warehouse'
+import { validateWarehouseStatus } from '../../schemas/almacen/warehouseSchema'
+import { getValidDate } from '../../utils/dateUtils'
+
+const serviceCreateBuysProduct = async (body: buysProductAttributes) => {
+  const callId = Date.now().toString(36) + Math.random().toString(36).slice(2)
+  console.log(`🎯 [${callId}] INICIO serviceCreateBuysProduct`)
+
+  // 1) Validación
+  const validation = buysProductValidation(body)
+  if (!validation.success) {
+    return {
+      success: false,
+      error: 'Error de validación',
+      details: validation.error.errors,
+      body,
+    }
+  }
+
+  const {
+    warehouse_id,
+    product_id,
+    unit_price,
+    total_cost,
+    supplier_id,
+    quantity,
+    entry_date,
+  } = validation.data
+
+  try {
+    console.log(`🔍 [${callId}] Datos validados`, {
+      warehouse_id,
+      product_id,
+      supplier_id,
+      quantity,
+      unit_price,
+      total_cost,
+    })
+
+    const [supplier, warehouse] = await Promise.all([
+      Supplier.findByPk(supplier_id),
+      Warehouse.findByPk(warehouse_id),
+    ])
+
+    if (!warehouse) {
+      return {
+        success: false,
+        error: 'Almacén no encontrado',
+        message: undefined,
+        action: undefined,
+        product: undefined,
+        movement: undefined,
+      }
+    }
+
+    const warehouseStatusValidation = validateWarehouseStatus({
+      status: warehouse.status,
+    })
+    if (!warehouseStatusValidation.success) {
+      return {
+        success: false,
+        error: warehouseStatusValidation.error,
+        message: undefined,
+        action: undefined,
+        product: undefined,
+        movement: undefined,
+      }
+    }
+
+    const supplierName = supplier?.suplier_name ?? `ID: ${supplier_id}`
+
+    // 2) ¿Existe registro acumulado para (almacén, producto)?
+    //    Nota: Ignoramos supplier_id para no crear nuevos datos cuando cambia el proveedor
+    const existingProduct = await BuysProduct.findOne({
+      where: { warehouse_id, product_id },
+    })
+
+    if (existingProduct) {
+      const previousQuantity = existingProduct.quantity
+      const addedQuantity = quantity // delta de esta compra
+      const newQuantity = previousQuantity + addedQuantity
+
+      const updatedProduct = await existingProduct.update({
+        unit_price,
+        total_cost, // Recalcular el costo total
+        quantity: newQuantity,
+        entry_date: getValidDate(entry_date),
+        supplier_id, // Actualizar al nuevo proveedor si cambió
+      })
+
+      console.log(
+        `🏁 [${callId}] ACTUALIZADO: antes=${previousQuantity}, +${addedQuantity} => ${newQuantity}`,
+      )
+
+      // Crear movimiento de almacén para la cantidad agregada
+      const movementResult = await serviceCreatewarehouseMovementProduct({
+        warehouse_id,
+        product_id,
+        movement_type: 'entrada',
+        quantity: addedQuantity,
+        movement_date: getValidDate(entry_date),
+        observations: `Nueva compra registrada. Proveedor: ${supplierName}`,
+      })
+      if ('error' in movementResult) {
+        console.warn(
+          '⚠️ Error al crear movimiento de almacén en actualización:',
+          movementResult.error,
+        )
+      }
+
+      return {
+        success: true,
+        product: updatedProduct,
+        movement: movementResult,
+        action: 'updated',
+        message: `Registro actualizado. Cantidad anterior: ${previousQuantity}, agregada: ${addedQuantity}, total: ${newQuantity}`,
+      }
+    }
+
+    // 3) Crear nuevo registro
+    const newWarehouseProduct = await BuysProduct.create({
+      warehouse_id,
+      product_id,
+      unit_price,
+      total_cost: Math.round(unit_price * quantity * 100) / 100,
+      supplier_id,
+      quantity,
+      entry_date: getValidDate(entry_date),
+    })
+
+    // 4) Movimiento de almacén (entrada)
+    const movementResult = await serviceCreatewarehouseMovementProduct({
+      warehouse_id,
+      product_id,
+      movement_type: 'entrada',
+      quantity,
+      movement_date: getValidDate(entry_date),
+      observations: `Nueva compra registrada. Proveedor: ${supplierName}`,
+    })
+    if ('error' in movementResult) {
+      console.warn(
+        '⚠️ Error al crear movimiento de almacén:',
+        movementResult.error,
+      )
+    }
+
+    console.log(`🏁 [${callId}] CREADO`)
+    return {
+      success: true,
+      product: newWarehouseProduct,
+      movement: movementResult,
+      action: 'created',
+      message: 'Registro creado exitosamente',
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return {
+        success: false,
+        error: 'Error al crear el Dato de compra',
+        details: error.message,
+        stack: error.stack,
+        body,
+      }
+    }
+    return {
+      success: false,
+      error: 'Error desconocido al crear el Dato de compra',
+      body,
+    }
+  }
+}
+
+export default serviceCreateBuysProduct

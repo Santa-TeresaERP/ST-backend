@@ -1,12 +1,14 @@
 // Utilidad para validar y corregir la fecha
 function getValidDate(dateValue: string | Date): Date {
-  if (!dateValue) return new Date();
-  if (dateValue instanceof Date && !isNaN(dateValue.getTime())) return dateValue;
+  if (!dateValue) return new Date()
+  if (dateValue instanceof Date && !isNaN(dateValue.getTime())) return dateValue
   if (typeof dateValue === 'string') {
     // Si ya tiene la parte de la hora, no concatenar
-    const dateStr = dateValue.includes('T') ? dateValue : dateValue + 'T00:00:00';
-    const d = new Date(dateStr);
-    if (!isNaN(d.getTime())) return d;
+    const dateStr = dateValue.includes('T')
+      ? dateValue
+      : dateValue + 'T00:00:00'
+    const d = new Date(dateStr)
+    if (!isNaN(d.getTime())) return d
   }
   // Si todo falla, retorna la fecha actual
   return new Date()
@@ -318,13 +320,15 @@ const serviceCreateProduction = async (body: productionAttributes) => {
       planta: plant.plant_name,
       warehouse_id_movimiento: plant.warehouse_id,
       // Incluir datos actualizados del inventario para que el frontend pueda actualizar la vista
-      warehouse_product_updated: updatedWarehouseProduct ? {
-        id: updatedWarehouseProduct.id,
-        warehouse_id: updatedWarehouseProduct.warehouse_id,
-        product_id: updatedWarehouseProduct.product_id,
-        quantity: updatedWarehouseProduct.quantity,
-        entry_date: updatedWarehouseProduct.entry_date,
-      } : null
+      warehouse_product_updated: updatedWarehouseProduct
+        ? {
+            id: updatedWarehouseProduct.id,
+            warehouse_id: updatedWarehouseProduct.warehouse_id,
+            product_id: updatedWarehouseProduct.product_id,
+            quantity: updatedWarehouseProduct.quantity,
+            entry_date: updatedWarehouseProduct.entry_date,
+          }
+        : null,
     }
 
     console.log('📄 Datos de la producción creada:', datosFinales)

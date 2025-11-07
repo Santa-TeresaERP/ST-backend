@@ -5,21 +5,23 @@
 
 export function getValidDate(dateValue: string | Date): Date {
   if (!dateValue) return new Date()
-  
+
   // Si ya es un objeto Date válido, devolverlo
   if (dateValue instanceof Date && !isNaN(dateValue.getTime())) {
     return dateValue
   }
-  
+
   if (typeof dateValue === 'string') {
     // Si ya tiene la parte de la hora, no concatenar
-    const dateStr = dateValue.includes('T') ? dateValue : dateValue + 'T00:00:00'
+    const dateStr = dateValue.includes('T')
+      ? dateValue
+      : dateValue + 'T00:00:00'
     const d = new Date(dateStr)
     if (!isNaN(d.getTime())) {
       return d
     }
   }
-  
+
   // Si todo falla, retorna la fecha actual
   return new Date()
 }

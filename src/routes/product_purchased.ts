@@ -1,7 +1,7 @@
 import express from 'express'
 // Importamos el objeto agrupador de controladores para una mayor limpieza
-import productPurchasedController from '@controllers/productPurchased'
 import authorization from '@middlewares/authorization'
+import productPurchasedController from '@controllers/Product_Purchased'
 
 const router = express.Router()
 

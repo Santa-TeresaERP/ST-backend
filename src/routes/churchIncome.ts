@@ -1,6 +1,6 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
-import useIncomeChurchController from '@controllers/church'
+import useIncomeChurchController from '@controllers/Incomechurch'
 
 const router = express.Router()
 
@@ -9,6 +9,10 @@ router.get('/', authorization, useIncomeChurchController.getAllIncomes)
 router.get('/active', authorization, useIncomeChurchController.getActiveIncomes)
 router.get('/:id', authorization, useIncomeChurchController.getIncomeChurchById)
 router.put('/:id', authorization, useIncomeChurchController.updateIncomeChurch)
-router.delete('/:id', authorization, useIncomeChurchController.deleteIncomeChurch)
+router.delete(
+  '/:id',
+  authorization,
+  useIncomeChurchController.deleteIncomeChurch,
+)
 
 export default router

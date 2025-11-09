@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import useIncomeChurch from '@services/church'
+import useIncomeChurch from '@services/IncomeChurch'
 
 const { serviceGetAllIncomes } = useIncomeChurch
 

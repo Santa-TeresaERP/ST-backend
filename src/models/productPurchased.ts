@@ -3,7 +3,7 @@
 import { Model, DataTypes, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { v4 as uuid } from 'uuid'
-import { ProductPurchasedAttributes } from '@type/almacen/product_purchased'
+import { ProductPurchasedAttributes } from '@type/almacen/product_Purchased'
 
 // Definimos los atributos que son opcionales en la creación
 type ProductPurchasedCreationAttributes = Optional<

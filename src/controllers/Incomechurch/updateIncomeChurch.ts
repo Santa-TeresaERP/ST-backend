@@ -1,9 +1,12 @@
 import { Request, Response } from 'express'
-import useIncomeChurch from '@services/church'
+import useIncomeChurch from '@services/IncomeChurch'
 
 const { serviceUpdateIncomeChurch } = useIncomeChurch
 
-const updateIncomeChurch = async (req: Request, res: Response): Promise<void> => {
+const updateIncomeChurch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const { id } = req.params
 

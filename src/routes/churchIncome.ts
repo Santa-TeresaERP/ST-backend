@@ -9,6 +9,10 @@ router.get('/', authorization, useIncomeChurchController.getAllIncomes)
 router.get('/active', authorization, useIncomeChurchController.getActiveIncomes)
 router.get('/:id', authorization, useIncomeChurchController.getIncomeChurchById)
 router.put('/:id', authorization, useIncomeChurchController.updateIncomeChurch)
-router.delete('/:id', authorization, useIncomeChurchController.deleteIncomeChurch)
+router.delete(
+  '/:id',
+  authorization,
+  useIncomeChurchController.deleteIncomeChurch,
+)
 
 export default router

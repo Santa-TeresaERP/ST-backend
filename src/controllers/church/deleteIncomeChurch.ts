@@ -3,7 +3,10 @@ import useIncomeChurch from '@services/church'
 
 const { serviceDeleteIncomeChurch } = useIncomeChurch
 
-const deleteIncomeChurch = async (req: Request, res: Response): Promise<void> => {
+const deleteIncomeChurch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const { churchId } = req.params
 

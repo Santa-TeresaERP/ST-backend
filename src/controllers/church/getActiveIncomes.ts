@@ -3,7 +3,10 @@ import useIncomeChurch from '@services/church'
 
 const { serviceGetActiveIncomes } = useIncomeChurch
 
-const getActiveIncomes = async (_req: Request, res: Response): Promise<void> => {
+const getActiveIncomes = async (
+  _req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const result = await serviceGetActiveIncomes()
 

@@ -3,7 +3,10 @@ import useIncomeChurch from '@services/church'
 
 const { serviceUpdateIncomeChurch } = useIncomeChurch
 
-const updateIncomeChurch = async (req: Request, res: Response): Promise<void> => {
+const updateIncomeChurch = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
   try {
     const { id } = req.params
 

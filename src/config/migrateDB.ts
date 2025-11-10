@@ -6,7 +6,7 @@ import { readdirSync } from 'node:fs'
 import createModules from './createModules'
 import createRoles from './createRoles'
 import { createDefaultWarehouseAndPlant } from './warehouse'
-
+import createStoreIglesia from './createStoreIglesia'
 class migrate {
   static async modelLoader() {
     const modelPath = join(process.cwd(), 'src', 'models')
@@ -61,6 +61,7 @@ class migrate {
       await createAdmin()
       await createRoles()
       await createDefaultWarehouseAndPlant()
+      await createStoreIglesia()
       console.log('Migration succesfully')
     } catch (err) {
       if (err instanceof Error) {

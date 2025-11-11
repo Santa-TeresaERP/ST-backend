@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import productPurchasedService from '@services/almacen/productPurchased'
 import { HttpError } from '@errors/http'
+import productPurchasedService from '@services/Product_Purchased'
 
 class DeleteProductPurchasedController {
   static async delete(req: Request, res: Response): Promise<void> {
@@ -18,7 +18,6 @@ class DeleteProductPurchasedController {
 
       res.status(200).json({
         success: true,
-        message: result.data.message,
       })
     } catch (error) {
       if (error instanceof HttpError) {

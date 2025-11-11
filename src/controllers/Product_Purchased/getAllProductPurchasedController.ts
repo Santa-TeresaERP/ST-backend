@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
-import productPurchasedService from '@services/almacen/productPurchased'
 import { HttpError } from '@errors/http'
+import productPurchasedService from '@services/Product_Purchased'
 
 class GetAllProductPurchasedController {
   // Método para la UI (solo activos)
-  static async get(req: Request, res: Response): Promise<void> {
+  static async get(_req: Request, res: Response): Promise<void> {
     try {
       const result = await productPurchasedService.get()
       res.status(200).json({
@@ -21,7 +21,7 @@ class GetAllProductPurchasedController {
   }
 
   // Método para desarrollador (todos)
-  static async getAll(req: Request, res: Response): Promise<void> {
+  static async getAll(_req: Request, res: Response): Promise<void> {
     try {
       const result = await productPurchasedService.getAll()
       res.status(200).json({

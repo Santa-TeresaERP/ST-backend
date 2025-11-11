@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import productPurchasedService from '@services/almacen/productPurchased'
 import { HttpError } from '@errors/http'
+import productPurchasedService from '@services/Product_Purchased'
 
 class GetProductPurchasedByIdController {
   static async getById(req: Request, res: Response): Promise<void> {

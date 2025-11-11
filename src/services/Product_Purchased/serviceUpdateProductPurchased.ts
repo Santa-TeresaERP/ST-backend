@@ -1,10 +1,10 @@
 import ProductPurchased from '@models/productPurchased'
 import { productPurchasedUpdateValidation } from '../../schemas/almacen/productPurchasedSchema'
-import { UpdateProductPurchasedPayload } from '../../types/almacen/productPurchased'
+import { ProductPurchasedAttributes } from '@type/almacen/product_Purchased'
 
 export const serviceUpdateProductPurchased = async (
   id: string,
-  body: UpdateProductPurchasedPayload,
+  body: ProductPurchasedAttributes,
 ) => {
   const validation = productPurchasedUpdateValidation(body)
   if (!validation.success) {

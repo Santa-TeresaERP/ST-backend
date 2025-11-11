@@ -1,6 +1,6 @@
 import ProductPurchased from '@models/productPurchased'
 import { productPurchasedValidation } from '../../schemas/almacen/productPurchasedSchema'
-import { CreateProductPurchasedPayload } from '../../types/almacen/product_purchased'
+import { CreateProductPurchasedPayload } from '../../types/almacen/product_Purchased'
 
 export const serviceCreateProductPurchased = async (
   body: CreateProductPurchasedPayload,

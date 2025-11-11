@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import productPurchasedService from '@services/almacen/productPurchased'
+import productPurchasedService from '@services/Product_Purchased/productPurchasedService'
 import { HttpError } from '@errors/http'
 
 class DeleteProductPurchasedController {

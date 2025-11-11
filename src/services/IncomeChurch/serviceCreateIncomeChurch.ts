@@ -1,7 +1,7 @@
 // src/services/Iglesia/serviceCreateIncomeChurch.ts
 
 import IncomeChurch from '@models/IncomeChurch'
-import { IncomeChurchAttributes } from '../../types/iglesia/income_church'
+import { IncomeChurchAttributes } from '../../types/church/income_church'
 
 /**
  * Crea un nuevo ingreso para una iglesia.

@@ -2,7 +2,7 @@
 
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database' // Asumimos que @config/database existe
-import { IncomeChurchAttributes } from '@type/iglesia/income_church' // Ajustamos la ruta de importación de tipos
+import { IncomeChurchAttributes } from '@type/church/income_church' // Ajustamos la ruta de importación de tipos
 
 // Definimos los atributos de creación, donde 'id', 'status', y timestamps son opcionales
 type IncomeChurchCreationAttributes = Optional<

@@ -1,34 +1,19 @@
-import { Request, Response } from 'express'
-import { HttpError } from '@errors/http'
 import productPurchasedService from '@services/Product_Purchased'
+import { Request, Response } from 'express'
 
-class CreateProductPurchasedController {
-  static async create(req: Request, res: Response): Promise<void> {
-    try {
-      const result = await productPurchasedService.create(req.body)
+const createProductPurchasedController = async (
+  req: Request,
+  res: Response,
+) => {
+  const result = await productPurchasedService.create(req.body)
 
-      if (result.error) {
-        res.status(400).json({
-          success: false,
-          message: 'Error en la validación de datos.',
-          error: result.error,
-        })
-        return
-      }
-
-      res.status(201).json({
-        success: true,
-        message: 'Producto comprado creado exitosamente.',
-        data: result.data,
-      })
-    } catch (error) {
-      if (error instanceof HttpError) {
-        res.status(error.statusCode).json({ error: error.message })
-      } else {
-        res.status(500).json({ error: 'Error interno del servidor' })
-      }
-    }
+  if ('error' in result) {
+    // Si hay un error de validación, devolvemos un 400 Bad Request
+    res.status(400).json({ error: result.error })
   }
+
+  // Para creación exitosa, es una buena práctica devolver 201 Created
+  res.status(201).json(result)
 }
 
-export default CreateProductPurchasedController
+export default createProductPurchasedController

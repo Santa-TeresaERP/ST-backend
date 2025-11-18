@@ -5,6 +5,7 @@ import Product from '@models/product'
 import Warehouse from '@models/warehouse'
 import Supplier from '@models/suplier'
 import { v4 as uuidv4 } from 'uuid'
+import ProductPurchased from './productPurchased'
 
 class BuysProduct
   extends Model<buysProductAttributes, Optional<buysProductAttributes, 'id'>>
@@ -97,6 +98,15 @@ BuysProduct.belongsTo(Supplier, {
 })
 Supplier.hasMany(BuysProduct, {
   foreignKey: 'supplier_id',
+  as: 'buys_products',
+})
+
+BuysProduct.hasMany(ProductPurchased , {
+  foreignKey: 'buysproduct_id',
+  as: 'supplier',
+})
+ProductPurchased.belongsTo(BuysProduct, {
+  foreignKey: 'productPurchased_id',
   as: 'buys_products',
 })
 

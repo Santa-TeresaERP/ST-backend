@@ -2,6 +2,8 @@ import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { ChurchAttributes } from '@type/iglesia/church'
 import { v4 as uuid } from 'uuid'
+import RentChurch from './rentChurch'
+import IncomeChurch from './IncomeChurch'
 
 class Church
   extends Model<
@@ -43,5 +45,19 @@ Church.init(
     timestamps: true,
   },
 )
+
+Church.hasMany(RentChurch, {
+  foreignKey: 'idChurch'   
+});
+RentChurch.belongsTo(Church, { 
+  foreignKey: 'idChurch' 
+})
+
+Church.hasMany(IncomeChurch, {
+  foreignKey: 'idChurch' 
+});
+IncomeChurch.belongsTo(Church, {
+  foreignKey: 'idChurch'
+});
 
 export default Church

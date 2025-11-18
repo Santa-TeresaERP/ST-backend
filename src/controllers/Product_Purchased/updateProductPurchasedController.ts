@@ -10,7 +10,7 @@ const updateProductPurchasedController = async (
 
   if ('error' in result) {
     // El error puede ser por validación (400) o por no encontrarlo (404)
-    return res.status(400).json({ error: result.error })
+    res.status(400).json({ error: result.error })
   }
 
   res.json(result)

@@ -1,5 +1,5 @@
+import productPurchasedService from '@services/Product_Purchased'
 import { Request, Response } from 'express'
-import productPurchasedService from '@services/almacen/productPurchased'
 
 const getProductPurchasedController = async (_req: Request, res: Response) => {
   const result = await productPurchasedService.get()

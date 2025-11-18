@@ -11,22 +11,39 @@ const serviceCreateRentChurch = async (body: RentChurchAttributes) => {
 
   const { name, type, startTime, endTime, price, date, idChurch } =
     validation.data
-
-  // Evitar solapamientos para la misma iglesia y fecha (suponiendo formato HH:mm)
-  const overlapping = await RentChurch.findOne({
-    where: {
-      idChurch,
-      status: true,
-      date,
-      startTime: { [Op.lte]: endTime },
-      endTime: { [Op.gte]: startTime },
-    },
-  })
-
-  if (overlapping) {
+  if (startTime >= endTime) {
     return {
-      error:
-        'No se puede crear la reserva: ya existe una reserva activa para esta iglesia en el rango horario indicado.',
+      error: 'La hora de inicio debe ser menor que la hora de fin.',
+    }
+  }
+  if (idChurch) {
+    const overlapping = await RentChurch.findOne({
+      where: {
+        idChurch,
+        status: true,
+        date,
+        [Op.or]: [
+          {
+            startTime: { [Op.lte]: startTime },
+            endTime: { [Op.gt]: startTime },
+          },
+          {
+            startTime: { [Op.lt]: endTime },
+            endTime: { [Op.gte]: endTime },
+          },
+          {
+            startTime: { [Op.gte]: startTime },
+            endTime: { [Op.lte]: endTime },
+          },
+        ],
+      },
+    })
+
+    if (overlapping) {
+      return {
+        error:
+          'No se puede crear la reserva: ya existe una reserva activa para esta iglesia en el rango horario indicado.',
+      }
     }
   }
 

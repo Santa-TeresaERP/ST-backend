@@ -1,3 +1,4 @@
+import { IncomeChurchAttributes } from '@type/church/income_church'
 import { z } from 'zod'
 
 export const createIncomeChurchSchema = z.object({
@@ -73,7 +74,7 @@ export const updateIncomeChurchSchema = z
  * @param data - Los datos de entrada.
  * @returns El resultado del parseo seguro de Zod.
  */
-export const createIncomeChurchValidation = (data: unknown) => {
+export const createIncomeChurchValidation = (data: IncomeChurchAttributes) => {
   return createIncomeChurchSchema.safeParse(data)
 }
 
@@ -82,6 +83,6 @@ export const createIncomeChurchValidation = (data: unknown) => {
  * @param data - Los datos de entrada.
  * @returns El resultado del parseo seguro de Zod.
  */
-export const updateIncomeChurchValidation = (data: unknown) => {
+export const updateIncomeChurchValidation = (data: IncomeChurchAttributes) => {
   return updateIncomeChurchSchema.safeParse(data)
 }

@@ -1,17 +1,18 @@
-import CreateProductPurchasedController from './createProductPurchasedController'
-import DeleteProductPurchasedController from './deleteProductPurchasedController'
-import GetAllProductPurchasedController from './getAllProductPurchasedController'
-import GetProductPurchasedByIdController from './getProductPurchasedByIdController'
-import UpdateProductPurchasedController from './updateProductPurchasedController'
+import createProductPurchasedController from './createProductPurchasedController'
+import deleteProductPurchasedController from './deleteProductPurchasedController'
+import getAllProductPurchasedController from './getAllProductPurchasedController'
+import getProductPurchasedController from './getProductPurchasedController'
+import getProductPurchasedByIdController from './getProductPurchasedByIdController'
+import updateProductPurchasedController from './updateProductPurchasedController'
 
-// Agrupamos todos los controladores para una fácil importación en las rutas
+// Agrupamos todas las funciones de controlador en un solo objeto
 const productPurchasedController = {
-  create: CreateProductPurchasedController.create,
-  delete: DeleteProductPurchasedController.delete,
-  get: GetAllProductPurchasedController.get, // Para la UI
-  getAll: GetAllProductPurchasedController.getAll, // Para developers
-  getById: GetProductPurchasedByIdController.getById,
-  update: UpdateProductPurchasedController.update,
+  create: createProductPurchasedController,
+  delete: deleteProductPurchasedController,
+  getAll: getAllProductPurchasedController,
+  get: getProductPurchasedController,
+  getById: getProductPurchasedByIdController,
+  update: updateProductPurchasedController,
 }
 
 export default productPurchasedController

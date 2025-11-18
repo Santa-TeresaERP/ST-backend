@@ -1,35 +1,19 @@
-import { Request, Response } from 'express'
-import { HttpError } from '@errors/http'
 import productPurchasedService from '@services/Product_Purchased'
+import { Request, Response } from 'express'
 
-class UpdateProductPurchasedController {
-  static async update(req: Request, res: Response): Promise<void> {
-    try {
-      const { id } = req.params
-      const result = await productPurchasedService.update(id, req.body)
+const updateProductPurchasedController = async (
+  req: Request,
+  res: Response,
+) => {
+  const { id } = req.params
+  const result = await productPurchasedService.update(id, req.body)
 
-      if (result.error) {
-        // Puede ser 400 por validación o 404 por no encontrarlo
-        res.status(404).json({
-          success: false,
-          message: result.error,
-        })
-        return
-      }
-
-      res.status(200).json({
-        success: true,
-        message: 'Producto comprado actualizado exitosamente.',
-        data: result.data,
-      })
-    } catch (error) {
-      if (error instanceof HttpError) {
-        res.status(error.statusCode).json({ error: error.message })
-      } else {
-        res.status(500).json({ error: 'Error interno del servidor' })
-      }
-    }
+  if ('error' in result) {
+    // El error puede ser por validación (400) o por no encontrarlo (404)
+    return res.status(400).json({ error: result.error })
   }
+
+  res.json(result)
 }
 
-export default UpdateProductPurchasedController
+export default updateProductPurchasedController

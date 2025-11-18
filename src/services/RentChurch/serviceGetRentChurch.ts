@@ -1,8 +1,10 @@
 import RentChurch from '@models/rentChurch'
-import Place from '@models/places'
+import Church from '@models/church'
 
 const serviceGetRentChurch = async (id: string) => {
-  const rent = await RentChurch.findByPk(id, { include: [Place] })
+  const rent = await RentChurch.findByPk(id, {
+    include: [{ model: Church, as: 'church' }],
+  })
   if (!rent) {
     return { error: 'La reserva no existe' }
   }

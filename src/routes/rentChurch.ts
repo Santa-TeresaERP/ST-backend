@@ -17,7 +17,7 @@ router.post(
 router.get(
   '/',
   authorization,
-  roleAuthorization('canRead', 'Iglesia'),
+
   rentChurchController.getRentChurchesController,
 )
 

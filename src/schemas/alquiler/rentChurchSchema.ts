@@ -59,3 +59,7 @@ const RentChurchSchema = z.object({
 
 export const rentChurchValidation = (data: RentChurchAttributes) =>
   RentChurchSchema.safeParse(data)
+
+export const rentChurchUpdateValidation = (
+  data: Partial<RentChurchAttributes>,
+) => RentChurchSchema.partial().safeParse(data)

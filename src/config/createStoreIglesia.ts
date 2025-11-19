@@ -12,7 +12,7 @@ const createStoreIglesia = async (options = { clean: false }) => {
     // Definimos las tiendas usando los campos de tu modelo
     const stores = [
       {
-        store_name: 'Iglesio',
+        store_name: 'Iglesia',
         address: '',
         observations: 'Esta es la sede Iglesia.',
       },

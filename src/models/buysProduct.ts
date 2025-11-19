@@ -101,7 +101,7 @@ Supplier.hasMany(BuysProduct, {
   as: 'buys_products',
 })
 
-BuysProduct.hasMany(ProductPurchased , {
+BuysProduct.hasMany(ProductPurchased, {
   foreignKey: 'buysproduct_id',
   as: 'product_purchased',
 })

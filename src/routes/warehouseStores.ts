@@ -1,7 +1,7 @@
 import express from 'express'
 import authorization from '@middlewares/authorization'
 import roleAuthorization from '@middlewares/roleAuthorization'
-import WarehouseStoreController from '@controllers/WarehouseStore/index'
+import WarehouseStoreController from '@controllers/warehouseStore/index'
 
 const router = express.Router()
 

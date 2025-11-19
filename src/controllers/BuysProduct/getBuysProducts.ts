@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
-import useBuysProduct from '@services/BuysProduct'
+import use from '@services/BuysProduct'
 
-const GetBuysProducts = async (_req: Request, res: Response) => {
+const Gets = async (_req: Request, res: Response) => {
   try {
-    const result = await useBuysProduct.serviceGetBuysProducts()
+  const result = await use.serviceGetBuysProducts()
 
     if ('error' in result) {
       res.status(400).json({ error: result.error })
@@ -15,4 +15,4 @@ const GetBuysProducts = async (_req: Request, res: Response) => {
   }
 }
 
-export default GetBuysProducts
+export default Gets

@@ -2,7 +2,6 @@ import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { RentChurchAttributes } from '@type/iglesia/rentChurch'
 import { v4 as uuid } from 'uuid'
-import Church from '@models/church'
 
 class RentChurch
   extends Model<
@@ -55,7 +54,5 @@ RentChurch.init(
     timestamps: true,
   },
 )
-
-RentChurch.belongsTo(Church, { foreignKey: 'idChurch', as: 'church' })
 
 export default RentChurch

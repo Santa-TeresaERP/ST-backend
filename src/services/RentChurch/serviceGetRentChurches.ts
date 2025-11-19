@@ -1,9 +1,9 @@
 import RentChurch from '@models/rentChurch'
-import Church from '@models/church'
+import Place from '@models/places'
 
 const serviceGetRentChurches = async () => {
   const rents = await RentChurch.findAll({
-    include: [{ model: Church, as: 'church' }],
+    include: [Place],
   })
   return rents
 }

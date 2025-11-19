@@ -1,24 +1,34 @@
 import RentChurch from '@models/rentChurch'
 import { RentChurchAttributes } from '@type/alquiler/rentChurch'
-import { rentChurchUpdateValidation } from '../../schemas/alquiler/rentChurchSchema'
+import { rentChurchValidation } from '../../schemas/alquiler/rentChurchSchema'
 
 const serviceUpdateRentChurch = async (
   id: string,
-  body: Partial<RentChurchAttributes>,
+  body: RentChurchAttributes,
 ) => {
-  const validation = rentChurchUpdateValidation(body)
+  const validation = rentChurchValidation(body)
   if (!validation.success) {
     return { error: validation.error.errors }
   }
 
-  const updateData = validation.data
+  const { name, type, startTime, endTime, price, status, date, idChurch } =
+    validation.data
 
   const rentRecord = await RentChurch.findByPk(id)
   if (!rentRecord) {
     return { error: 'La reserva no existe' }
   }
 
-  await rentRecord.update(updateData)
+  await rentRecord.update({
+    name,
+    type,
+    startTime,
+    endTime,
+    price,
+    status,
+    date,
+    idChurch,
+  })
 
   return rentRecord
 }

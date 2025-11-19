@@ -3,7 +3,6 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database' // Asumimos que @config/database existe
 import { IncomeChurchAttributes } from '@type/church/income_church' // Ajustamos la ruta de importación de tipos
-import Church from './church'
 
 // Definimos los atributos de creación, donde 'id', 'status', y timestamps son opcionales
 type IncomeChurchCreationAttributes = Optional<
@@ -72,10 +71,6 @@ IncomeChurch.init(
     underscored: true, // Consistente con tu modelo original
   },
 )
-
-IncomeChurch.belongsTo(Church, {
-  foreignKey: 'idChurch',         
-})
 
 // 3. Exportación por defecto
 export default IncomeChurch

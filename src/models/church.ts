@@ -47,17 +47,23 @@ Church.init(
 )
 
 Church.hasMany(RentChurch, {
-  foreignKey: 'idChurch'   
+  foreignKey: 'idChurch',
+  as: 'rentals' 
 });
+
 RentChurch.belongsTo(Church, { 
-  foreignKey: 'idChurch' 
+  foreignKey: 'idChurch',
+  as: 'church' 
 })
 
 Church.hasMany(IncomeChurch, {
-  foreignKey: 'idChurch' 
+  foreignKey: 'idChurch',
+  as: 'incomes' 
 });
+
 IncomeChurch.belongsTo(Church, {
-  foreignKey: 'idChurch'
+  foreignKey: 'idChurch',
+  as: 'church' 
 });
 
 export default Church

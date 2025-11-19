@@ -1,7 +1,8 @@
-// src/services/Iglesia/serviceCreateIncomeChurch.ts
-
 import IncomeChurch from '@models/IncomeChurch'
 import { IncomeChurchAttributes } from '../../types/church/income_church'
+
+// 👇 Importamos la función de sincronización con General Income
+import createChurchIncome from '@services/GeneralIncome/CollentionFunc/Church/ChurchIcome'
 
 /**
  * Crea un nuevo ingreso para una iglesia.
@@ -14,7 +15,7 @@ const serviceCreateIncomeChurch = async (
   churchId: string,
 ) => {
   try {
-    // Validaciones
+    // --- Validaciones ---
     if (!churchId) {
       return {
         success: false,
@@ -43,17 +44,24 @@ const serviceCreateIncomeChurch = async (
       }
     }
 
-    // Crear el nuevo ingreso
+    // 1) Crear el nuevo ingreso en la tabla específica (INCOME_CHURCH)
     const newIncome = await IncomeChurch.create({
       ...data,
       idChurch: churchId,
       status: true,
       date: data.date ?? new Date().toISOString(),
-    } as IncomeChurchAttributes) // <-- 🔒 Forzamos el tipo ya validado
+    } as IncomeChurchAttributes)
+
+    // 2) Registrar el ingreso en la tabla global (GENERAL_INCOMES)
+    // Usamos .get({ plain: true }) para obtener el objeto JSON limpio de Sequelize
+    await createChurchIncome(
+      newIncome.get({ plain: true }) as IncomeChurchAttributes,
+    )
 
     return {
       success: true,
-      message: 'Ingreso de la iglesia creado exitosamente.',
+      message:
+        'Ingreso de la iglesia creado exitosamente y registrado en contabilidad.',
       income: newIncome,
     }
   } catch (error) {

@@ -4,14 +4,14 @@ import {
   createLocation,
   deleteLocation,
   getAllLocations,
-  getLocationByID,
+  getLocationById,
   updateLocation,
 } from '@controllers/Locations'
 
 const router = express.Router()
 router.post('/', authorization, createLocation)
 router.get('/', authorization, getAllLocations)
-router.get('/:id', authorization, getLocationByID)
+router.get('/:id', authorization, getLocationById)
 router.put('/:id', authorization, updateLocation)
 router.delete('/:id', authorization, deleteLocation)
 

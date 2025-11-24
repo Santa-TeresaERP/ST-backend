@@ -8,16 +8,20 @@ const deleteIncomeChurch = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const { churchId } = req.params
+    // 1. Extraemos 'id' (el identificador único de la fila), NO 'churchId'
+    // Esto debe coincidir con tu ruta: router.delete('/:id', ...)
+    const { id } = req.params
 
-    if (!churchId) {
-      res.status(400).json({ error: 'El ID de la iglesia es requerido' })
+    if (!id) {
+      res.status(400).json({ error: 'El ID del ingreso es requerido' })
       return
     }
 
-    const result = await serviceDeleteIncomeChurch(churchId)
+    // 2. Pasamos el ID específico al servicio
+    const result = await serviceDeleteIncomeChurch(id)
 
     if (!result.success) {
+      // Usualmente 404 si no se encontró el registro para borrar
       res.status(404).json({ error: result.error })
       return
     }

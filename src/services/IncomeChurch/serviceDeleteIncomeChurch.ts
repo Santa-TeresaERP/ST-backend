@@ -1,38 +1,37 @@
 import IncomeChurch from '@models/IncomeChurch'
 
-const serviceDeleteIncomeChurch = async (churchId: string) => {
+// Recibimos 'id' (el identificador único del ingreso), no el de la iglesia
+const serviceDeleteIncomeChurch = async (id: string) => {
   try {
-    // 1. Buscar todos los ingresos de la iglesia especificada
-    const incomes = await IncomeChurch.findAll({
-      where: { idChurch: churchId },
-    })
+    // 1. Buscar el ingreso específico por su Primary Key (ID)
+    const income = await IncomeChurch.findByPk(id)
 
-    if (!incomes || incomes.length === 0) {
+    // 2. Verificar si existe
+    if (!income) {
       return {
         success: false,
-        error: 'No se encontraron ingresos para esta iglesia.',
+        error: 'No se encontró el ingreso con el ID especificado.',
       }
     }
 
-    // 2. Eliminar todos los ingresos encontrados
-    const deletedCount = await IncomeChurch.destroy({
-      where: { idChurch: churchId },
-    })
+    // 3. Eliminar ese registro específico
+    // Al ejecutar destroy sobre la instancia 'income', solo se borra esa fila.
+    await income.destroy()
 
-    // 3. Respuesta exitosa
+    // 4. Respuesta exitosa
     return {
       success: true,
-      message: `${deletedCount} ingreso(s) eliminado(s) exitosamente para la iglesia.`,
-      deletedCount,
+      message: 'Ingreso eliminado exitosamente.',
+      deletedCount: 1,
     }
   } catch (error) {
-    console.error('Error al eliminar los ingresos de la iglesia:', error)
+    console.error('Error al eliminar el ingreso:', error)
     return {
       success: false,
       error:
         error instanceof Error
           ? error.message
-          : 'Error al eliminar los ingresos de la iglesia.',
+          : 'Error al eliminar el ingreso.',
     }
   }
 }

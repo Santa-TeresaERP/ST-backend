@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import useBuysProduct from '@services/BuysProduct'
+import use from '@services/BuysProduct'
 
-const GetBuysProductById = async (req: Request, res: Response) => {
+const GetById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params
 
@@ -10,7 +10,7 @@ const GetBuysProductById = async (req: Request, res: Response) => {
       return
     }
 
-    const result = await useBuysProduct.serviceGetBuysProductById(id)
+  const result = await use.serviceGetBuysProductById(id)
     res.status(200).json(result)
   } catch (error) {
     if (error instanceof Error && error.message.includes('not found')) {
@@ -21,4 +21,4 @@ const GetBuysProductById = async (req: Request, res: Response) => {
   }
 }
 
-export default GetBuysProductById
+export default GetById

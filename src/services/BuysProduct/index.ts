@@ -4,6 +4,7 @@ import serviceGetAllBuysProducts from './serviceGetAllBuysProducts'
 import serviceGetBuysProductById from './serviceGetBuysProductById'
 import serviceUpdateBuysProduct from './serviceUpdateBuysProduct'
 import serviceDeleteBuysProduct from './serviceDeleteBuysProduct'
+import serviceCreateNonProducibleProduct from './serviceCreateNonProducibleProduct'
 
 const useBuysProduct = {
   serviceCreateBuysProduct,
@@ -12,6 +13,7 @@ const useBuysProduct = {
   serviceGetBuysProductById,
   serviceUpdateBuysProduct,
   serviceDeleteBuysProduct,
+  serviceCreateNonProducibleProduct,
 }
 
 export default useBuysProduct

@@ -7,35 +7,59 @@ import Warehouse from '@models/warehouse'
 import { validateWarehouseStatus } from '../../schemas/almacen/warehouseSchema'
 import { getValidDate } from '../../utils/dateUtils'
 
+const DEFAULT_WAREHOUSE_NAME = 'Almacen monasterio'
+
 const serviceCreateBuysProduct = async (body: buysProductAttributes) => {
   const callId = Date.now().toString(36) + Math.random().toString(36).slice(2)
   console.log(`🎯 [${callId}] INICIO serviceCreateBuysProduct`)
-
-  // 1) Validación
-  const validation = buysProductValidation(body)
-  if (!validation.success) {
-    return {
-      success: false,
-      error: 'Error de validación',
-      details: validation.error.errors,
-      body,
-    }
-  }
-
-  const {
-    warehouse_id,
-    product_id,
-    unit_price,
-    total_cost,
-    supplier_id,
-    quantity,
-    entry_date,
-  } = validation.data
+  const payload = { ...body }
 
   try {
+    if (!payload.warehouse_id) {
+      const defaultWarehouse = await Warehouse.findOne({
+        where: { name: DEFAULT_WAREHOUSE_NAME },
+      })
+
+      if (!defaultWarehouse) {
+        return {
+          success: false,
+          error: `No se encontró el almacén por defecto (${DEFAULT_WAREHOUSE_NAME}).`,
+          message: undefined,
+          action: undefined,
+          product: undefined,
+          movement: undefined,
+        }
+      }
+
+      payload.warehouse_id = defaultWarehouse.id
+      console.log(
+        `ℹ️ [${callId}] Almacén por defecto aplicado: ${DEFAULT_WAREHOUSE_NAME} (${defaultWarehouse.id})`,
+      )
+    }
+
+    const validation = buysProductValidation(payload as buysProductAttributes)
+    if (!validation.success) {
+      return {
+        success: false,
+        error: 'Error de validación',
+        details: validation.error.errors,
+        body,
+      }
+    }
+
+    const {
+      warehouse_id,
+      product_purchased_id,
+      unit_price,
+      total_cost,
+      supplier_id,
+      quantity,
+      entry_date,
+    } = validation.data
+
     console.log(`🔍 [${callId}] Datos validados`, {
       warehouse_id,
-      product_id,
+      product_purchased_id,
       supplier_id,
       quantity,
       unit_price,
@@ -77,7 +101,7 @@ const serviceCreateBuysProduct = async (body: buysProductAttributes) => {
     // 2) ¿Existe registro acumulado para (almacén, producto)?
     //    Nota: Ignoramos supplier_id para no crear nuevos datos cuando cambia el proveedor
     const existingProduct = await BuysProduct.findOne({
-      where: { warehouse_id, product_id },
+      where: { warehouse_id, product_purchased_id },
     })
 
     if (existingProduct) {
@@ -100,7 +124,7 @@ const serviceCreateBuysProduct = async (body: buysProductAttributes) => {
       // Crear movimiento de almacén para la cantidad agregada
       const movementResult = await serviceCreatewarehouseMovementProduct({
         warehouse_id,
-        product_id,
+        product_id: product_purchased_id,
         movement_type: 'entrada',
         quantity: addedQuantity,
         movement_date: getValidDate(entry_date),
@@ -125,7 +149,7 @@ const serviceCreateBuysProduct = async (body: buysProductAttributes) => {
     // 3) Crear nuevo registro
     const newWarehouseProduct = await BuysProduct.create({
       warehouse_id,
-      product_id,
+      product_purchased_id,
       unit_price,
       total_cost: Math.round(unit_price * quantity * 100) / 100,
       supplier_id,
@@ -136,7 +160,7 @@ const serviceCreateBuysProduct = async (body: buysProductAttributes) => {
     // 4) Movimiento de almacén (entrada)
     const movementResult = await serviceCreatewarehouseMovementProduct({
       warehouse_id,
-      product_id,
+      product_id: product_purchased_id,
       movement_type: 'entrada',
       quantity,
       movement_date: getValidDate(entry_date),

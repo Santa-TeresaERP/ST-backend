@@ -7,10 +7,10 @@ export const buysProductSchema = z.object({
     .uuid('El ID del almacén debe ser un UUID válido')
     .nonempty('El ID del almacén no puede estar vacío'),
 
-  product_id: z
+  product_purchased_id: z
     .string()
-    .uuid('El ID del producto debe ser un UUID válido')
-    .nonempty('El ID del producto no puede estar vacío'),
+    .uuid('El ID del producto comprado debe ser un UUID válido')
+    .nonempty('El ID del producto comprado no puede estar vacío'),
 
   quantity: z.number({ invalid_type_error: 'La cantidad debe ser un número' }),
 

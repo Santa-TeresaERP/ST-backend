@@ -24,7 +24,7 @@ const createProductIncome = async (
     )
 
     // --- Validaciones básicas ---
-    if (!buysProductData.product_id) {
+    if (!buysProductData.product_purchased_id) {
       throw new Error('product_id es requerido')
     }
     if (
@@ -61,7 +61,7 @@ const createProductIncome = async (
 
     // 4) Descripción automática
     const descriptionParts: string[] = [
-      `Venta de producto: ${buysProductData.product_name || buysProductData.product_id}`,
+      `Venta de producto: ${buysProductData.product_name || buysProductData.product_purchased_id}`,
       `Cantidad: ${buysProductData.quantity}`,
       `Precio unitario: S/. ${salePrice.toFixed(2)}`,
     ]

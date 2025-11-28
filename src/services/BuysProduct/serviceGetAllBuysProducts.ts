@@ -1,5 +1,5 @@
 import BuysProduct from '@models/buysProduct'
-import Product from '@models/product'
+import ProductPurchased from '@models/productPurchased'
 import Warehouse from '@models/warehouse'
 import Supplier from '@models/suplier'
 
@@ -7,8 +7,8 @@ const serviceGetAllBuysProducts = async () => {
   const products = await BuysProduct.findAll({
     include: [
       {
-        model: Product,
-        as: 'product',
+        model: ProductPurchased,
+        as: 'product_purchased',
         attributes: ['name', 'description', 'status'],
       },
       {

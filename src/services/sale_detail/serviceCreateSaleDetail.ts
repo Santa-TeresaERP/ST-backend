@@ -57,7 +57,7 @@ const serviceCreateSaleDetail = async (body: SaleDetailAttributes) => {
     // Buscar el BuysProduct más reciente para este producto (puede haber varios)
     const buysProduct = await BuysProduct.findOne({
       where: {
-        product_id: productId,
+        product_purchased_id: productId,
         status: true,
       },
       include: [
@@ -99,7 +99,7 @@ const serviceCreateSaleDetail = async (body: SaleDetailAttributes) => {
 
       await createProductIncome({
         warehouse_id: buysProduct.warehouse_id,
-        product_id: buysProduct.product_id,
+        product_purchased_id: buysProduct.product_purchased_id,
         unit_price: buysProduct.unit_price,
         total_cost: buysProduct.total_cost,
         supplier_id: buysProduct.supplier_id,

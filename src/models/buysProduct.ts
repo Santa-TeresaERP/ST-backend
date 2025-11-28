@@ -1,7 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { buysProductAttributes } from '@type/almacen/buys_product'
-import Product from '@models/product'
 import Warehouse from '@models/warehouse'
 import Supplier from '@models/suplier'
 import { v4 as uuidv4 } from 'uuid'
@@ -16,7 +15,7 @@ class BuysProduct
   }
   public id?: string
   public warehouse_id!: string
-  public product_id!: string
+  public product_purchased_id!: string
   public unit_price!: number
   public total_cost!: number
   public supplier_id!: string
@@ -36,7 +35,7 @@ BuysProduct.init(
       type: DataTypes.UUID,
       allowNull: false,
     },
-    product_id: {
+    product_purchased_id: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -73,16 +72,6 @@ BuysProduct.init(
   },
 )
 
-// Relaciones
-BuysProduct.belongsTo(Product, {
-  foreignKey: 'product_id',
-  as: 'product',
-})
-Product.hasMany(BuysProduct, {
-  foreignKey: 'product_id',
-  as: 'buys_products',
-})
-
 BuysProduct.belongsTo(Warehouse, {
   foreignKey: 'warehouse_id',
   as: 'warehouse',
@@ -101,12 +90,13 @@ Supplier.hasMany(BuysProduct, {
   as: 'buys_products',
 })
 
-BuysProduct.hasMany(ProductPurchased, {
-  foreignKey: 'buysproduct_id',
+BuysProduct.belongsTo(ProductPurchased, {
+  foreignKey: 'product_purchased_id',
   as: 'product_purchased',
 })
-ProductPurchased.belongsTo(BuysProduct, {
-  foreignKey: 'productPurchased_id',
+
+ProductPurchased.hasMany(BuysProduct, {
+  foreignKey: 'product_purchased_id',
   as: 'buys_products',
 })
 

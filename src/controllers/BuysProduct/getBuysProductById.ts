@@ -10,7 +10,7 @@ const GetById = async (req: Request, res: Response) => {
       return
     }
 
-  const result = await use.serviceGetBuysProductById(id)
+    const result = await use.serviceGetBuysProductById(id)
     res.status(200).json(result)
   } catch (error) {
     if (error instanceof Error && error.message.includes('not found')) {

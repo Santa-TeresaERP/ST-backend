@@ -1,16 +1,18 @@
-import GeneralIncome from '@models/generalIncome' 
-import Module from '@models/modules'       
+import GeneralIncome from '@models/generalIncome'
+import Module from '@models/modules'
 import { RentChurchAttributes } from '@type/iglesia/rentChurch'
 
 const getModuleIdByName = async (name: string): Promise<string> => {
   // 1. Consultar la tabla Module para obtener el ID real
-  const moduleData = await Module.findOne({ 
-      where: { name: name },
-      attributes: ['id'] 
+  const moduleData = await Module.findOne({
+    where: { name: name },
+    attributes: ['id'],
   })
 
   if (!moduleData) {
-    throw new Error(`Módulo con nombre '${name}' no encontrado en la base de datos.`)
+    throw new Error(
+      `Módulo con nombre '${name}' no encontrado en la base de datos.`,
+    )
   }
 
   return moduleData.id
@@ -28,11 +30,11 @@ const serviceCreateGeneralIncome = async (
 
     const generalIncomeData = {
       module_id: moduleIglesiaId,
-      income_type: 'donaciones', 
-      amount: rentData.price, 
-      date: incomeDate, 
+      income_type: 'donaciones',
+      amount: rentData.price,
+      date: incomeDate,
       description: `Ingreso de renta de iglesia: ${rentData.name} (${rentData.startTime})`,
-      report_id: null, 
+      report_id: null,
     }
 
     // 3. Crear el registro
@@ -41,7 +43,9 @@ const serviceCreateGeneralIncome = async (
     return generalIncome
   } catch (error) {
     console.error('Error al crear GeneralIncome desde RentChurch:', error)
-    throw new Error('No se pudo registrar el ingreso general (Verifique la existencia del módulo "iglesia").')
+    throw new Error(
+      'No se pudo registrar el ingreso general (Verifique la existencia del módulo "iglesia").',
+    )
   }
 }
 

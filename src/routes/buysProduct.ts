@@ -6,20 +6,10 @@ import buysProductController from '@controllers/BuysProduct'
 const router = Router()
 
 // Get: Obtener compras de productos con status true
-router.get(
-  '/',
-  authorization,
-  roleAuthorization('canRead', 'inventario'),
-  buysProductController.GetBuysProducts,
-)
+router.get('/', authorization, buysProductController.GetBuysProducts)
 
 // GetAll: Obtener todas las compras de productos sin filtro (para desarrollador)
-router.get(
-  '/all',
-  authorization,
-  roleAuthorization('canRead', 'inventario'),
-  buysProductController.GetAllBuysProducts,
-)
+router.get('/all', authorization, buysProductController.GetAllBuysProducts)
 
 // GetById: Obtener compra de producto por ID
 router.get(

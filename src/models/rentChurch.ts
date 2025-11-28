@@ -2,7 +2,6 @@ import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { RentChurchAttributes } from '@type/iglesia/rentChurch'
 import { v4 as uuid } from 'uuid'
-import Church from './church'; // Importa el modelo Church
 
 class RentChurch
   extends Model<
@@ -55,8 +54,5 @@ RentChurch.init(
     timestamps: true,
   },
 )
-
-// Asociación entre RentChurch y Church
-RentChurch.belongsTo(Church, { foreignKey: 'idChurch', as: 'church' })
 
 export default RentChurch

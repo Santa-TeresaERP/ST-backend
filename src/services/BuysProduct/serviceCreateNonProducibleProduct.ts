@@ -1,6 +1,7 @@
 import Product from '@models/product'
 import Category from '@models/categories'
 import { buysProductAttributes } from '@type/almacen/buys_product'
+import { Op } from 'sequelize'
 
 interface CreateNonProducibleProductInput {
   name: string
@@ -36,17 +37,36 @@ const serviceCreateNonProducibleProduct = async (
     }
 
     // Validar que el producto no exista ya
-    const existingProduct = await Product.findOne({
-      where: { name, category_id },
+    const normalizedName = name.trim()
+    let existingProduct = await Product.findOne({
+      where: {
+        name: { [Op.iLike]: normalizedName },
+        category_id,
+      },
     })
+
+    if (!existingProduct) {
+      existingProduct = await Product.findOne({
+        where: {
+          name: { [Op.iLike]: normalizedName },
+        },
+        order: [['updatedAt', 'DESC']],
+      })
+    }
+
     if (existingProduct) {
-      console.warn(
-        `⚠️ [${callId}] Producto no producible ya existe: ${existingProduct.id}`,
+      const updatedProduct = await existingProduct.update({
+        price,
+        description: description ?? existingProduct.description,
+        category_id: category_id ?? existingProduct.category_id,
+      })
+      console.log(
+        `ℹ️ [${callId}] Producto no producible reutilizado: ${updatedProduct.id}`,
       )
       return {
-        success: false,
-        error: 'Un producto con este nombre ya existe en esta categoría',
-        existingProduct: existingProduct.id,
+        success: true,
+        product: updatedProduct,
+        message: 'Producto existente actualizado con nueva compra',
       }
     }
 

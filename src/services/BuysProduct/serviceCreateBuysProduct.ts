@@ -2,12 +2,25 @@ import BuysProduct from '@models/buysProduct'
 import { buysProductValidation } from '../../schemas/almacen/BuysProductSchema'
 import { buysProductAttributes } from '@type/almacen/buys_product'
 import serviceCreatewarehouseMovementProduct from '../warehouse_movement_product/serviceCreatewarehouse_movement_product'
+import serviceCreateNonProducibleProduct from './serviceCreateNonProducibleProduct'
 import Supplier from '@models/suplier'
+import Product from '@models/product'
 import Warehouse from '@models/warehouse'
 import { validateWarehouseStatus } from '../../schemas/almacen/warehouseSchema'
 import { getValidDate } from '../../utils/dateUtils'
 
-const serviceCreateBuysProduct = async (body: buysProductAttributes) => {
+/**
+ * Interfaz extendida para crear compra de producto con opción de crear producto no producible
+ */
+interface CreateBuysProductInput extends buysProductAttributes {
+  create_non_producible_product?: boolean
+  product_name?: string
+  product_description?: string
+  product_category_id?: string
+  product_price?: number
+}
+
+const serviceCreateBuysProduct = async (body: CreateBuysProductInput) => {
   const callId = Date.now().toString(36) + Math.random().toString(36).slice(2)
   console.log(`🎯 [${callId}] INICIO serviceCreateBuysProduct`)
 
@@ -133,6 +146,32 @@ const serviceCreateBuysProduct = async (body: buysProductAttributes) => {
       entry_date: getValidDate(entry_date),
     })
 
+    // 3.5) Crear producto no producible si se solicita
+    let nonProducibleProduct = null
+    if (body.create_non_producible_product && body.product_name && body.product_category_id) {
+      console.log(
+        `📦 [${callId}] Intentando crear producto no producible con nombre: ${body.product_name}`,
+      )
+      const nonProducibleResult = await serviceCreateNonProducibleProduct({
+        name: body.product_name,
+        category_id: body.product_category_id,
+        price: body.product_price ?? unit_price,
+        description: body.product_description ?? '',
+        buysProductData: body,
+      })
+      if ('success' in nonProducibleResult && nonProducibleResult.success) {
+        nonProducibleProduct = nonProducibleResult.product
+        console.log(
+          `✅ [${callId}] Producto no producible creado: ${nonProducibleProduct.id}`,
+        )
+      } else {
+        console.warn(
+          `⚠️ [${callId}] Error al crear producto no producible:`,
+          'error' in nonProducibleResult ? nonProducibleResult.error : 'Error desconocido',
+        )
+      }
+    }
+
     // 4) Movimiento de almacén (entrada)
     const movementResult = await serviceCreatewarehouseMovementProduct({
       warehouse_id,
@@ -154,8 +193,9 @@ const serviceCreateBuysProduct = async (body: buysProductAttributes) => {
       success: true,
       product: newWarehouseProduct,
       movement: movementResult,
+      nonProducibleProduct: nonProducibleProduct,
       action: 'created',
-      message: 'Registro creado exitosamente',
+      message: `Registro creado exitosamente${nonProducibleProduct ? ' con producto no producible' : ''}`,
     }
   } catch (error: unknown) {
     if (error instanceof Error) {

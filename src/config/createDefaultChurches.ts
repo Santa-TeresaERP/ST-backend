@@ -10,8 +10,8 @@ const createDefaultChurches = async (options = { clean: false }) => {
     // Definimos las iglesias por defecto
     const defaultChurches = [
       {
-        name: 'Parroquia San Francisco',
-        location: 'Av. Arequipa 123, Arequipa',
+        name: 'Iglesia Monasterio',
+        location: 'Monasterio de Santa Catalina de Siena',
         state: true,
         status: true,
       },

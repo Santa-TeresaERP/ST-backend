@@ -1,10 +1,30 @@
 import RentChurch from '@models/rentChurch'
+import Church from '@models/church'
 import { RentChurchAttributes } from '@type/alquiler/rentChurch'
 import { rentChurchValidation } from '../../schemas/alquiler/rentChurchSchema'
 import { Op } from 'sequelize'
+import createRentGeneralIncome from './createRentGeneralIncome'
+
+const DEFAULT_CHURCH_NAME = 'Iglesia Monasterio'
 
 const serviceCreateRentChurch = async (body: RentChurchAttributes) => {
-  const validation = rentChurchValidation(body)
+  // Siempre resolvemos el ID real de la iglesia "Iglesia Monasterio" para evitar valores desactualizados.
+  const defaultChurch = await Church.findOne({
+    where: { name: DEFAULT_CHURCH_NAME, status: true },
+  })
+
+  if (!defaultChurch) {
+    return {
+      error: `No se encontró la iglesia por defecto "${DEFAULT_CHURCH_NAME}".`,
+    }
+  }
+
+  const bodyWithDefaultChurch: RentChurchAttributes = {
+    ...body,
+    idChurch: defaultChurch.id,
+  }
+
+  const validation = rentChurchValidation(bodyWithDefaultChurch)
   if (!validation.success) {
     return { error: validation.error.errors }
   }
@@ -57,6 +77,21 @@ const serviceCreateRentChurch = async (body: RentChurchAttributes) => {
     date,
     idChurch,
   })
+
+  try {
+    await createRentGeneralIncome({
+      name,
+      type,
+      startTime,
+      endTime,
+      price,
+      date,
+      idChurch,
+      status: true,
+    })
+  } catch (error) {
+    console.error('Error creando el ingreso general para la reserva:', error)
+  }
 
   return newRent
 }

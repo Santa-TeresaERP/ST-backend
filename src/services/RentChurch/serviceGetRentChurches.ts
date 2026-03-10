@@ -3,7 +3,7 @@ import Place from '@models/places'
 
 const serviceGetRentChurches = async () => {
   const rents = await RentChurch.findAll({
-    include: [Place],
+    include: [{ model: Place, as: 'place' }],
   })
   return rents
 }

@@ -2,6 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '@config/database'
 import { RentChurchAttributes } from '@type/iglesia/rentChurch'
 import { v4 as uuid } from 'uuid'
+import Place from '@models/places'
 
 class RentChurch
   extends Model<
@@ -56,3 +57,6 @@ RentChurch.init(
 )
 
 export default RentChurch
+
+// Asociaciones
+RentChurch.belongsTo(Place, { foreignKey: 'idChurch', as: 'place' })
